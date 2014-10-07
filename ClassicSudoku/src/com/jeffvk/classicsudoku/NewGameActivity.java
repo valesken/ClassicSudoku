@@ -54,6 +54,7 @@ public class NewGameActivity extends Activity {
 				BufferedReader br = new BufferedReader(fr);
 				String state = br.readLine();
 				br.close();
+				System.out.println(state);
 				game.loadBoard(state);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -194,7 +195,7 @@ public class NewGameActivity extends Activity {
 			}
 			if(game.checkTile(lastGridBoxIndex, value))
 			{
-				game.setTile(lastGridBoxIndex, 9);
+				game.setTile(lastGridBoxIndex, value);
 				if(value != 0)
 					lastGridBox.setText(Integer.toString(value));
 				else
