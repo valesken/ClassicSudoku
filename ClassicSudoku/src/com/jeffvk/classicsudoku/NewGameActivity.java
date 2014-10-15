@@ -92,12 +92,18 @@ public class NewGameActivity extends Activity {
 			
 			@Override
 			public void onGlobalLayout() {
-				for(int i = 0; i < 81; i++)
+
+				if(lastGridBox != null)
+					lastGridBox.setBackgroundColor(Color.CYAN);
+				else
 				{
-					if(game.checkTileIsOrig(i))
-						grid.getChildAt(i).setBackgroundColor(Color.LTGRAY);
-					else
-						grid.getChildAt(i).setBackgroundColor(Color.WHITE);
+					for(int i = 0; i < 81; i++)
+					{
+						if(game.checkTileIsOrig(i))
+							grid.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+						else
+							grid.getChildAt(i).setBackgroundColor(Color.WHITE);
+					}
 				}
 			}
 		});
