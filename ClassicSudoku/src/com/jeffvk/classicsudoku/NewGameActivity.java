@@ -96,6 +96,8 @@ public class NewGameActivity extends Activity {
 				{
 					if(game.checkTileIsOrig(i))
 						grid.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+					else
+						grid.getChildAt(i).setBackgroundColor(Color.WHITE);
 				}
 			}
 		});
