@@ -118,9 +118,12 @@
                 android:text="6" 
                 android:onClick="numClick"
                 />
-            <View
+            <Button
+                android:id="@+id/pause"
                 android:layout_width="80dp"
-                android:layout_height="40dp" 
+                android:layout_height="40dp"
+                android:text="Pause"
+                android:onClick="pause"
                 />
         </TableRow>
         <TableRow

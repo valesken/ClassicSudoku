@@ -6,8 +6,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -66,7 +69,26 @@ public class NewGameActivity extends Activity {
 		
 		grid = (GridView)findViewById(R.id.grid);
 		clock = (TextView) findViewById(R.id.clock);
-		t = runClock();
+		t = new Thread(new Runnable() {
+            public void run() {
+            while(true)
+            {
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e)
+                {
+                    break;
+                }
+                clock.post(new Runnable() {
+                    public void run() {
+                        clock.setText(game.getTime());
+                    }
+                });
+            }
+            }
+        });
 		
 		showBoard();
 		
@@ -107,6 +129,7 @@ public class NewGameActivity extends Activity {
 				}
 			}
 		});
+
 		t.start();
 	}
 	
@@ -132,6 +155,23 @@ public class NewGameActivity extends Activity {
 		}
 		
 	}
+
+    public void pause(View button)
+    {
+        game.pause();
+
+        final View pauseDialog = getLayoutInflater().inflate(R.layout.pause_dialog, null);
+        new AlertDialog.Builder(this)
+                .setView(pauseDialog)
+                .setNeutralButton("Resume Game", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(game.isStarted())
+                            game.start();
+                    }
+                })
+                .show();
+    }
 	
 	public void hint(View button)
 	{
@@ -240,31 +280,6 @@ public class NewGameActivity extends Activity {
 		}
 		grid.setAdapter(new ArrayAdapter<String>(this, R.layout.grid_text_view, stringValues));
 		clock.setText(game.getTime());
-	}
-	
-	private Thread runClock()
-	{
-		Thread t = new Thread(new Runnable() {
-	        public void run() {
-	        	while(true)
-	        	{
-	        		try
-	        		{
-	        			Thread.sleep(1000);
-	        		}
-	        		catch(InterruptedException e)
-	        		{
-	        			break;
-	        		}
-	        		clock.post(new Runnable() {
-	        			public void run() {
-	        				clock.setText(game.getTime());
-	        			}
-	        		});
-	        	}
-	        }
-	    });
-		return t;
 	}
 
 }
