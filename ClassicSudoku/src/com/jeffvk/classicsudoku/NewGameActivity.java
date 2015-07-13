@@ -5,9 +5,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,6 +36,7 @@ public class NewGameActivity extends Activity {
 	private int lastGridBoxIndex;
 	private TextView clock;
 	private Thread t;
+    private HashSet<Integer> conflicts;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class NewGameActivity extends Activity {
 		int difficulty = 0;
 		String content = "";
 		game = new Board();
+        conflicts = new HashSet<Integer>();
 		Intent cameFrom = getIntent();
 		content = cameFrom.getStringExtra(MainActivity.EXTRA_LOAD);
 		if(content.length() == 1)
@@ -54,6 +62,7 @@ public class NewGameActivity extends Activity {
 				BufferedReader br = new BufferedReader(fr);
 				String state = br.readLine();
 				br.close();
+				System.out.println(state);
 				game.loadBoard(state);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -65,39 +74,74 @@ public class NewGameActivity extends Activity {
 		
 		grid = (GridView)findViewById(R.id.grid);
 		clock = (TextView) findViewById(R.id.clock);
-		t = runClock();
+		t = new Thread(new Runnable() {
+            public void run() {
+            while(true)
+            {
+                try
+                {
+                    Thread.sleep(1000);
+                }
+                catch(InterruptedException e)
+                {
+                    break;
+                }
+                clock.post(new Runnable() {
+                    public void run() {
+                        clock.setText(game.getTime());
+                    }
+                });
+            }
+            }
+        });
 		
 		showBoard();
 		
 		grid.setOnItemClickListener(
-				new OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent, View thisGridBox, int position, long id)
+			new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View thisGridBox, int position, long id)
+				{
+					if(lastGridBox != null)
 					{
-						if(lastGridBox != null)
-						{
-							if(game.checkTileIsOrig(lastGridBoxIndex))
-								lastGridBox.setBackgroundColor(Color.LTGRAY);
-							else
-								lastGridBox.setBackgroundColor(Color.WHITE);
-						}
-						thisGridBox.setBackgroundColor(Color.CYAN);
-						lastGridBox = (CheckedTextView) thisGridBox;
-						lastGridBoxIndex = position;
+						if(game.checkTileIsOrig(lastGridBoxIndex))
+							lastGridBox.setBackgroundColor(Color.LTGRAY);
+						else
+							lastGridBox.setBackgroundColor(Color.WHITE);
 					}
-				});
-		
+                    if(!conflicts.isEmpty())
+                    {
+                        for(int i = 0; i < 81; i++)
+                        {
+                            if(conflicts.contains(i))
+                                grid.getChildAt(i).setBackgroundColor(Color.RED);
+                        }
+                    }
+			    	thisGridBox.setBackgroundColor(Color.CYAN);
+					lastGridBox = (CheckedTextView) thisGridBox;
+					lastGridBoxIndex = position;
+				}
+			});
+
 		grid.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			
+
 			@Override
 			public void onGlobalLayout() {
-				for(int i = 0; i < 81; i++)
+				if(lastGridBox != null)
+					lastGridBox.setBackgroundColor(Color.CYAN);
+				else
 				{
-					if(game.checkTileIsOrig(i))
-						grid.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+					for(int i = 0; i < 81; i++)
+					{
+						if(game.checkTileIsOrig(i))
+							grid.getChildAt(i).setBackgroundColor(Color.LTGRAY);
+						else
+							grid.getChildAt(i).setBackgroundColor(Color.WHITE);
+					}
 				}
 			}
 		});
+
 		t.start();
 	}
 	
@@ -123,6 +167,23 @@ public class NewGameActivity extends Activity {
 		}
 		
 	}
+
+    public void pause(View button)
+    {
+        game.pause();
+
+        final View pauseDialog = getLayoutInflater().inflate(R.layout.pause_dialog, null);
+        new AlertDialog.Builder(this)
+                .setView(pauseDialog)
+                .setNeutralButton("Resume Game", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(game.isStarted())
+                            game.start();
+                    }
+                })
+                .show();
+    }
 	
 	public void hint(View button)
 	{
@@ -154,6 +215,8 @@ public class NewGameActivity extends Activity {
 	{
 		if(lastGridBox != null)
 		{
+            conflicts.clear();
+
 			if(!game.isStarted())
 				game.start();
 			int value = game.getTileValue(lastGridBoxIndex);
@@ -192,20 +255,16 @@ public class NewGameActivity extends Activity {
 			default:
 				break;
 			}
-			if(game.checkTile(lastGridBoxIndex, value))
-			{
-				game.setTile(lastGridBoxIndex, 9);
-				if(value != 0)
-					lastGridBox.setText(Integer.toString(value));
-				else
-					lastGridBox.setText(" ");
-			}
-			else
-			{
-				Toast
-				  .makeText(this, "Oops, that can't go there.", Toast.LENGTH_LONG)
-				  .show();
-			}
+			if(game.checkTile(lastGridBoxIndex, value, conflicts))
+                conflicts.clear();
+
+            if(!game.checkTileIsOrig(lastGridBoxIndex)) {
+                game.setTile(lastGridBoxIndex, value);
+                if (value != 0)
+                    lastGridBox.setText(Integer.toString(value));
+                else
+                    lastGridBox.setText(" ");
+            }
 		}
 		clock.setText(game.getTime());
 		if(game.isWon())
@@ -231,31 +290,6 @@ public class NewGameActivity extends Activity {
 		}
 		grid.setAdapter(new ArrayAdapter<String>(this, R.layout.grid_text_view, stringValues));
 		clock.setText(game.getTime());
-	}
-	
-	private Thread runClock()
-	{
-		Thread t = new Thread(new Runnable() {
-	        public void run() {
-	        	while(true)
-	        	{
-	        		try
-	        		{
-	        			Thread.sleep(1000);
-	        		}
-	        		catch(InterruptedException e)
-	        		{
-	        			break;
-	        		}
-	        		clock.post(new Runnable() {
-	        			public void run() {
-	        				clock.setText(game.getTime());
-	        			}
-	        		});
-	        	}
-	        }
-	    });
-		return t;
 	}
 
 }

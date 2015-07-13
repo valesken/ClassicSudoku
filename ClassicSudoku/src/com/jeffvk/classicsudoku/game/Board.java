@@ -7,6 +7,9 @@ package com.jeffvk.classicsudoku.game;
  * It then acts as the interface by which the main Sudoku program interacts with the game.
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Random; // necessary to generate pseudo-random numbers
 
 public class Board
@@ -26,6 +29,8 @@ public class Board
 	private long start = 0, now; // Used to keep track of time
     private int givens = 30; // This value is just to make sure the program runs, but 30 will never be used
     private int bound = 0; // Defaults to 0, which will only be used in the completely random case
+    private int timeElapsed = 0;
+    private boolean paused = true;
 
     /*
      * Public functions.
@@ -186,42 +191,31 @@ public class Board
     		nums[i] = (Integer) boxes[i].getValue();
     }
 
-	/* 
-	 * This function returns a boolean value indicating if the user's input is valid.
-	 * Will return false for invalid rows or columns.
-	 * Will also return false if the row or column or zone already contains the guessed value.
-	 * Will also update the board if the guess is valid.
-	 */
-	public boolean updateBoard(int row, int col, int val)
-	{
-		if(row < 0 || (row > MAX_ROW-1))
-			return false;
-		if(col < 0 || col > MAX_ROW-1)
-			return false;
-		if(!checkTile(row, col, val))
-			return false;
-		setTile(row, col, val);
-		return true;
-	}
-     	
     /*
      * This function tells the main game if it is valid to change the chosen tile in the chosen way.
      */
-    public boolean checkTile(int row, int col, int num)
+    public boolean checkTile(int row, int col, int value, HashSet<Integer> conflicts)
     {
+        boolean noConflict = true;
+        conflicts = new HashSet<Integer>();
         int zone = rows[row].getMember(col).getZone();
         if(rows[row].getMember(col).hasValue() && rows[row].getMember(col).isOrig())
-            return false;
-        if(num < 0 || num > MAX_ROW)
-            return false;
-        if(num != 0 && (rows[row].hasMemberValue(num) || cols[col].hasMemberValue(num) || zones[zone].hasMemberValue(num)))
-            return false;
-        return true;
+            noConflict = false;
+        if(value < 0 || value > MAX_ROW)
+            noConflict = false;
+        if(value != 0 && (rows[row].hasMemberValue(value) || cols[col].hasMemberValue(value) || zones[zone].hasMemberValue(value))) {
+            noConflict = false;
+            rows[row].getMemberConflicts(value, conflicts);
+            cols[col].getMemberConflicts(value, conflicts);
+            zones[zone].getMemberConflicts(value, conflicts);
+        }
+
+        return noConflict;
     }
     
-    public boolean checkTile(int index, int num)
+    public boolean checkTile(int index, int value, HashSet<Integer> conflicts)
     {
-    	return checkTile(boxes[index].getRow(), boxes[index].getCol(), num);
+    	return checkTile(boxes[index].getRow(), boxes[index].getCol(), value, conflicts);
     }
     
     public boolean checkTileIsOrig(int index)
@@ -336,7 +330,9 @@ public class Board
 	
 	public void start()
 	{
-		start = (System.currentTimeMillis())/1000; // start time in seconds (1 sec = 1000 ms)
+        paused = false;
+        start = (System.currentTimeMillis())/1000 - timeElapsed;
+        now = (System.currentTimeMillis()/1000);
 	}
 	
 	public boolean isStarted()
@@ -349,16 +345,25 @@ public class Board
 	// Returns the time elapsed since the start of the game as a String in form "min:sec"
 	public String getTime()
 	{
+        int seconds, minutes;
 		if(start == 0)
 			return "0:00";
-		now = (System.currentTimeMillis())/1000; // current time in seconds
-		int seconds = (int)(now - start);
-		int minutes = seconds/60;
-		seconds = seconds%60;
+        else if(!paused) {
+            now = (System.currentTimeMillis()) / 1000; // current time in seconds
+            timeElapsed = (int) (now - start);
+        }
+        seconds = timeElapsed%60;
+        minutes = timeElapsed/60;
 		String time = minutes + ":";
 		time+=(String.format("%02d", seconds)); // for some reason, time.concat() did not display the seconds
 		return time;
 	}
+
+    public void pause()
+    {
+        timeElapsed = (int)(now - start);
+        paused = true;
+    }
 	
 	public String getNotes(int index)
 	{

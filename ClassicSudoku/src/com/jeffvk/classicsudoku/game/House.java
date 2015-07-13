@@ -16,6 +16,10 @@ package com.jeffvk.classicsudoku.game;
  *    int length()
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
 class House
 {
     // Member Variables
@@ -96,6 +100,15 @@ class House
                 return true;
         }
         return false;
+    }
+
+    public void getMemberConflicts(int value, HashSet<Integer> conflictsHash)
+    {
+        for(int i = 0; i < MAX_ROW; i++)
+        {
+            if(members[i].getValue() == value)
+                conflictsHash.add(members[i].getId());
+        }
     }
 		
     /*
