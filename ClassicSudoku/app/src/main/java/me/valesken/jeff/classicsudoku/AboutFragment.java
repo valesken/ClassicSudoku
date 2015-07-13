@@ -17,7 +17,7 @@ public class AboutFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
 
-        getActivity().setTitle("Simply Sudoku - About");
+        getActivity().setTitle(getResources().getString(R.string.app_name).concat(" - About"));
 
         return rootView;
     }

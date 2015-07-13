@@ -35,7 +35,7 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         activity = (MainActivity)getActivity();
 
-        activity.setTitle("Simple Sudoku");
+        activity.setTitle(getResources().getString(R.string.app_name));
         game = activity.getGame();
         fm = activity.getFragmentManager();
         autoSaveFile = activity.getAutoSaveFile();

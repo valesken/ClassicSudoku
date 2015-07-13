@@ -112,7 +112,7 @@ public class MainActivity extends Activity {
     @Override
     public void onBackPressed() {
         if(fm.getBackStackEntryCount() == 1) {
-            setTitle("Simply Sudoku");
+            setTitle(getResources().getString(R.string.app_name));
             if(fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName().equals("Game"))
                 game.handleAutoSave();
         }

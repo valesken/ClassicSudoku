@@ -42,7 +42,7 @@ public class LoadFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_load, container, false);
         activity = (MainActivity)getActivity();
         fm = activity.getFragmentManager();
-        activity.setTitle("Simply Sudoku - Load");
+        activity.setTitle(getResources().getString(R.string.app_name).concat(" - Load"));
 
         /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
         rootView.setOnTouchListener(new View.OnTouchListener()

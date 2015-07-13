@@ -149,7 +149,7 @@ public class GameFragment extends Fragment {
         inflater = _inflater;
         rootView = inflater.inflate(R.layout.fragment_game, container, false);
         activity = (MainActivity)getActivity();
-        activity.setTitle("Simple Sudoku - Game");
+        activity.setTitle(getResources().getString(R.string.app_name).concat(" - Game"));
 
             /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
         rootView.setOnTouchListener(new View.OnTouchListener()

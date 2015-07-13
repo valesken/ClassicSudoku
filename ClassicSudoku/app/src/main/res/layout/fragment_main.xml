@@ -33,7 +33,7 @@
             android:id="@+id/about_button"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="About Simply Sudoku" />
+            android:text="About Classic Sudoku" />
         <Button
             android:id="@+id/high_scores_button"
             android:layout_width="fill_parent"

@@ -39,7 +39,7 @@ public class HighScoresFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_high_score, container, false);
         activity = (MainActivity)getActivity();
 
-        activity.setTitle("Simply Sudoku - High Scores");
+        activity.setTitle(getResources().getString(R.string.app_name).concat(" - High Scores"));
         final File highScores = new File(activity.getFilesDir(), "HighScores.txt");
         highScoresJSON = activity.getHighScoresJSON();
 
