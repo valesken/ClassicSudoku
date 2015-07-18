@@ -3,24 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:paddingRight="0dp">
-
-    <!--<GridView
-        android:id="@+id/grid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginRight="0dp"
-        android:paddingRight="0dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:scrollbars="none"
-        android:clipChildren="true"
-        android:numColumns="@integer/board_size"
-        android:stretchMode="columnWidth"
-        android:background="@android:color/transparent" />-->
+    android:paddingRight="0dp"
+    android:background="@drawable/light_bg">
 
     <TableLayout
         android:id="@+id/grid"
@@ -69,7 +53,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/textbar"
         android:layout_centerHorizontal="true"
-        android:layout_margin="0dp">
+        android:layout_margin="2dp">
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -80,35 +64,40 @@
                 android:id="@+id/clear"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Clear"/>
             <Button
                 android:id="@+id/one"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="1"/>
             <Button
                 android:id="@+id/two"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="2"/>
             <Button
                 android:id="@+id/three"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="3"/>
             <Button
                 android:id="@+id/save"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Save"/>
         </TableRow>
@@ -122,35 +111,40 @@
                 android:id="@+id/hint"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Hint"/>
             <Button
                 android:id="@+id/four"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="4"/>
             <Button
                 android:id="@+id/five"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="5"/>
             <Button
                 android:id="@+id/six"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="6"/>
             <Button
                 android:id="@+id/pause"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Pause"/>
         </TableRow>
@@ -164,35 +158,40 @@
                 android:id="@+id/solve"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Solve"/>
             <Button
                 android:id="@+id/seven"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="7"/>
             <Button
                 android:id="@+id/eight"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="8"/>
             <Button
                 android:id="@+id/nine"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="9"/>
             <Button
                 android:id="@+id/mode_switch"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_margin="0dp"
+                android:layout_margin="1dp"
+                android:background="@drawable/game_button_selector"
                 android:padding="0dp"
                 android:text="Notes"/>
         </TableRow>
