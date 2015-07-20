@@ -53,11 +53,14 @@ public class GameFragment extends Fragment {
     private View currentTile;
     private int currentPosition;
     private View save_dialog_view;
-    private AlertDialog.Builder save_alert;
+    private View overwrite_dialog_view;
+    private AlertDialog save_alert;
+    private AlertDialog overwrite_alert;
     private String filename;
     private File saveFile;
     private File[] files;
-    private String[] filenames;
+    private JSONObject loadJSON;
+    private int loadJSONPosition;
     private TextView clock_tv;
     private volatile boolean paused = false;
     private volatile boolean gameOver = false;
@@ -120,16 +123,18 @@ public class GameFragment extends Fragment {
         boardSize = _boardSize;
         board = new Board(boardSize);
         difficulty = board.NewGame(_difficulty);
+        loadJSON = null;
         saveFile = null;
+        loadJSONPosition = -1;
     }
 
-    public void loadGame(int _boardSize, File _saveFile)
+    public void loadGame(int _boardSize, File _saveFile, int _loadJSONPosition)
     {
-        saveFile = _saveFile;
-        boardSize = _boardSize;
-        board = new Board(boardSize);
-
         try {
+            loadJSONPosition = _loadJSONPosition;
+            saveFile = _saveFile;
+            boardSize = _boardSize;
+            board = new Board(boardSize);
             BufferedReader buff = new BufferedReader(new FileReader(saveFile));
             JSONObject jsonObject = new JSONObject(buff.readLine());
             buff.close();
@@ -150,8 +155,22 @@ public class GameFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_game, container, false);
         activity = (MainActivity)getActivity();
         activity.setTitle(getResources().getString(R.string.app_name).concat(" - Game"));
+        try {
+            JSONObject loadGamesJSON = activity.getLoadGamesJSON();
+            if (loadJSONPosition > -1) {
+                loadJSON = loadGamesJSON.getJSONObject(Integer.toString(loadJSONPosition));
+                filename = loadJSON.getString("filename");
+            }
+            else {
+                loadJSON = null;
+                filename = "";
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
+        /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
         rootView.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
@@ -159,7 +178,6 @@ public class GameFragment extends Fragment {
         });
 
         files = activity.getFiles();
-        filenames = activity.getFilenames();
 
         //region Difficulty Level
         TextView difficulty_tv = (TextView)rootView.findViewById(R.id.difficulty_text);
@@ -376,64 +394,38 @@ public class GameFragment extends Fragment {
         //endregion
 
         //region Save Logic & Button
-        final AlertDialog.Builder overwrite_alert = new AlertDialog.Builder(rootView.getContext())
-                .setNegativeButton("Go Back", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showSaveDialog();
-                    }
-                })
-                .setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        saveGame(activity.getSaveDir(), filename);
-                        paused = false;
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        showSaveDialog();
-                    }
-                });
+        overwrite_alert = new AlertDialog.Builder(rootView.getContext()).create();
+        overwrite_alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                overwrite_alert.cancel();
+            }
+        });
+        overwrite_dialog_view = inflater.inflate(R.layout.confirm_dialog_layout, container, false);
+        overwrite_dialog_view.findViewById(R.id.confirm_back_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSaveDialog();
+                overwrite_alert.cancel();
+            }
+        });
+        overwrite_dialog_view.findViewById(R.id.confirm_continue_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveGame(activity.getSaveDir(), filename);
+                paused = false;
+                overwrite_alert.cancel();
+            }
+        });
+        overwrite_alert.setView(overwrite_dialog_view);
 
-        save_alert = new AlertDialog.Builder(rootView.getContext())
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        paused = false;
-                    }
-                })
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        filename = ((EditText) (save_dialog_view.findViewById(R.id.save_textbox))).getText().toString();
-                        activity.loadFiles();
-                        files = activity.getFiles();
-                        filenames = activity.getFilenames();
-                        boolean found = false;
-                        for (String f : filenames)
-                            if (f.equals(filename)) {
-                                found = true;
-                                break;
-                            }
-                        if (found) {
-                            InputMethodManager imm = (InputMethodManager) rootView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(save_dialog_view.findViewById(R.id.save_textbox).getWindowToken(), 0);
-                            overwrite_alert.setMessage(String.format("%s already exists. Overwrite it?", filename));
-                            overwrite_alert.show();
-                        } else {
-                            saveGame(activity.getSaveDir(), filename);
-                            paused = false;
-                        }
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        paused = false;
-                    }
-                });
+        save_alert = new AlertDialog.Builder(rootView.getContext()).create();
+        save_alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                paused = false;
+            }
+        });
 
         Button save_button = (Button) rootView.findViewById(R.id.save);
         save_button.setOnClickListener(new View.OnClickListener() {
@@ -445,9 +437,7 @@ public class GameFragment extends Fragment {
                     paused = true;
 
                     // Get filename to display
-                    if (saveFile != null)
-                        filename = saveFile.getName().replace(".txt", "");
-                    else {
+                    if(filename.equals("")) {
                         int num, maxNum = 0;
                         String name;
                         filename = difficulty == 1 ? "Easy" : (difficulty == 2 ? "Medium" : "Hard");
@@ -493,37 +483,106 @@ public class GameFragment extends Fragment {
     public void showSaveDialog() {
         save_dialog_view = inflater.inflate(R.layout.save_dialog_layout, container, false);
         ((EditText)(save_dialog_view.findViewById(R.id.save_textbox))).setText(filename);
+        save_dialog_view.findViewById(R.id.save_cancel_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paused = false;
+                save_alert.cancel();
+            }
+        });
+        save_dialog_view.findViewById(R.id.save_save_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filename = ((EditText) (save_dialog_view.findViewById(R.id.save_textbox))).getText().toString();
+                activity.loadFiles();
+                files = activity.getFiles();
+                boolean found = false;
+                for (File f : files)
+                    if (f.getName().replace(".txt", "").equals(filename)) {
+                        found = true;
+                        break;
+                    }
+                save_alert.cancel();
+                if (found) {
+                    InputMethodManager imm = (InputMethodManager) rootView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(save_dialog_view.findViewById(R.id.save_textbox).getWindowToken(), 0);
+                    String message = String.format("%s already exists. Overwrite it?", filename);
+                    ((TextView)overwrite_dialog_view.findViewById(R.id.confirm_dialog_text)).setText(message);
+                    overwrite_alert.show();
+                } else {
+                    saveGame(activity.getSaveDir(), filename);
+                    paused = false;
+                }
+            }
+        });
         save_alert.setView(save_dialog_view);
         save_alert.show();
     }
 
     public void handleAutoSave() {
-        File autoSaveFile = activity.getAutoSaveFile();
-        if (!gameOver) {
-            saveGame(activity.getFilesDir(), "AutoSave");
-            activity.enableResumeGameButton(true);
-            activity.loadFiles();
-            files = activity.getFiles();
-            filenames = activity.getFilenames();
+        try {
+            File autoSaveFile = activity.getAutoSaveFile();
+            if (!gameOver) {
+                File saveFile = new File(activity.getFilesDir(), "AutoSave.txt");
+                BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
+                JSONObject jsonObject = board.save((String) clock_tv.getText());
+                buff.write(jsonObject.toString());
+                buff.flush();
+                buff.close();
+                activity.enableResumeGameButton(true);
+                activity.loadFiles();
+                files = activity.getFiles();
+            } else if (autoSaveFile != null) {
+                activity.enableResumeGameButton(false);
+                autoSaveFile.delete();
+                activity.loadFiles();
+                files = activity.getFiles();
+            }
         }
-        else if (autoSaveFile != null) {
-            activity.enableResumeGameButton(false);
-            autoSaveFile.delete();
-            activity.loadFiles();
-            files = activity.getFiles();
-            filenames = activity.getFilenames();
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /*
+     * Write game state to file.
+     * Update loadGamesJSON with this JSON.
+     */
     public void saveGame(File saveDir, String _filename) {
         try {
+            String clock_text = (String) clock_tv.getText();
+            // Write game state to file
             File saveFile = new File(saveDir, _filename.concat(".txt"));
             BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
-            JSONObject jsonObject = board.save((String) clock_tv.getText());
+            JSONObject jsonObject = board.save(clock_text);
             buff.write(jsonObject.toString());
             buff.flush();
             buff.close();
-        } catch (IOException e) {
+            // Update loadGamesJSON with this JSON
+            JSONObject loadGamesJSON = activity.getLoadGamesJSON();
+            if(loadJSON == null || !loadJSON.getString("filename").equals(_filename)) {
+                loadJSON = new JSONObject();
+                loadJSON.put("filename", _filename);
+                loadJSON.put("time", clock_text);
+                int length = loadGamesJSON.getInt("length");
+                loadGamesJSON.put(Integer.toString(length), loadJSON);
+                ++length;
+                loadGamesJSON.put("length", Integer.toString(length));
+            }
+            else {
+                loadJSON.put("time", clock_text);
+                loadGamesJSON.put(Integer.toString(loadJSONPosition), loadJSON);
+            }
+            // Write loadGamesJSON to loadGamesFile
+            buff = new BufferedWriter(new FileWriter(activity.getLoadGamesFile(), false));
+            buff.write(loadGamesJSON.toString());
+            buff.flush();
+            buff.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (JSONException e) {
             e.printStackTrace();
         }
     }

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +15,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Created by Jeff on 7/12/2015.
@@ -27,10 +35,13 @@ public class LoadFragment extends Fragment {
     private ListView loadList;
     private View mostRecentView;
     private int mostRecentPosition;
+    private String filename;
     private MainActivity activity;
+    private File loadGamesFile;
+    private JSONObject loadGamesJSON;
     private File[] files;
-    private String[] filenames;
     private FragmentManager fm;
+    private LayoutInflater inflater;
 
     public LoadFragment() {
         mostRecentView = null;
@@ -38,11 +49,13 @@ public class LoadFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater _inflater, ViewGroup container, Bundle savedInstanceState) {
+        inflater = _inflater;
         rootView = inflater.inflate(R.layout.fragment_load, container, false);
         activity = (MainActivity)getActivity();
         fm = activity.getFragmentManager();
         activity.setTitle(getResources().getString(R.string.app_name).concat(" - Load"));
+        loadGamesFile = activity.getLoadGamesFile();
 
         /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
         rootView.setOnTouchListener(new View.OnTouchListener()
@@ -55,7 +68,7 @@ public class LoadFragment extends Fragment {
 
         activity.loadFiles();
         files = activity.getFiles();
-        filenames = activity.getFilenames();
+        loadGamesJSON = activity.getLoadGamesJSON();
 
         if(files == null || files.length == 0) {
             loadList.setVisibility(View.INVISIBLE);
@@ -64,19 +77,20 @@ public class LoadFragment extends Fragment {
         else {
             loadEmptyMessage.setVisibility(View.INVISIBLE);
             loadList.setVisibility(View.VISIBLE);
-            final LoadGameAdapter loadGameAdapter = new LoadGameAdapter(filenames, rootView.getContext());
+            final LoadGameAdapter loadGameAdapter = new LoadGameAdapter(loadGamesJSON, rootView.getContext());
             loadList.setAdapter(loadGameAdapter);
             loadList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     if(mostRecentView != null) {
-                        mostRecentView.setBackground(getResources().getDrawable(android.R.color.white));
+                        mostRecentView.setBackground(getResources().getDrawable(android.R.color.transparent));
                         mostRecentView.findViewById(R.id.load_list_item_delete).setVisibility(View.INVISIBLE);
                     }
 
                     mostRecentView = view;
                     mostRecentPosition = position;
                     mostRecentView.setBackground(getResources().getDrawable(android.R.color.holo_blue_light));
+                    filename = ((TextView)(mostRecentView.findViewById(R.id.load_list_item_text))).getText().toString();
 
                     Button deleteButton = (Button)mostRecentView.findViewById(R.id.load_list_item_delete);
                     deleteButton.setVisibility(View.VISIBLE);
@@ -95,9 +109,10 @@ public class LoadFragment extends Fragment {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mostRecentPosition != -1) {
+                if(mostRecentView != null) {
+                    File saveDir = activity.getSaveDir();
                     GameFragment game = new GameFragment();
-                    game.loadGame(getResources().getInteger(R.integer.board_size), files[mostRecentPosition]);
+                    game.loadGame(getResources().getInteger(R.integer.board_size), new File(saveDir.getAbsolutePath().concat(filename.concat(".txt"))), mostRecentPosition);
                     activity.setGame(game);
                     fm.popBackStack();
                     fm.beginTransaction()
@@ -122,39 +137,67 @@ public class LoadFragment extends Fragment {
         return rootView;
     }
 
-    /* Game deletion logic */
+    //region Game deletion logic
     public void deleteGame(final LoadGameAdapter loadGameAdapter, final View loadList) {
-        new AlertDialog.Builder(rootView.getContext())
-            .setTitle("Confirm Delete")
-            .setMessage(String.format("Are you sure you want to delete %s?", filenames[mostRecentPosition]))
-            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (files[mostRecentPosition].delete()) {
-                        if (filenames[mostRecentPosition].equals("AutoSave"))
-                            activity.enableResumeGameButton(false);
-                        if (mostRecentPosition < (filenames.length - 1)) {
-                            mostRecentView.setBackground(getResources().getDrawable(android.R.color.white));
-                            mostRecentView.findViewById(R.id.load_list_item_delete).setVisibility(View.INVISIBLE);
-                        }
-                        mostRecentView = null;
-                        mostRecentPosition = -1;
-                        activity.loadFiles();
-                        files = activity.getFiles();
-                        filenames = activity.getFilenames();
-                        loadGameAdapter.renewAdapter(filenames);
-                        if (loadGameAdapter.getCount() == 0) {
-                            loadList.setVisibility(View.INVISIBLE);
-                            rootView.findViewById(R.id.load_empty_message).setVisibility(View.VISIBLE);
-                        }
+        final AlertDialog deleteAlert = new AlertDialog.Builder(rootView.getContext()).create();
+        View deleteAlertView = inflater.inflate(R.layout.delete_game_dialog_layout, null);
+        deleteAlertView.findViewById(R.id.delete_game_no_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteAlert.cancel();
+            }
+        });
+        deleteAlertView.findViewById(R.id.delete_game_yes_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Delete file on disk
+                String _filename = ((TextView)mostRecentView.findViewById(R.id.load_list_item_text)).getText().toString();
+                File deleteFile = new File(activity.getSaveDir(), _filename.concat(".txt"));
+                if (deleteFile.delete()) {
+                    // Reset graphical state
+                    if (mostRecentPosition < (files.length - 1)) {
+                        mostRecentView.setBackground(getResources().getDrawable(android.R.color.transparent));
+                        mostRecentView.findViewById(R.id.load_list_item_delete).setVisibility(View.INVISIBLE);
+                    }
+                    mostRecentView = null;
+                    mostRecentPosition = -1;
+                    // Update activity copies
+                    activity.loadFiles(); // Updates files
+                    updateLoadGamesFile();
+                    files = activity.getFiles();
+                    loadGameAdapter.renewAdapter(activity.getLoadGamesJSON());
+                    if (loadGameAdapter.getCount() == 0) {
+                        loadList.setVisibility(View.INVISIBLE);
+                        rootView.findViewById(R.id.load_empty_message).setVisibility(View.VISIBLE);
                     }
                 }
-            })
-            .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            })
-            .show();
+                deleteAlert.cancel();
+            }
+        });
+        deleteAlert.setView(deleteAlertView);
+        deleteAlert.show();
     }
+
+    private void updateLoadGamesFile() {
+        try {
+            int length = loadGamesJSON.getInt("length");
+            for(int i = length-1; i > mostRecentPosition; --i)
+                loadGamesJSON.put(Integer.toString(i-1), loadGamesJSON.get(Integer.toString(i)));
+            loadGamesJSON.remove(Integer.toString(length-1));
+            loadGamesJSON.put("length", --length);
+
+            BufferedWriter buff = new BufferedWriter(new FileWriter(loadGamesFile, false));
+            buff.write(loadGamesJSON.toString());
+            buff.flush();
+            buff.close();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //endregion
 }

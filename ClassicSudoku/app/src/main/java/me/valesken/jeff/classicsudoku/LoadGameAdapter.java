@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,14 +20,21 @@ import java.util.Arrays;
  */
 public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
     Context context;
-    ArrayList<String> filenames;
+    int length;
+    JSONObject loadGamesJSON;
     View[] views;
 
-    public LoadGameAdapter(String[] _filenames, Context _context) {
-        filenames = new ArrayList<String>();
-        filenames.addAll(Arrays.asList(_filenames));
+    public LoadGameAdapter(JSONObject _loadGamesJSON, Context _context) {
+        length = 0;
+        loadGamesJSON = _loadGamesJSON;
+        try {
+            length = loadGamesJSON.getInt("length");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
         context = _context;
-        views = new View[filenames.size()];
+        views = new View[length];
     }
 
     @Override
@@ -34,7 +44,16 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             listItemView = inflater.inflate(R.layout.load_list_item_layout, null);
-            ((TextView)listItemView.findViewById(R.id.load_list_item_text)).setText(filenames.get(position));
+            try {
+                JSONObject thisLoadGameJSON = loadGamesJSON.getJSONObject(Integer.toString(position));
+                String filenameString = thisLoadGameJSON.getString("filename");
+                String timeString = thisLoadGameJSON.getString("time");
+                ((TextView) listItemView.findViewById(R.id.load_list_item_text)).setText(filenameString);
+                ((TextView) listItemView.findViewById(R.id.load_list_item_time)).setText(timeString);
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
             views[position] = listItemView;
         }
         else
@@ -44,7 +63,7 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
     }
 
     @Override
-    public int getCount() { return filenames.size(); }
+    public int getCount() { return length; }
 
     @Override
     public Object getItem(int position) { return views[position]; }
@@ -52,11 +71,21 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
     @Override
     public long getItemId(int position) { return 0; }
 
-    public void renewAdapter(String[] _filenames) {
-        filenames.clear();
-        for (int i = 0; i < _filenames.length; ++i) {
-            filenames.add(_filenames[i]);
-            ((TextView)views[i].findViewById(R.id.load_list_item_text)).setText(filenames.get(i));
+    public void renewAdapter(JSONObject _loadGamesJSON) {
+        length = 0;
+        loadGamesJSON = _loadGamesJSON;
+        try {
+            length = loadGamesJSON.getInt("length");
+            for (int i = 0; i < length; ++i) {
+                JSONObject thisLoadGameJSON = loadGamesJSON.getJSONObject(Integer.toString(i));
+                String filenameString = thisLoadGameJSON.getString("filename");
+                String timeString = thisLoadGameJSON.getString("time");
+                ((TextView)views[i].findViewById(R.id.load_list_item_text)).setText(filenameString);
+                ((TextView)views[i].findViewById(R.id.load_list_item_time)).setText(timeString);
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
         }
         this.notifyDataSetChanged();
     }

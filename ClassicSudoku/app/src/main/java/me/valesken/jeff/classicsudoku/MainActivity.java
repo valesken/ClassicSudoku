@@ -24,9 +24,9 @@ public class MainActivity extends Activity {
 
     private static FragmentManager fm;
     private static File[] files;
-    private static String[] filenames;
     private static File saveDir;
     private static File highScores;
+    private static File loadGamesFile;
     private static File autoSaveFile;
     private static JSONObject highScoresJSON;
     private static GameFragment game;
@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         main = new MainFragment();
 
-        // Set up high scores file (if doesn't exist) and load high scores
         try {
+            // Set up high scores file (if doesn't exist) and load high scores
             highScores = new File(getFilesDir(), "HighScores.txt");
             if (!highScores.exists()) {
                 BufferedWriter buff = new BufferedWriter(new FileWriter(highScores, false));
@@ -50,6 +50,15 @@ public class MainActivity extends Activity {
             BufferedReader buff_r = new BufferedReader(new FileReader(highScores));
             highScoresJSON = new JSONObject(buff_r.readLine());
             buff_r.close();
+
+            // Set up load games file (if doesn't exist)
+            loadGamesFile = new File(getFilesDir(), "LoadGames.txt");
+            if (!loadGamesFile.exists()) {
+                BufferedWriter buff = new BufferedWriter(new FileWriter(loadGamesFile, false));
+                buff.write(getResources().getString(R.string.load_games_init));
+                buff.flush();
+                buff.close();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -73,6 +82,7 @@ public class MainActivity extends Activity {
     }
 
     public void loadFiles() {
+
         // Load AutoSave.txt (if it exists)
         autoSaveFile = null;
         files = getFilesDir().listFiles();
@@ -84,21 +94,15 @@ public class MainActivity extends Activity {
 
         // Load all other save files
         files = saveDir.listFiles();
-        if(files == null)
-            filenames = null;
-        else {
-            filenames = new String[files.length];
-            for (int i = 0; i < files.length; ++i)
-                filenames[i] = files[i].getName().replace(".txt", "");
-        }
     }
 
+    //region Options Menu
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }*/
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -107,7 +111,8 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
-    }
+    }*/
+    //endregion
 
     @Override
     public void onBackPressed() {
@@ -133,7 +138,23 @@ public class MainActivity extends Activity {
 
     public File[] getFiles() { return files; }
 
-    public String[] getFilenames() { return filenames; }
+    public JSONObject getLoadGamesJSON() {
+        JSONObject loadGamesJSON = null;
+        try {
+            BufferedReader buff_r = new BufferedReader(new FileReader(loadGamesFile));
+            loadGamesJSON = new JSONObject(buff_r.readLine());
+            buff_r.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return loadGamesJSON;
+    }
+
+    public File getLoadGamesFile() { return loadGamesFile; }
 
     public GameFragment getGame() { return game; }
 

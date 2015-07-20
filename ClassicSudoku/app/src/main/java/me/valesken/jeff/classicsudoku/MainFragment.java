@@ -52,7 +52,7 @@ public class MainFragment extends Fragment {
             public void onClick(View v) {
                 autoSaveFile = activity.getAutoSaveFile();
                 game = new GameFragment();
-                game.loadGame(getResources().getInteger(R.integer.board_size), autoSaveFile);
+                game.loadGame(getResources().getInteger(R.integer.board_size), autoSaveFile, -1);
                 activity.setGame(game);
                 fm.beginTransaction()
                     .add(R.id.container, game)
@@ -103,54 +103,58 @@ public class MainFragment extends Fragment {
 
     private void toNew(LayoutInflater inflater, final View button)
     {
-        final View newGameDialogView = inflater.inflate(R.layout.new_game_dialog_layout, null);
         button.setEnabled(false);
-        new AlertDialog.Builder(rootView.getContext())
-            .setTitle("Choose Difficulty")
-            .setView(newGameDialogView)
-            .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    button.setEnabled(true);
-                }
-            })
-            .setNegativeButton("Play", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    game = new GameFragment();
-                    RadioGroup radioGroup = (RadioGroup) newGameDialogView.findViewById(R.id.difficultyRadGroup);
-                    int id = radioGroup.getCheckedRadioButtonId();
-                    int difficulty = 1; /* Defaults to Easy */
-                    switch (id) {
-                        case R.id.mediumRadButton:
-                            difficulty = 2;
-                            break;
-                        case R.id.hardRadButton:
-                            difficulty = 3;
-                            break;
-                        case R.id.randomRadButton:
-                            difficulty = 4;
-                            break;
-                        default:
-                            break;
-                    }
-                    game.newGame(getResources().getInteger(R.integer.board_size), difficulty);
-                    activity.setGame(game);
 
-                    fm.beginTransaction()
-                            .add(R.id.container, game)
-                            .addToBackStack("Game")
-                            .commit();
-                    button.setEnabled(true);
+        final AlertDialog ad = new AlertDialog.Builder(rootView.getContext()).create();
+
+        final View newGameDialogView = inflater.inflate(R.layout.new_game_dialog_layout, null);
+        newGameDialogView.findViewById(R.id.new_game_cancel_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                button.setEnabled(true);
+                ad.cancel();
+            }
+        });
+        newGameDialogView.findViewById(R.id.new_game_play_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                game = new GameFragment();
+                RadioGroup radioGroup = (RadioGroup) newGameDialogView.findViewById(R.id.difficultyRadGroup);
+                int id = radioGroup.getCheckedRadioButtonId();
+                int difficulty = 1; /* Defaults to Easy */
+                switch (id) {
+                    case R.id.mediumRadButton:
+                        difficulty = 2;
+                        break;
+                    case R.id.hardRadButton:
+                        difficulty = 3;
+                        break;
+                    case R.id.randomRadButton:
+                        difficulty = 4;
+                        break;
+                    default:
+                        break;
                 }
-            })
-            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    button.setEnabled(true);
-                }
-            })
-            .show();
+                game.newGame(getResources().getInteger(R.integer.board_size), difficulty);
+                activity.setGame(game);
+
+                fm.beginTransaction()
+                        .add(R.id.container, game)
+                        .addToBackStack("Game")
+                        .commit();
+                button.setEnabled(true);
+                ad.cancel();
+            }
+        });
+
+        ad.setView(newGameDialogView);
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                button.setEnabled(true);
+            }
+        });
+        ad.show();
     }
 
     public void enableResumeGameButton(boolean enabled) { resumeGameButton.setEnabled(enabled); }

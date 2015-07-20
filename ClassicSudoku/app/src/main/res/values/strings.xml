@@ -4,6 +4,7 @@
     <string name="app_name">Classic Sudoku</string>
     <string name="action_settings">Settings</string>
     <string name="high_scores_init">{\"Easy\":[\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],\"Medium\":[\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"],\"Hard\":[\"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\", \"\"]}</string>
+    <string name="load_games_init">{\"length\":\"0\"}</string>
     <string name="about_app_string">Classic Sudoku was created by Jeff Kennedy in early 2015 as a way to exercise his love of code and his love of Sudoku. If anyone else claims they made this, they are a liar and should be scorned as such.</string>
     <string name="about_app_string2">Also, feel free to use, re-use, alter, or abuse this code to your heart\'s content. Just don\'t be a dick about it.</string>
     <string name="about_app_string3">\"Sudoku\" is a Japanese word that essentially means \"Single Number.\" Originally it was a French game called \"Number Place\" that first appeared in Le Siecle in 1892, but it only lasted about a decade before fading into obscurity.</string>

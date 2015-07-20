@@ -8,11 +8,12 @@
     android:background="#545454" >
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center_horizontal"
         android:padding="5dp"
-        android:background="@drawable/light_dialog_bg" >
+        android:background="@drawable/light_dialog_bg">
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,14 +21,16 @@
             android:layout_margin="5dp"
             android:textSize="17sp"
             android:textColor="@android:color/black"
-            android:text="Save As:" />
+            android:text="Wait up!" />
 
-        <EditText
-            android:id="@+id/save_textbox"
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/confirm_dialog_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@android:color/white" />
+            android:padding="5dp"
+            android:textSize="17sp"
+            android:textColor="@android:color/black"
+            android:text="That filename already exists."/>
 
     </LinearLayout>
 
@@ -37,22 +40,22 @@
         android:paddingTop="1dp"
         android:background="#545454">
         <Button
-            android:id="@+id/save_cancel_button"
+            android:id="@+id/confirm_back_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/dialog_button_selector"
-            android:text="Cancel" />
+            android:text="Go Back" />
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"/>
         <Button
-            android:id="@+id/save_save_button"
+            android:id="@+id/confirm_continue_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/dialog_button_selector"
-            android:text="Save" />
+            android:text="Continue" />
     </LinearLayout>
 
 </LinearLayout>
