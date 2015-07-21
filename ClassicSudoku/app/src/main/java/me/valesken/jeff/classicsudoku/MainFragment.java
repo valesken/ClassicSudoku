@@ -53,7 +53,7 @@ public class MainFragment extends Fragment {
                 autoSaveFile = activity.getAutoSaveFile();
                 game = new GameFragment();
                 game.loadGame(getResources().getInteger(R.integer.board_size), autoSaveFile, -1);
-                activity.setGame(game);
+                activity.setGameFragment(game);
                 fm.beginTransaction()
                     .add(R.id.container, game)
                     .addToBackStack("Game")
@@ -136,7 +136,7 @@ public class MainFragment extends Fragment {
                         break;
                 }
                 game.newGame(getResources().getInteger(R.integer.board_size), difficulty);
-                activity.setGame(game);
+                activity.setGameFragment(game);
 
                 fm.beginTransaction()
                         .add(R.id.container, game)

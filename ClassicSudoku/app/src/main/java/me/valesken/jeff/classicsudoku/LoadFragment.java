@@ -3,9 +3,7 @@ package me.valesken.jeff.classicsudoku;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -113,7 +110,7 @@ public class LoadFragment extends Fragment {
                     File saveDir = activity.getSaveDir();
                     GameFragment game = new GameFragment();
                     game.loadGame(getResources().getInteger(R.integer.board_size), new File(saveDir.getAbsolutePath().concat(filename.concat(".txt"))), mostRecentPosition);
-                    activity.setGame(game);
+                    activity.setGameFragment(game);
                     fm.popBackStack();
                     fm.beginTransaction()
                         .add(R.id.container, game)

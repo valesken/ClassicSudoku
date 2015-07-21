@@ -3,7 +3,6 @@ package me.valesken.jeff.classicsudoku;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +28,7 @@ public class MainActivity extends Activity {
     private static File loadGamesFile;
     private static File autoSaveFile;
     private static JSONObject highScoresJSON;
-    private static GameFragment game;
+    private static GameFragment gameFragment;
     private static MainFragment main;
 
     @Override
@@ -119,9 +118,16 @@ public class MainActivity extends Activity {
         if(fm.getBackStackEntryCount() == 1) {
             setTitle(getResources().getString(R.string.app_name));
             if(fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName().equals("Game"))
-                game.handleAutoSave();
+                gameFragment.handleAutoSave();
         }
         super.onBackPressed();
+    }
+
+    @Override
+    public void onPause() {
+        if(fm.getBackStackEntryCount() == 1 && fm.getBackStackEntryAt(fm.getBackStackEntryCount()-1).getName().equals("Game"))
+            gameFragment.pause();
+        super.onPause();
     }
 
     /*
@@ -156,7 +162,7 @@ public class MainActivity extends Activity {
 
     public File getLoadGamesFile() { return loadGamesFile; }
 
-    public GameFragment getGame() { return game; }
+    public GameFragment getGame() { return gameFragment; }
 
     /*
      * Setters
@@ -164,6 +170,6 @@ public class MainActivity extends Activity {
 
     public void enableResumeGameButton(boolean enabled) { main.enableResumeGameButton(enabled); }
 
-    public void setGame(GameFragment _game) { game = _game; }
+    public void setGameFragment(GameFragment _gameFragment) { gameFragment = _gameFragment; }
 
 }

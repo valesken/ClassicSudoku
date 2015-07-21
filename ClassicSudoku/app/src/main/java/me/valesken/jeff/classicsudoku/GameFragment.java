@@ -28,7 +28,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import me.valesken.jeff.sudoku_structure.Board;
@@ -56,6 +55,7 @@ public class GameFragment extends Fragment {
     private View overwrite_dialog_view;
     private AlertDialog save_alert;
     private AlertDialog overwrite_alert;
+    private AlertDialog paused_alert;
     private String filename;
     private File saveFile;
     private File[] files;
@@ -106,7 +106,6 @@ public class GameFragment extends Fragment {
                         }
                     });
                 } catch (InterruptedException e) {
-                    System.out.println(e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
                     Thread.currentThread().interrupt();
                 }
             }
@@ -371,22 +370,7 @@ public class GameFragment extends Fragment {
                 if(gameOver)
                     Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
                 else {
-                    paused = true;
-                    new AlertDialog.Builder(rootView.getContext())
-                            .setMessage("Game is paused.")
-                            .setNeutralButton("Resume", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    paused = false;
-                                }
-                            })
-                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                @Override
-                                public void onCancel(DialogInterface dialog) {
-                                    paused = false;
-                                }
-                            })
-                            .show();
+                    pause();
                 }
             }
         });
@@ -472,6 +456,24 @@ public class GameFragment extends Fragment {
         });
         //endregion
 
+        //region "Paused" Alert
+        paused_alert = new AlertDialog.Builder(rootView.getContext()).create();
+        paused_alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                paused = false;
+            }
+        });
+        View pausedAlertView = inflater.inflate(R.layout.pause_dialog_layout, container, false);
+        pausedAlertView.findViewById(R.id.pause_resume_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paused_alert.cancel();
+            }
+        });
+        paused_alert.setView(pausedAlertView);
+        //endregion
+
         return rootView;
     }
 
@@ -521,6 +523,7 @@ public class GameFragment extends Fragment {
 
     public void handleAutoSave() {
         try {
+            clockThread.interrupt();
             File autoSaveFile = activity.getAutoSaveFile();
             if (!gameOver) {
                 File saveFile = new File(activity.getFilesDir(), "AutoSave.txt");
@@ -541,6 +544,13 @@ public class GameFragment extends Fragment {
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void pause() {
+        if(!paused) {
+            paused = true;
+            paused_alert.show();
         }
     }
 
