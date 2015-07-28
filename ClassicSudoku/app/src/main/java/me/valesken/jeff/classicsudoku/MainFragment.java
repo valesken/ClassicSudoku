@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -23,11 +25,12 @@ public class MainFragment extends Fragment {
     private View rootView;
     private Button resumeGameButton;
     private MainActivity activity;
-    private GameFragment game;
     private FragmentManager fm;
-    private File autoSaveFile;
+    private boolean loadingGame;
 
-    public MainFragment() { }
+    public MainFragment() {
+        loadingGame = false;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,9 +39,8 @@ public class MainFragment extends Fragment {
         activity = (MainActivity)getActivity();
 
         activity.setTitle(getResources().getString(R.string.app_name));
-        game = activity.getGame();
         fm = activity.getFragmentManager();
-        autoSaveFile = activity.getAutoSaveFile();
+        File autoSaveFile = activity.getAutoSaveFile();
 
         resumeGameButton = (Button) rootView.findViewById(R.id.resume_game_button);
         Button newGameButton = (Button) rootView.findViewById(R.id.new_game_button);
@@ -50,20 +52,15 @@ public class MainFragment extends Fragment {
         resumeGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                autoSaveFile = activity.getAutoSaveFile();
-                game = new GameFragment();
-                game.loadGame(getResources().getInteger(R.integer.board_size), autoSaveFile, -1);
-                activity.setGameFragment(game);
-                fm.beginTransaction()
-                    .add(R.id.container, game)
-                    .addToBackStack("Game")
-                    .commit();
+                new LoadGameTask().execute(getResources().getInteger(R.integer.board_size));
+                Toast.makeText(rootView.getContext(), "Loading...", Toast.LENGTH_LONG).show();
             }
         });
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toNew(f_inflater, v);
+                if(!loadingGame)
+                    toNew(f_inflater, v);
             }
         });
         loadGameButton.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +100,7 @@ public class MainFragment extends Fragment {
 
     private void toNew(LayoutInflater inflater, final View button)
     {
-        button.setEnabled(false);
+        loadingGame = true;
 
         final AlertDialog ad = new AlertDialog.Builder(rootView.getContext()).create();
 
@@ -111,14 +108,12 @@ public class MainFragment extends Fragment {
         newGameDialogView.findViewById(R.id.new_game_cancel_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                button.setEnabled(true);
                 ad.cancel();
             }
         });
         newGameDialogView.findViewById(R.id.new_game_play_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                game = new GameFragment();
                 RadioGroup radioGroup = (RadioGroup) newGameDialogView.findViewById(R.id.difficultyRadGroup);
                 int id = radioGroup.getCheckedRadioButtonId();
                 int difficulty = 1; /* Defaults to Easy */
@@ -135,14 +130,8 @@ public class MainFragment extends Fragment {
                     default:
                         break;
                 }
-                game.newGame(getResources().getInteger(R.integer.board_size), difficulty);
-                activity.setGameFragment(game);
-
-                fm.beginTransaction()
-                        .add(R.id.container, game)
-                        .addToBackStack("Game")
-                        .commit();
-                button.setEnabled(true);
+                new NewGameTask().execute(getResources().getInteger(R.integer.board_size), difficulty);
+                Toast.makeText(rootView.getContext(), "Loading...", Toast.LENGTH_LONG).show();
                 ad.cancel();
             }
         });
@@ -158,4 +147,58 @@ public class MainFragment extends Fragment {
     }
 
     public void enableResumeGameButton(boolean enabled) { resumeGameButton.setEnabled(enabled); }
+
+    private class NewGameTask extends AsyncTask<Integer, Void, GameFragment> {
+        @Override
+        protected void onPreExecute() { }
+
+        @Override
+        protected GameFragment doInBackground(Integer... ints) {
+            int boardSize = ints[0];
+            int difficulty = ints[1];
+            GameFragment game = new GameFragment();
+            game.newGame(boardSize, difficulty);
+            activity.setGameFragment(game);
+            return game;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... voids) { }
+
+        @Override
+        protected void onPostExecute(GameFragment game) {
+            fm.beginTransaction()
+                    .add(R.id.container, game)
+                    .addToBackStack("Game")
+                    .commit();
+            loadingGame = false;
+            Toast.makeText(rootView.getContext(), "Loaded!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class LoadGameTask extends AsyncTask<Integer, Void, GameFragment> {
+        @Override
+        protected void onPreExecute() { }
+
+        @Override
+        protected GameFragment doInBackground(Integer... ints) {
+            GameFragment game = new GameFragment();
+            game.loadGame(getResources().getInteger(R.integer.board_size), activity.getAutoSaveFile(), -1);
+            return game;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... voids) { }
+
+        @Override
+        protected void onPostExecute(GameFragment game) {
+
+            activity.setGameFragment(game);
+            fm.beginTransaction()
+                    .add(R.id.container, game)
+                    .addToBackStack("Game")
+                    .commit();
+            Toast.makeText(rootView.getContext(), "Loaded!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

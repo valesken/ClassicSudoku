@@ -3,6 +3,7 @@ package me.valesken.jeff.classicsudoku;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -107,15 +109,8 @@ public class LoadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(mostRecentView != null) {
-                    File saveDir = activity.getSaveDir();
-                    GameFragment game = new GameFragment();
-                    game.loadGame(getResources().getInteger(R.integer.board_size), new File(saveDir.getAbsolutePath().concat(filename.concat(".txt"))), mostRecentPosition);
-                    activity.setGameFragment(game);
-                    fm.popBackStack();
-                    fm.beginTransaction()
-                        .add(R.id.container, game)
-                        .addToBackStack("Game")
-                        .commit();
+                    new LoadGameTask().execute(getResources().getInteger(R.integer.board_size), mostRecentPosition);
+                    Toast.makeText(rootView.getContext(), "Loading...", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -197,4 +192,35 @@ public class LoadFragment extends Fragment {
     }
 
     //endregion
+
+    private class LoadGameTask extends AsyncTask<Integer, Void, GameFragment> {
+        @Override
+        protected void onPreExecute() { }
+
+        @Override
+        protected GameFragment doInBackground(Integer... ints) {
+            int boardSize = ints[0];
+            int position = ints[1];
+            File saveDir = activity.getSaveDir();
+            File saveFile = new File(saveDir.getAbsolutePath().concat("/".concat(filename.concat(".txt"))));
+            GameFragment game = new GameFragment();
+            game.loadGame(boardSize, saveFile, position);
+            return game;
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... voids) { }
+
+        @Override
+        protected void onPostExecute(GameFragment game) {
+
+            activity.setGameFragment(game);
+            fm.popBackStack();
+            fm.beginTransaction()
+                    .add(R.id.container, game)
+                    .addToBackStack("Game")
+                    .commit();
+            Toast.makeText(rootView.getContext(), "Loaded!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
