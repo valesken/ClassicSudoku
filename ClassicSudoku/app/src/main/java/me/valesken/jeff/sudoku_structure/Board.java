@@ -13,6 +13,10 @@ import java.util.Stack;
  * Last updated on 7/12/2015
  */
 public class Board {
+    static public String jsonTimeId = "time";
+    static public String jsonDifficultyId = "difficulty";
+    static public String jsonSolutionId = "solution";
+    static public String jsonTilesId = "tiles";
 
     private int boardSize;
     private int difficulty;
@@ -52,14 +56,14 @@ public class Board {
 
     /**
      * Getter for whether or not a Tile is in note-mode.
-     * @param position
+     * @param position The index (0 - 80) of the Tile to check
      * @return True: Tile is in note mode. False: Tile is in value mode.
      */
     public boolean tileIsNoteMode(int position) { return tiles[position].isNoteMode(); }
 
     /**
      * Getter for whether or not a given Tile is an 'original' Tile.
-     * @param position
+     * @param position The index (0 - 80) of the Tile to check
      * @return whether or not a given Tile is an 'original' Tile.
      */
     public boolean isOrig(int position) { return tiles[position].isOrig(); }
@@ -80,8 +84,8 @@ public class Board {
 
     /**
      * This updates a specific Tile.
-     * @param position index of the Tile to update
-     * @param value new value/note for Tile
+     * @param position The index (0 - 80) of the Tile to update
+     * @param value The new value/note for the Tile
      */
     public void updateTile(int position, int value)
     {
@@ -104,7 +108,7 @@ public class Board {
 
     public int getHint()
     {
-        LinkedList<Tile> openTiles = new LinkedList<Tile>();
+        LinkedList<Tile> openTiles = new LinkedList<>();
         for(int i = 0; i < tiles.length; ++i)
             if (tiles[i].getValue() == 0 || tiles[i].getValue() != solution[i])
                 openTiles.add(tiles[i]);
@@ -147,18 +151,18 @@ public class Board {
     {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("time", currentTime);
-            jsonObject.put("difficulty", difficulty);
+            jsonObject.put(jsonTimeId, currentTime);
+            jsonObject.put(jsonDifficultyId, difficulty);
 
             JSONArray solutionArray = new JSONArray();
-            for (int i = 0; i < solution.length; ++i)
-                solutionArray.put(solution[i]);
-            jsonObject.put("solution", solutionArray);
+            for (int solution_value : solution)
+                solutionArray.put(solution_value);
+            jsonObject.put(jsonSolutionId, solutionArray);
 
             JSONArray tilesArray = new JSONArray();
-            for (int i = 0; i < tiles.length; ++i)
-                tilesArray.put(tiles[i].getJSON());
-            jsonObject.put("tiles", tilesArray);
+            for (Tile tile : tiles)
+                tilesArray.put(tile.getJSON());
+            jsonObject.put(jsonTilesId, tilesArray);
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -203,12 +207,12 @@ public class Board {
         int difficulty = 0;
         randGen = new Random();
         try {
-            difficulty = jsonObject.getInt("difficulty");
-            timeElapsed = jsonObject.getString("time");
-            JSONArray jsonArray = jsonObject.getJSONArray("solution");
+            difficulty = jsonObject.getInt(jsonDifficultyId);
+            timeElapsed = jsonObject.getString(jsonTimeId);
+            JSONArray jsonArray = jsonObject.getJSONArray(jsonSolutionId);
             for(int i = 0; i < jsonArray.length(); ++i)
                 solution[i] = jsonArray.getInt(i);
-            jsonArray = jsonObject.getJSONArray("tiles");
+            jsonArray = jsonObject.getJSONArray(jsonTilesId);
             for (int i = 0; i < jsonArray.length(); ++i) {
                 tiles[i].loadTileState(jsonArray.getJSONObject(i));
                 tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i].getZoneNumber()]);
@@ -222,7 +226,7 @@ public class Board {
 
     private void initialize()
     {
-        Stack<Tile> tileStack = new Stack<Tile>();
+        Stack<Tile> tileStack = new Stack<>();
         Tile tempTile;
         int count; // to make sure initialization doesn't take TOO long
 
@@ -266,7 +270,7 @@ public class Board {
                      * Get here if not the case that all values have already been tried
                      * Check if tile already visited
                      */
-                    while(tiles[currentIndex].hasBeenVisited()) {
+                    if(tiles[currentIndex].hasBeenVisited()) {
                         currentIndex = (currentIndex < (tiles.length-1)) ? currentIndex+1 : 0;
                         break;
                     }
@@ -338,8 +342,8 @@ public class Board {
     {
         int bound = (difficulty > 2) ? 2 : ((difficulty == 2) ? 3 : 4);
 
-        Stack<House> highHouses = new Stack<House>();
-        Stack<House> lowHouses = new Stack<House>();
+        Stack<House> highHouses = new Stack<>();
+        Stack<House> lowHouses = new Stack<>();
         Tile tile;
         House lowHouse;
         House highHouse;

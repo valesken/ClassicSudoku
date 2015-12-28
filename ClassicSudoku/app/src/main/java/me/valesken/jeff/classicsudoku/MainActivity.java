@@ -59,10 +59,7 @@ public class MainActivity extends Activity {
                 buff.close();
             }
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (JSONException e) {
+        catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -151,18 +148,13 @@ public class MainActivity extends Activity {
             loadGamesJSON = new JSONObject(buff_r.readLine());
             buff_r.close();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (JSONException e) {
+        catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return loadGamesJSON;
     }
 
     public File getLoadGamesFile() { return loadGamesFile; }
-
-    public GameFragment getGame() { return gameFragment; }
 
     /*
      * Setters

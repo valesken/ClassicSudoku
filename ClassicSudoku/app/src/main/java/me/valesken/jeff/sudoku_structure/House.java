@@ -1,7 +1,8 @@
 package me.valesken.jeff.sudoku_structure;
 
+//import android.util.SparseArray;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -18,14 +19,14 @@ public class House {
 
     private int boardSize;
     private ArrayList<Tile> members;
-    private HashMap<Integer, LinkedList<Tile>> values; // For contradiction checking
+    //private SparseArray<LinkedList<Tile>> values; // For contradiction checking
 
     public House(int mBoardSize) {
         boardSize = mBoardSize;
-        members = new ArrayList<Tile>(mBoardSize);
-        values = new HashMap<Integer, LinkedList<Tile>>();
-        for(int i = 1; i <= boardSize; ++i)
-            values.put(i, new LinkedList<Tile>());
+        members = new ArrayList<>(mBoardSize);
+        //values = new SparseArray<LinkedList<Tile>>();
+        //for(int i = 1; i <= boardSize; ++i)
+        //    values.put(i, new LinkedList<Tile>());
     }
 
     /*
@@ -51,14 +52,15 @@ public class House {
         return false;
     }
 
+    /*
     // Checks if contradictions exist in the house
     public boolean hasContradiction() { return hasContradiction(new LinkedList<Tile>()); }
 
     // Checks if contradictions exist in the house
     public boolean hasContradiction(LinkedList<Tile> contradictions) {
         // Initialize values
+        int value;
         boolean result = false;
-        int value = 0;
         for(int i = 1; i <= boardSize; ++i)
             values.get(i).clear();
 
@@ -79,7 +81,7 @@ public class House {
 
         // Return the result
         return result;
-    }
+    }*/
 
     public int getValueCount()
     {
@@ -92,7 +94,7 @@ public class House {
 
     public LinkedList<Tile> getValueTiles()
     {
-        LinkedList<Tile> valueTiles = new LinkedList<Tile>();
+        LinkedList<Tile> valueTiles = new LinkedList<>();
         for(Tile t : members)
             if(t.getValue() > 0)
                 valueTiles.add(t);

@@ -37,7 +37,7 @@ public class GridManager {
         this.gameFragment = _gameFragment;
         this.values = board.getBoard();
         this.currentGridIndex = -1;
-        views = new View[values.length];
+        this.views = new View[values.length];
     }
 
     public void initializeGrid() {
@@ -115,7 +115,7 @@ public class GridManager {
             TextView textView = (TextView) tile.findViewById(R.id.tile_value_text);
             textView.setVisibility(View.VISIBLE);
             if (values[gridIndex].get(0) > 0)
-                textView.setText(Integer.toString(values[gridIndex].get(0)));
+                textView.setText(String.format("%d", values[gridIndex].get(0)));
             else
                 textView.setText(" ");
 

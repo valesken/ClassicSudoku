@@ -28,7 +28,7 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
         length = 0;
         loadGamesJSON = _loadGamesJSON;
         try {
-            length = loadGamesJSON.getInt("length");
+            length = loadGamesJSON.getInt(context.getResources().getString(R.string.json_length_id));
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -46,8 +46,8 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
             listItemView = inflater.inflate(R.layout.load_list_item_layout, null);
             try {
                 JSONObject thisLoadGameJSON = loadGamesJSON.getJSONObject(Integer.toString(position));
-                String filenameString = thisLoadGameJSON.getString("filename");
-                String timeString = thisLoadGameJSON.getString("time");
+                String filenameString = thisLoadGameJSON.getString(context.getResources().getString(R.string.json_filename_id));
+                String timeString = thisLoadGameJSON.getString(context.getResources().getString(R.string.json_time_id));
                 ((TextView) listItemView.findViewById(R.id.load_list_item_text)).setText(filenameString);
                 ((TextView) listItemView.findViewById(R.id.load_list_item_time)).setText(timeString);
             }
@@ -75,11 +75,11 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
         length = 0;
         loadGamesJSON = _loadGamesJSON;
         try {
-            length = loadGamesJSON.getInt("length");
+            length = loadGamesJSON.getInt(context.getResources().getString(R.string.json_length_id));
             for (int i = 0; i < length; ++i) {
                 JSONObject thisLoadGameJSON = loadGamesJSON.getJSONObject(Integer.toString(i));
-                String filenameString = thisLoadGameJSON.getString("filename");
-                String timeString = thisLoadGameJSON.getString("time");
+                String filenameString = thisLoadGameJSON.getString(context.getResources().getString(R.string.json_filename_id));
+                String timeString = thisLoadGameJSON.getString(context.getResources().getString(R.string.json_time_id));
                 ((TextView)views[i].findViewById(R.id.load_list_item_text)).setText(filenameString);
                 ((TextView)views[i].findViewById(R.id.load_list_item_time)).setText(timeString);
             }

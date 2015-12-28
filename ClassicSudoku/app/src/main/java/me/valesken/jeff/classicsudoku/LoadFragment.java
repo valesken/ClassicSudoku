@@ -183,10 +183,7 @@ public class LoadFragment extends Fragment {
             buff.flush();
             buff.close();
         }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
+        catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }

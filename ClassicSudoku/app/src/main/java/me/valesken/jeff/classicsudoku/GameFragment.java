@@ -38,7 +38,6 @@ import me.valesken.jeff.sudoku_structure.Board;
  * This fragment contains the actual board and UI that comprise the main game.
  */
 public class GameFragment extends Fragment {
-
     //region Member Variables
     private LayoutInflater inflater;
     private View rootView;
@@ -48,7 +47,6 @@ public class GameFragment extends Fragment {
     private int boardSize;
     private Board board;
     private GridManager gridManager;
-    private TableLayout grid;
     private View currentTile;
     private int currentPosition;
     private View save_dialog_view;
@@ -64,7 +62,7 @@ public class GameFragment extends Fragment {
     private TextView clock_tv;
     private volatile boolean paused = false;
     private volatile boolean gameOver = false;
-    //endregion
+    //endregionNewGameTask
 
     //region Clock Thread
     private Thread clockThread = new Thread(new Runnable() {
@@ -139,10 +137,7 @@ public class GameFragment extends Fragment {
             buff.close();
             difficulty = board.LoadGame(jsonObject);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (JSONException e) {
+        catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
@@ -158,7 +153,7 @@ public class GameFragment extends Fragment {
             JSONObject loadGamesJSON = activity.getLoadGamesJSON();
             if (loadJSONPosition > -1) {
                 loadJSON = loadGamesJSON.getJSONObject(Integer.toString(loadJSONPosition));
-                filename = loadJSON.getString("filename");
+                filename = loadJSON.getString(getResources().getString(R.string.json_filename_id));
             }
             else {
                 loadJSON = null;
@@ -195,7 +190,7 @@ public class GameFragment extends Fragment {
         //endregion
 
         //region Playing Grid Setup
-        grid = (TableLayout) rootView.findViewById(R.id.grid);
+        TableLayout grid = (TableLayout) rootView.findViewById(R.id.grid);
         gridManager = new GridManager(rootView.getContext(), board, boardSize, grid, this);
         gridManager.initializeGrid();
         //endregion
@@ -570,17 +565,17 @@ public class GameFragment extends Fragment {
             buff.close();
             // Update loadGamesJSON with this JSON
             JSONObject loadGamesJSON = activity.getLoadGamesJSON();
-            if(loadJSON == null || !loadJSON.getString("filename").equals(_filename)) {
+            if(loadJSON == null || !loadJSON.getString(getResources().getString(R.string.json_filename_id)).equals(_filename)) {
                 loadJSON = new JSONObject();
-                loadJSON.put("filename", _filename);
-                loadJSON.put("time", clock_text);
-                int length = loadGamesJSON.getInt("length");
+                loadJSON.put(getResources().getString(R.string.json_filename_id), _filename);
+                loadJSON.put(getResources().getString(R.string.json_time_id), clock_text);
+                int length = loadGamesJSON.getInt(getResources().getString(R.string.json_length_id));
                 loadGamesJSON.put(Integer.toString(length), loadJSON);
                 ++length;
-                loadGamesJSON.put("length", Integer.toString(length));
+                loadGamesJSON.put(getResources().getString(R.string.json_length_id), Integer.toString(length));
             }
             else {
-                loadJSON.put("time", clock_text);
+                loadJSON.put(getResources().getString(R.string.json_time_id), clock_text);
                 loadGamesJSON.put(Integer.toString(loadJSONPosition), loadJSON);
             }
             // Write loadGamesJSON to loadGamesFile
@@ -589,10 +584,7 @@ public class GameFragment extends Fragment {
             buff.flush();
             buff.close();
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (JSONException e) {
+        catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
@@ -620,7 +612,7 @@ public class GameFragment extends Fragment {
             int seconds = Integer.parseInt(currentTime.substring(index+1));
             String scoreTime;
             int scoreMinutes, scoreSeconds;
-            ArrayList<String> scores = new ArrayList<String>();
+            ArrayList<String> scores = new ArrayList<>();
 
             //region Find Current Score Place
             boolean inserted = false;
@@ -663,10 +655,7 @@ public class GameFragment extends Fragment {
             buff.close();
             //endregion
         }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
+        catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }

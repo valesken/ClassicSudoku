@@ -10,7 +10,16 @@ import java.util.LinkedList;
  * Created by Jeff on 2/28/2015.
  * Last updated on 7/12/2015
  */
+
 public class Tile {
+    static public String jsonIndexId = "index";
+    static public String jsonRowId = "row";
+    static public String jsonColumnId = "column";
+    static public String jsonZoneId = "zone";
+    static public String jsonNoteModeId = "noteMode";
+    static public String jsonOrigId = "orig";
+    static public String jsonValuesId = "notesOrValue";
+
     private int boardSize;
     private int index;
     private int rowNumber;
@@ -38,7 +47,7 @@ public class Tile {
         clear();
 
         visited = false;
-        initValues = new boolean[mBoardSize];
+        initValuesTried = new boolean[mBoardSize];
     }
 
     //region Setters
@@ -105,7 +114,7 @@ public class Tile {
         if(noteMode)
             return getNotes();
         else {
-            LinkedList<Integer> list = new LinkedList<Integer>();
+            LinkedList<Integer> list = new LinkedList<>();
             list.add(getValue());
             return list;
         }
@@ -116,7 +125,7 @@ public class Tile {
     public LinkedList<Integer> getNotes()
     {
         if(noteMode) {
-            LinkedList<Integer> notesList = new LinkedList<Integer>();
+            LinkedList<Integer> notesList = new LinkedList<>();
             for (int i = 0; i < boardSize; ++i)
                 if(notes[i])
                     notesList.add(i+1);
@@ -141,18 +150,18 @@ public class Tile {
     {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("index", this.getIndex());
-            jsonObject.put("row", this.getRowNumber());
-            jsonObject.put("column", this.getColumnNumber());
-            jsonObject.put("zone", this.getZoneNumber());
-            jsonObject.put("noteMode", this.isNoteMode());
-            jsonObject.put("orig", this.isOrig());
+            jsonObject.put(jsonIndexId, this.getIndex());
+            jsonObject.put(jsonRowId, this.getRowNumber());
+            jsonObject.put(jsonColumnId, this.getColumnNumber());
+            jsonObject.put(jsonZoneId, this.getZoneNumber());
+            jsonObject.put(jsonNoteModeId, this.isNoteMode());
+            jsonObject.put(jsonOrigId, this.isOrig());
 
             JSONArray notesOrValueArray = new JSONArray();
             LinkedList<Integer> notesOrValue = this.getNotesOrValue();
             for(int i = 0; i < notesOrValue.size(); ++i)
                 notesOrValueArray.put(notesOrValue.get(i));
-            jsonObject.put("notesOrValue", notesOrValueArray);
+            jsonObject.put(jsonValuesId, notesOrValueArray);
         }
         catch(JSONException e) {
             e.printStackTrace();
@@ -168,7 +177,7 @@ public class Tile {
     //region Initialization
 
     private boolean visited;
-    private boolean[] initValues;
+    private boolean[] initValuesTried;
 
     public void unVisit() { visited = false; }
 
@@ -178,14 +187,13 @@ public class Tile {
     // false - did not succeed (value already tried or contradicts house)
     public boolean tryInitValue(int initValue)
     {
-        if(initValues[initValue-1])
+        if(initValuesTried[initValue - 1])
             return false;
+        initValuesTried[initValue - 1] = true;
         if(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {
-            initValues[initValue -1] = true;
             return false;
         }
         visited = true;
-        initValues[initValue-1] = true;
         this.update(initValue);
         return true;
     }
@@ -194,17 +202,17 @@ public class Tile {
     // false - there is still an untried value
     public boolean allInitValuesTried()
     {
-        for(boolean b : initValues)
+        for(boolean b : initValuesTried)
             if(!b)
                 return false;
         return true;
     }
 
-    // Call when board initilization has reached a contradiction and needs to clear Tiles
+    // Call when board initialization has reached a contradiction and needs to clear Tiles
     public void resetInitializationState()
     {
-        for(int i = 0; i < initValues.length; ++i)
-            initValues[i] = false;
+        for(int i = 0; i < initValuesTried.length; ++i)
+            initValuesTried[i] = false;
         value = 0;
         visited = false;
     }
@@ -214,14 +222,14 @@ public class Tile {
     public void loadTileState(JSONObject jsonObject)
     {
         try {
-            this.index = jsonObject.getInt("index");
-            this.rowNumber = jsonObject.getInt("row");
-            this.columnNumber = jsonObject.getInt("column");
-            this.zoneNumber = jsonObject.getInt("zone");
-            this.noteMode = jsonObject.getBoolean("noteMode");
-            this.orig = jsonObject.getBoolean("orig");
+            this.index = jsonObject.getInt(jsonIndexId);
+            this.rowNumber = jsonObject.getInt(jsonRowId);
+            this.columnNumber = jsonObject.getInt(jsonColumnId);
+            this.zoneNumber = jsonObject.getInt(jsonZoneId);
+            this.noteMode = jsonObject.getBoolean(jsonNoteModeId);
+            this.orig = jsonObject.getBoolean(jsonOrigId);
 
-            JSONArray jsonArray = jsonObject.getJSONArray("notesOrValue");
+            JSONArray jsonArray = jsonObject.getJSONArray(jsonValuesId);
             if(noteMode)
                 for (int i = 0; i < jsonArray.length(); ++i)
                     notes[jsonArray.getInt(i)-1] = true;

@@ -70,10 +70,7 @@ public class HighScoresFragment extends Fragment {
                     buff.close();
                     setupSpinner();
                 }
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                catch (IOException e) {
+                catch (JSONException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -100,7 +97,7 @@ public class HighScoresFragment extends Fragment {
             String[] easyScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 easyScores[i] = easy.getString(i);
-            lists[0].setAdapter(new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, easyScores));
+            lists[0].setAdapter(new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_list_item_1, easyScores));
             //endregion
 
             //region medium scores
@@ -108,7 +105,7 @@ public class HighScoresFragment extends Fragment {
             String[] mediumScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 mediumScores[i] = medium.getString(i);
-            lists[1].setAdapter(new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, mediumScores));
+            lists[1].setAdapter(new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_list_item_1, mediumScores));
             //endregion
 
             //region hard scores
@@ -116,13 +113,13 @@ public class HighScoresFragment extends Fragment {
             String[] hardScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 hardScores[i] = hard.getString(i);
-            lists[2].setAdapter(new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_list_item_1, hardScores));
+            lists[2].setAdapter(new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_list_item_1, hardScores));
             //endregion
 
             //region Spinner
             final String[] difficulties = {"Easy", "Medium", "Hard"};
             final Spinner highScoresSpinner = (Spinner) rootView.findViewById(R.id.high_scores_spinner);
-            highScoresSpinner.setAdapter(new ArrayAdapter<String>(rootView.getContext(), android.R.layout.simple_spinner_dropdown_item, difficulties));
+            highScoresSpinner.setAdapter(new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_spinner_dropdown_item, difficulties));
             highScoresSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
