@@ -72,9 +72,9 @@ public class Board {
      * Getter for the current board state. Tile value/notes returned as a list of Integers.
      * @return list of value/notes for each Tile in the board
      */
-    public LinkedList<Integer>[] getBoard()
+    public LinkedList[] getBoard()
     {
-        LinkedList<Integer>[] list = new LinkedList[tiles.length];
+        LinkedList[] list = new LinkedList[tiles.length];
 
         for(int i = 0; i < list.length; ++i)
             list[i] = getTile(i);

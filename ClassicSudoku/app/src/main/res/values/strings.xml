@@ -14,5 +14,11 @@
     <string name="json_filename_id">filename</string>
     <string name="json_time_id">time</string>
     <string name="json_length_id">length</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="random">Random</string>
+    <string name="autosave_filename">AutoSave.txt</string>
+    <string name="you_win_msg">Game Over! You win!</string>
 
 </resources>

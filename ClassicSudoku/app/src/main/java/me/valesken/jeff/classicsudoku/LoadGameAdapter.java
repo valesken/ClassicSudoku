@@ -1,5 +1,6 @@
 package me.valesken.jeff.classicsudoku;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,6 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Jeff on 6/25/2015.
@@ -37,6 +35,7 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
         views = new View[length];
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View listItemView;

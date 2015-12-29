@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 
 /**
  * Created by Jeff on 7/11/2015.
+ *
+ * This fragment contains the layout for the app's about page. It does very little.
  */
 public class AboutFragment extends Fragment {
     public AboutFragment() {}

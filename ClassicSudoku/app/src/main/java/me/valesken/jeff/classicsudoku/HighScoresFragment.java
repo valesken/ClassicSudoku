@@ -31,13 +31,20 @@ public class HighScoresFragment extends Fragment {
     private View rootView;
     private MainActivity activity;
     private static JSONObject highScoresJSON;
+    private String easyString, mediumString, hardString;
 
-    public HighScoresFragment() { currentPosition = 0; }
+    public HighScoresFragment() {
+        currentPosition = 0;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_high_score, container, false);
         activity = (MainActivity)getActivity();
+
+        easyString = getResources().getString(R.string.easy);
+        mediumString = getResources().getString(R.string.medium);
+        hardString = getResources().getString(R.string.hard);
 
         activity.setTitle(getResources().getString(R.string.app_name).concat(" - High Scores"));
         final File highScores = new File(activity.getFilesDir(), "HighScores.txt");
@@ -61,9 +68,9 @@ public class HighScoresFragment extends Fragment {
                     JSONArray jsonArray = new JSONArray();
                     for (int i = 0; i < 10; ++i)
                         jsonArray.put("");
-                    highScoresJSON.put("Easy", new JSONArray(jsonArray.toString()));
-                    highScoresJSON.put("Medium", new JSONArray(jsonArray.toString()));
-                    highScoresJSON.put("Hard", new JSONArray(jsonArray.toString()));
+                    highScoresJSON.put(easyString, new JSONArray(jsonArray.toString()));
+                    highScoresJSON.put(mediumString, new JSONArray(jsonArray.toString()));
+                    highScoresJSON.put(hardString, new JSONArray(jsonArray.toString()));
                     BufferedWriter buff = new BufferedWriter(new FileWriter(highScores, false));
                     buff.write(highScoresJSON.toString());
                     buff.flush();
@@ -86,14 +93,15 @@ public class HighScoresFragment extends Fragment {
         return rootView;
     }
 
-    private void setupSpinner() {final ListView[] lists = {
+    private void setupSpinner() {
+        final ListView[] lists = {
             (ListView)rootView.findViewById(R.id.easy_high_scores),
             (ListView)rootView.findViewById(R.id.medium_high_scores),
-            (ListView)rootView.findViewById(R.id.hard_high_scores)};
-
+            (ListView)rootView.findViewById(R.id.hard_high_scores)
+        };
         try {
             //region easy scores
-            JSONArray easy = highScoresJSON.getJSONArray("Easy");
+            JSONArray easy = highScoresJSON.getJSONArray(easyString);
             String[] easyScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 easyScores[i] = easy.getString(i);
@@ -101,7 +109,7 @@ public class HighScoresFragment extends Fragment {
             //endregion
 
             //region medium scores
-            JSONArray medium = highScoresJSON.getJSONArray("Medium");
+            JSONArray medium = highScoresJSON.getJSONArray(mediumString);
             String[] mediumScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 mediumScores[i] = medium.getString(i);
@@ -109,7 +117,7 @@ public class HighScoresFragment extends Fragment {
             //endregion
 
             //region hard scores
-            JSONArray hard = highScoresJSON.getJSONArray("Hard");
+            JSONArray hard = highScoresJSON.getJSONArray(hardString);
             String[] hardScores = new String[10];
             for(int i = 0; i < 10; ++i)
                 hardScores[i] = hard.getString(i);
@@ -117,7 +125,7 @@ public class HighScoresFragment extends Fragment {
             //endregion
 
             //region Spinner
-            final String[] difficulties = {"Easy", "Medium", "Hard"};
+            final String[] difficulties = {easyString, mediumString, hardString};
             final Spinner highScoresSpinner = (Spinner) rootView.findViewById(R.id.high_scores_spinner);
             highScoresSpinner.setAdapter(new ArrayAdapter<>(rootView.getContext(), android.R.layout.simple_spinner_dropdown_item, difficulties));
             highScoresSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

@@ -1,5 +1,6 @@
 package me.valesken.jeff.classicsudoku;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -24,7 +25,7 @@ public class GridManager {
     private Board board;
     private int boardSize;
     private TableLayout grid;
-    private LinkedList<Integer>[] values;
+    private LinkedList[] values;
     private View[] views;
     private GameFragment gameFragment;
     private int currentGridIndex;
@@ -40,6 +41,7 @@ public class GridManager {
         this.views = new View[values.length];
     }
 
+    @SuppressLint("InflateParams")
     public void initializeGrid() {
         values = board.getBoard();
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -114,8 +116,8 @@ public class GridManager {
         if(!board.tileIsNoteMode(gridIndex)) {
             TextView textView = (TextView) tile.findViewById(R.id.tile_value_text);
             textView.setVisibility(View.VISIBLE);
-            if (values[gridIndex].get(0) > 0)
-                textView.setText(String.format("%d", values[gridIndex].get(0)));
+            if ((Integer)values[gridIndex].get(0) > 0)
+                textView.setText(String.format("%d", (Integer)values[gridIndex].get(0)));
             else
                 textView.setText(" ");
 
@@ -127,8 +129,8 @@ public class GridManager {
         // note tile
         else {
             tile.findViewById(R.id.tile_value_text).setVisibility(View.INVISIBLE);
-            for(int note: values[gridIndex])
-                tileNoteViews[note-1].setVisibility(View.VISIBLE);
+            for(Object note: values[gridIndex])
+                tileNoteViews[(Integer)note-1].setVisibility(View.VISIBLE);
         }
     }
 

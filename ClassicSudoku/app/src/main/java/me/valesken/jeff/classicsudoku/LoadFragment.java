@@ -1,5 +1,6 @@
 package me.valesken.jeff.classicsudoku;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -130,6 +131,7 @@ public class LoadFragment extends Fragment {
     }
 
     //region Game deletion logic
+    @SuppressLint("InflateParams")
     public void deleteGame(final LoadGameAdapter loadGameAdapter, final View loadList) {
         final AlertDialog deleteAlert = new AlertDialog.Builder(rootView.getContext()).create();
         View deleteAlertView = inflater.inflate(R.layout.delete_game_dialog_layout, null);
@@ -172,11 +174,11 @@ public class LoadFragment extends Fragment {
 
     private void updateLoadGamesFile() {
         try {
-            int length = loadGamesJSON.getInt("length");
+            int length = loadGamesJSON.getInt(getResources().getString(R.string.json_length_id));
             for(int i = length-1; i > mostRecentPosition; --i)
                 loadGamesJSON.put(Integer.toString(i-1), loadGamesJSON.get(Integer.toString(i)));
             loadGamesJSON.remove(Integer.toString(length-1));
-            loadGamesJSON.put("length", --length);
+            loadGamesJSON.put(getResources().getString(R.string.json_length_id), --length);
 
             BufferedWriter buff = new BufferedWriter(new FileWriter(loadGamesFile, false));
             buff.write(loadGamesJSON.toString());

@@ -148,6 +148,7 @@ public class GameFragment extends Fragment {
         inflater = _inflater;
         rootView = inflater.inflate(R.layout.fragment_game, container, false);
         activity = (MainActivity)getActivity();
+        final String youWinMsg = getResources().getString(R.string.you_win_msg);
         activity.setTitle(getResources().getString(R.string.app_name).concat(" - Game"));
         try {
             JSONObject loadGamesJSON = activity.getLoadGamesJSON();
@@ -178,13 +179,13 @@ public class GameFragment extends Fragment {
         switch (difficulty)
         {
             case 1:
-                difficulty_tv.setText("Easy");
+                difficulty_tv.setText(rootView.getContext().getResources().getString(R.string.easy));
                 break;
             case 2:
-                difficulty_tv.setText("Medium");
+                difficulty_tv.setText(rootView.getContext().getResources().getString(R.string.medium));
                 break;
             default:
-                difficulty_tv.setText("Hard");
+                difficulty_tv.setText(rootView.getContext().getResources().getString(R.string.hard));
                 break;
         }
         //endregion
@@ -206,7 +207,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button two = (Button) rootView.findViewById(R.id.two);
@@ -219,7 +220,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button three = (Button) rootView.findViewById(R.id.three);
@@ -232,7 +233,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button four = (Button) rootView.findViewById(R.id.four);
@@ -245,7 +246,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button five = (Button) rootView.findViewById(R.id.five);
@@ -258,7 +259,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button six = (Button) rootView.findViewById(R.id.six);
@@ -271,7 +272,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button seven = (Button) rootView.findViewById(R.id.seven);
@@ -284,7 +285,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button eight = (Button) rootView.findViewById(R.id.eight);
@@ -297,7 +298,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button nine = (Button) rootView.findViewById(R.id.nine);
@@ -310,7 +311,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button clear = (Button) rootView.findViewById(R.id.clear);
@@ -320,7 +321,7 @@ public class GameFragment extends Fragment {
                 if (currentTile != null && !gameOver)
                     gridManager.clearTile(currentPosition);
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button noteMode_button = (Button) rootView.findViewById(R.id.mode_switch);
@@ -328,7 +329,7 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
                 else if(currentTile != null)
                     gridManager.toggleMode(currentPosition);
             }
@@ -343,7 +344,7 @@ public class GameFragment extends Fragment {
                         updateHighScore();
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button solve_button = (Button) rootView.findViewById(R.id.solve);
@@ -355,7 +356,7 @@ public class GameFragment extends Fragment {
                     gameOver = true;
                 }
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
             }
         });
         Button pause_button = (Button) rootView.findViewById(R.id.pause);
@@ -363,7 +364,7 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
                 else {
                     pause();
                 }
@@ -411,7 +412,7 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(gameOver)
-                    Toast.makeText(rootView.getContext(), "Game Over! You win!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(rootView.getContext(), youWinMsg, Toast.LENGTH_LONG).show();
                 else {
                     paused = true;
 
@@ -419,7 +420,17 @@ public class GameFragment extends Fragment {
                     if(filename.equals("")) {
                         int num, maxNum = 0;
                         String name;
-                        filename = difficulty == 1 ? "Easy" : (difficulty == 2 ? "Medium" : "Hard");
+                        switch(difficulty) {
+                            case 1:
+                                filename = rootView.getContext().getResources().getString(R.string.easy);
+                                break;
+                            case 2:
+                                filename = rootView.getContext().getResources().getString(R.string.medium);
+                                break;
+                            default:
+                                filename = rootView.getContext().getResources().getString(R.string.hard);
+                                break;
+                        }
                         for (File f : files) {
                             name = f.getName().replace(".txt", "");
                             if (name.startsWith(filename) && name.length() > filename.length()) {
@@ -428,7 +439,7 @@ public class GameFragment extends Fragment {
                                     if (num > maxNum)
                                         maxNum = num;
                                 }
-                                catch (NumberFormatException e) { } // e.g. ignore "EasyTown"
+                                catch (NumberFormatException ignored) { } // e.g. ignore "EasyTown"
                             }
                         }
                         filename = filename.concat(Integer.toString(maxNum + 1));
@@ -516,12 +527,13 @@ public class GameFragment extends Fragment {
         save_alert.show();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public void handleAutoSave() {
         try {
             clockThread.interrupt();
             File autoSaveFile = activity.getAutoSaveFile();
             if (!gameOver) {
-                File saveFile = new File(activity.getFilesDir(), "AutoSave.txt");
+                File saveFile = new File(activity.getFilesDir(), getResources().getString(R.string.autosave_filename));
                 BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
                 JSONObject jsonObject = board.save((String) clock_tv.getText());
                 buff.write(jsonObject.toString());
@@ -596,13 +608,13 @@ public class GameFragment extends Fragment {
             JSONArray jsonScores;
             switch (difficulty) {
                 case 1:
-                    jsonScores = highScoresJSON.getJSONArray("Easy");
+                    jsonScores = highScoresJSON.getJSONArray(getResources().getString(R.string.easy));
                     break;
                 case 2:
-                    jsonScores = highScoresJSON.getJSONArray("Medium");
+                    jsonScores = highScoresJSON.getJSONArray(getResources().getString(R.string.medium));
                     break;
                 default:
-                    jsonScores = highScoresJSON.getJSONArray("Hard");
+                    jsonScores = highScoresJSON.getJSONArray(getResources().getString(R.string.hard));
                     break;
             }
 
@@ -620,7 +632,7 @@ public class GameFragment extends Fragment {
                 scoreTime = jsonScores.getString(i);
                 index = scoreTime.indexOf(':');
                 scoreMinutes = Integer.parseInt(scoreTime.substring(0, index));
-                scoreSeconds = Integer.parseInt(scoreTime.substring(index+1));
+                scoreSeconds = Integer.parseInt(scoreTime.substring(index + 1));
                 if(!inserted && scoreMinutes > minutes) {
                     scores.add(currentTime);
                     inserted = true;
@@ -640,13 +652,13 @@ public class GameFragment extends Fragment {
                 jsonScores.put(i, scores.get(i));
             switch (difficulty) {
                 case 1:
-                    highScoresJSON.put("Easy", jsonScores);
+                    highScoresJSON.put(getResources().getString(R.string.easy), jsonScores);
                     break;
                 case 2:
-                    highScoresJSON.put("Medium", jsonScores);
+                    highScoresJSON.put(getResources().getString(R.string.medium), jsonScores);
                     break;
                 default:
-                    highScoresJSON.put("Hard", jsonScores);
+                    highScoresJSON.put(getResources().getString(R.string.hard), jsonScores);
                     break;
             }
             BufferedWriter buff = new BufferedWriter(new FileWriter(activity.getHighScoresFile(), false));

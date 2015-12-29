@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
     private static GameFragment gameFragment;
     private static MainFragment main;
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

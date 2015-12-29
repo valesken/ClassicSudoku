@@ -1,5 +1,6 @@
 package me.valesken.jeff.classicsudoku;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -98,6 +99,7 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
+    @SuppressLint("InflateParams")
     private void toNew(LayoutInflater inflater, final View button)
     {
         loadingGame = true;
