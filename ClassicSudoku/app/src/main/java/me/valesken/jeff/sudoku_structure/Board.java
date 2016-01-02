@@ -197,6 +197,7 @@ public class Board {
         initialize();
         digHoles(difficulty);
         checkBounds(difficulty);
+        checkAndFixHoles();
         markOriginals();
 
         return difficulty;
@@ -413,6 +414,47 @@ public class Board {
         for(Tile t : tiles)
             if(t.getValue() > 0)
                 t.setOrig(true);
+    }
+
+    private void checkAndFixBadPairs(House house1, House house2) {
+        for (int i = 0; i < (int) Math.sqrt(boardSize); ++i) {
+            for (int j = 1; j < (int) Math.sqrt(boardSize); ++j) {
+                Tile[] toCheck = {
+                        house1.getMember(i),
+                        house2.getMember(i),
+                        house1.getMember(j),
+                        house2.getMember(j)
+                };
+                boolean noSeeds = true;
+                for (Tile t : toCheck) {
+                    if (t.getValue() > 0) {
+                        noSeeds = false;
+                        break;
+                    }
+                }
+                if (noSeeds
+                        && solution[toCheck[0].getIndex()] == solution[toCheck[3].getIndex()]
+                        && solution[toCheck[1].getIndex()] == solution[toCheck[2].getIndex()]) {
+                    int tileToUpdate = randGen.nextInt(4);
+                    toCheck[tileToUpdate].update(solution[toCheck[tileToUpdate].getIndex()]);
+                }
+            }
+        }
+    }
+
+    // Note: Does pairs only
+    // 0/1, 0/2, 1/2
+    // 3/4, 3/5, 4/5
+    // 6/7, 6/8, 7/8
+    private void checkAndFixHoles() {
+        for(int zoneTriplet = 0; zoneTriplet < 3; ++zoneTriplet) { // Iterate through columns of zones
+            for (int house1 = 0; house1 < 2; ++house1) { // Iterate through columns within zone-column
+                for (int house2 = house1 + 1; house2 < 3; ++house2) {
+                    checkAndFixBadPairs(columns[(3 * zoneTriplet) + house1], columns[(3 * zoneTriplet) + house2]); // vertical
+                    checkAndFixBadPairs(rows[(3 * zoneTriplet) + house1], rows[(3 * zoneTriplet) + house2]); // horizontal
+                }
+            }
+        }
     }
 
     public String getTime()

@@ -3,6 +3,7 @@ package me.valesken.jeff.sudoku_structure;
 //import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -15,7 +16,7 @@ import java.util.LinkedList;
  * House can return a tile at the specified position in the House.
  * House does not need to do anything else;
  */
-public class House {
+public class House implements Iterable<Tile> {
 
     private int boardSize;
     private ArrayList<Tile> members;
@@ -52,37 +53,6 @@ public class House {
         return false;
     }
 
-    /*
-    // Checks if contradictions exist in the house
-    public boolean hasContradiction() { return hasContradiction(new LinkedList<Tile>()); }
-
-    // Checks if contradictions exist in the house
-    public boolean hasContradiction(LinkedList<Tile> contradictions) {
-        // Initialize values
-        int value;
-        boolean result = false;
-        for(int i = 1; i <= boardSize; ++i)
-            values.get(i).clear();
-
-        // Get the values from the members of the house
-        for(Tile t : members) {
-            value = t.getValue();
-            if(value != 0)
-                values.get(value).add(t);
-        }
-
-        // Check if any values contain multiples
-        for(int i = 1; i < boardSize; ++i) {
-            if(values.get(i).size() > 1) {
-                contradictions.addAll(values.get(i));
-                result = true;
-            }
-        }
-
-        // Return the result
-        return result;
-    }*/
-
     public int getValueCount()
     {
         int count = 0;
@@ -99,5 +69,10 @@ public class House {
             if(t.getValue() > 0)
                 valueTiles.add(t);
         return valueTiles;
+    }
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return members.iterator();
     }
 }

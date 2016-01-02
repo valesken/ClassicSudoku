@@ -37,7 +37,89 @@
     <favorites_list name="ClassicSudoku" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="Board.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6775862">
+              <caret line="204" column="0" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#Board#0;class#Board#0" expanded="true" />
+                <element signature="method#tileIsNoteMode#0;class#Board#0" expanded="true" />
+                <element signature="method#isOrig#0;class#Board#0" expanded="true" />
+                <element signature="method#getBoard#0;class#Board#0" expanded="true" />
+                <element signature="method#getHint#0;class#Board#0" expanded="true" />
+                <element signature="method#isGameOver#0;class#Board#0" expanded="true" />
+                <element signature="method#solve#0;class#Board#0" expanded="true" />
+                <element signature="method#save#0;class#Board#0" expanded="true" />
+                <element signature="method#NewGame#0;class#Board#0" expanded="true" />
+                <element signature="method#LoadGame#0;class#Board#0" expanded="true" />
+                <element signature="method#initialize#0;class#Board#0" expanded="true" />
+                <element signature="method#digHoles#0;class#Board#0" expanded="true" />
+                <element signature="method#checkBounds#0;class#Board#0" expanded="true" />
+                <element signature="method#markOriginals#0;class#Board#0" expanded="true" />
+                <element signature="method#checkAndFixBadPairs#0;class#Board#0" expanded="true" />
+                <element signature="method#checkAndFixHoles#0;class#Board#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="House.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="75" column="34" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#House#0;class#House#0" expanded="true" />
+                <element signature="method#addMember#0;class#House#0" expanded="true" />
+                <element signature="method#getMember#0;class#House#0" expanded="true" />
+                <element signature="method#hasValue#0;class#House#0" expanded="true" />
+                <element signature="method#getValueCount#0;class#House#0" expanded="true" />
+                <element signature="method#getValueTiles#0;class#House#0" expanded="true" />
+                <element signature="e#2135#2136#0" expanded="true" />
+                <element signature="e#2176#2177#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+              <folding>
+                <element signature="method#Tile#0;class#Tile#0" expanded="true" />
+                <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
+                <element signature="method#update#0;class#Tile#0" expanded="true" />
+                <element signature="method#clear#0;class#Tile#0" expanded="true" />
+                <element signature="method#toggleMode#0;class#Tile#0" expanded="true" />
+                <element signature="method#getNotesOrValue#0;class#Tile#0" expanded="true" />
+                <element signature="method#getValue#0;class#Tile#0" expanded="false" />
+                <element signature="method#getNotes#0;class#Tile#0" expanded="true" />
+                <element signature="method#getIndex#0;class#Tile#0" expanded="false" />
+                <element signature="method#getRowNumber#0;class#Tile#0" expanded="false" />
+                <element signature="method#getColumnNumber#0;class#Tile#0" expanded="false" />
+                <element signature="method#getZoneNumber#0;class#Tile#0" expanded="false" />
+                <element signature="method#isNoteMode#0;class#Tile#0" expanded="false" />
+                <element signature="method#isOrig#0;class#Tile#0" expanded="false" />
+                <element signature="method#getJSON#0;class#Tile#0" expanded="true" />
+                <element signature="method#unVisit#0;class#Tile#0" expanded="true" />
+                <element signature="method#hasBeenVisited#0;class#Tile#0" expanded="true" />
+                <element signature="method#tryInitValue#0;class#Tile#0" expanded="true" />
+                <element signature="method#allInitValuesTried#0;class#Tile#0" expanded="true" />
+                <element signature="method#resetInitializationState#0;class#Tile#0" expanded="true" />
+                <element signature="method#setOrig#0;class#Tile#0" expanded="false" />
+                <element signature="method#loadTileState#0;class#Tile#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="GradleLocalSettings">
     <option name="availableProjects">
@@ -1551,7 +1633,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/game_button_selector.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
@@ -1566,6 +1647,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/classicsudoku/GameFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/classicsudoku/AboutFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/classicsudoku/GridManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java" />
       </list>
     </option>
@@ -1611,9 +1693,9 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1630,68 +1712,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="styles.xml" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResGroupNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ClassicSudoku" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ClassicSudoku" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ClassicSudoku" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1747,28 +1767,10 @@
               <option name="myItemId" value="jeff" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="classicsudoku" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ClassicSudoku" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="manifests" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
-            </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1778,6 +1780,8 @@
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="F5AZFG14M950" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RunManager" selected="Android Application.app">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -1952,8 +1956,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="0" width="1922" height="1055" extended-state="7" />
-    <editor active="false" />
+    <frame x="-1" y="0" width="1922" height="1055" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.49786553" order="7" side_tool="false" content_ui="tabs" />
@@ -1963,28 +1967,28 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39977974" sideWeight="0.50213444" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.50213444" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2497332" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2497332" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39977974" sideWeight="0.49786553" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39977974" sideWeight="0.49786553" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -2003,11 +2007,87 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="453" column="14" selection-start-line="453" selection-start-column="14" selection-end-line="453" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Board#0;class#Board#0" expanded="true" />
+            <element signature="method#tileIsNoteMode#0;class#Board#0" expanded="true" />
+            <element signature="method#isOrig#0;class#Board#0" expanded="true" />
+            <element signature="method#getBoard#0;class#Board#0" expanded="true" />
+            <element signature="method#getHint#0;class#Board#0" expanded="true" />
+            <element signature="method#isGameOver#0;class#Board#0" expanded="true" />
+            <element signature="method#solve#0;class#Board#0" expanded="true" />
+            <element signature="method#save#0;class#Board#0" expanded="true" />
+            <element signature="method#NewGame#0;class#Board#0" expanded="true" />
+            <element signature="method#LoadGame#0;class#Board#0" expanded="true" />
+            <element signature="method#initialize#0;class#Board#0" expanded="true" />
+            <element signature="method#digHoles#0;class#Board#0" expanded="true" />
+            <element signature="method#checkBounds#0;class#Board#0" expanded="true" />
+            <element signature="method#markOriginals#0;class#Board#0" expanded="true" />
+            <element signature="method#checkAndFixBadPairs#0;class#Board#0" expanded="true" />
+            <element signature="method#checkAndFixHoles#0;class#Board#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="34" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#House#0;class#House#0" expanded="true" />
+            <element signature="method#addMember#0;class#House#0" expanded="true" />
+            <element signature="method#getMember#0;class#House#0" expanded="true" />
+            <element signature="method#hasValue#0;class#House#0" expanded="true" />
+            <element signature="method#getValueCount#0;class#House#0" expanded="true" />
+            <element signature="method#getValueTiles#0;class#House#0" expanded="true" />
+            <element signature="e#2135#2136#0" expanded="true" />
+            <element signature="e#2176#2177#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+          <folding>
+            <element signature="method#Tile#0;class#Tile#0" expanded="true" />
+            <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
+            <element signature="method#update#0;class#Tile#0" expanded="true" />
+            <element signature="method#clear#0;class#Tile#0" expanded="true" />
+            <element signature="method#toggleMode#0;class#Tile#0" expanded="true" />
+            <element signature="method#getNotesOrValue#0;class#Tile#0" expanded="true" />
+            <element signature="method#getValue#0;class#Tile#0" expanded="false" />
+            <element signature="method#getNotes#0;class#Tile#0" expanded="true" />
+            <element signature="method#getIndex#0;class#Tile#0" expanded="false" />
+            <element signature="method#getRowNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#getColumnNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#getZoneNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#isNoteMode#0;class#Tile#0" expanded="false" />
+            <element signature="method#isOrig#0;class#Tile#0" expanded="false" />
+            <element signature="method#getJSON#0;class#Tile#0" expanded="true" />
+            <element signature="method#unVisit#0;class#Tile#0" expanded="true" />
+            <element signature="method#hasBeenVisited#0;class#Tile#0" expanded="true" />
+            <element signature="method#tryInitValue#0;class#Tile#0" expanded="true" />
+            <element signature="method#allInitValuesTried#0;class#Tile#0" expanded="true" />
+            <element signature="method#resetInitializationState#0;class#Tile#0" expanded="true" />
+            <element signature="method#setOrig#0;class#Tile#0" expanded="false" />
+            <element signature="method#loadTileState#0;class#Tile#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/classicsudoku/GridManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="49" column="20" selection-start-line="49" selection-start-column="12" selection-end-line="49" selection-end-column="20" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#GridManager#0;class#GridManager#0" expanded="true" />
             <element signature="method#updateItem#0;class#GridManager#0" expanded="true" />
             <element signature="method#updateTile#0;class#GridManager#0" expanded="true" />
@@ -2023,33 +2103,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="173" column="23" selection-start-line="173" selection-start-column="12" selection-end-line="173" selection-end-column="23" />
-          <folding>
-            <element signature="e#823#824#0" expanded="true" />
-            <element signature="e#858#859#0" expanded="true" />
-            <element signature="method#onCreateView#0;class#MainFragment#0" expanded="true" />
-            <element signature="e#1838#2142#0" expanded="true" />
-            <element signature="e#2141#2142#0" expanded="true" />
-            <element signature="e#2186#2377#0" expanded="true" />
-            <element signature="e#2376#2377#0" expanded="true" />
-            <element signature="e#2422#2750#0" expanded="true" />
-            <element signature="e#2749#2750#0" expanded="true" />
-            <element signature="e#2792#3084#0" expanded="true" />
-            <element signature="e#3083#3084#0" expanded="true" />
-            <element signature="e#3131#3433#0" expanded="true" />
-            <element signature="e#3432#3433#0" expanded="true" />
-            <element signature="method#toNew#0;class#MainFragment#0" expanded="true" />
-            <element signature="e#3953#4098#0" expanded="true" />
-            <element signature="e#4097#4098#0" expanded="true" />
-            <element signature="e#4186#5222#0" expanded="true" />
-            <element signature="e#5221#5222#0" expanded="true" />
-            <element signature="e#5296#5482#0" expanded="true" />
-            <element signature="e#5481#5482#0" expanded="true" />
-            <element signature="method#enableResumeGameButton#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#doInBackground#0;class#NewGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#onPostExecute#0;class#NewGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#doInBackground#0;class#LoadGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#onPostExecute#0;class#LoadGameTask#0;class#MainFragment#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2074,7 +2127,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="64" column="51" selection-start-line="64" selection-start-column="51" selection-end-line="64" selection-end-column="51" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
@@ -2085,7 +2137,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="77" selection-start-line="2" selection-start-column="77" selection-end-line="2" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2093,7 +2144,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="75" selection-start-line="3" selection-start-column="75" selection-end-line="3" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2101,7 +2151,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="451" column="45" selection-start-line="451" selection-start-column="45" selection-end-line="451" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2117,7 +2166,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2125,7 +2173,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2133,15 +2180,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="method#onCreate#0;class#MainActivity#0" expanded="true" />
-            <element signature="e#1395#1446#0" expanded="true" />
-            <element signature="method#loadFiles#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onBackPressed#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onPause#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#getLoadGamesJSON#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#enableResumeGameButton#0;class#MainActivity#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2149,15 +2187,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="method#onCreate#0;class#MainActivity#0" expanded="true" />
-            <element signature="e#1395#1446#0" expanded="true" />
-            <element signature="method#loadFiles#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onBackPressed#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onPause#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#getLoadGamesJSON#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#enableResumeGameButton#0;class#MainActivity#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2179,7 +2208,6 @@
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer">
@@ -2202,7 +2230,6 @@
       <provider editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider selected="true" editor-type-id="android-designer">
@@ -2213,7 +2240,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="7" column="11" selection-start-line="7" selection-start-column="11" selection-end-line="7" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2221,7 +2247,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
@@ -2232,7 +2257,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2240,7 +2264,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2248,7 +2271,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2256,7 +2278,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2292,7 +2313,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="75" selection-start-line="3" selection-start-column="75" selection-end-line="3" selection-end-column="75" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2300,7 +2320,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="77" selection-start-line="2" selection-start-column="77" selection-end-line="2" selection-end-column="77" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2308,7 +2327,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.27561837">
           <caret line="77" column="42" selection-start-line="77" selection-start-column="42" selection-end-line="77" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer">
@@ -2319,7 +2337,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="451" column="45" selection-start-line="451" selection-start-column="45" selection-end-line="451" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2335,14 +2352,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-1.1501707">
           <caret line="69" column="20" selection-start-line="69" selection-start-column="20" selection-end-line="69" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#loadFiles#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onBackPressed#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#onPause#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#getLoadGamesJSON#0;class#MainActivity#0" expanded="true" />
-            <element signature="method#enableResumeGameButton#0;class#MainActivity#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2350,33 +2359,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.69283277">
           <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
-          <folding>
-            <element signature="e#823#824#0" expanded="true" />
-            <element signature="e#858#859#0" expanded="true" />
-            <element signature="method#onCreateView#0;class#MainFragment#0" expanded="true" />
-            <element signature="e#1838#2142#0" expanded="true" />
-            <element signature="e#2141#2142#0" expanded="true" />
-            <element signature="e#2186#2377#0" expanded="true" />
-            <element signature="e#2376#2377#0" expanded="true" />
-            <element signature="e#2422#2750#0" expanded="true" />
-            <element signature="e#2749#2750#0" expanded="true" />
-            <element signature="e#2792#3084#0" expanded="true" />
-            <element signature="e#3083#3084#0" expanded="true" />
-            <element signature="e#3131#3433#0" expanded="true" />
-            <element signature="e#3432#3433#0" expanded="true" />
-            <element signature="method#toNew#0;class#MainFragment#0" expanded="true" />
-            <element signature="e#3953#4098#0" expanded="true" />
-            <element signature="e#4097#4098#0" expanded="true" />
-            <element signature="e#4186#5222#0" expanded="true" />
-            <element signature="e#5221#5222#0" expanded="true" />
-            <element signature="e#5296#5482#0" expanded="true" />
-            <element signature="e#5481#5482#0" expanded="true" />
-            <element signature="method#enableResumeGameButton#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#doInBackground#0;class#NewGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#onPostExecute#0;class#NewGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#doInBackground#0;class#LoadGameTask#0;class#MainFragment#0" expanded="true" />
-            <element signature="method#onPostExecute#0;class#LoadGameTask#0;class#MainFragment#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2384,14 +2366,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
           <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#LoadGameAdapter#0;class#LoadGameAdapter#0" expanded="true" />
-            <element signature="method#getView#0;class#LoadGameAdapter#0" expanded="true" />
-            <element signature="method#getItem#0;class#LoadGameAdapter#0" expanded="true" />
-            <element signature="method#getItemId#0;class#LoadGameAdapter#0" expanded="true" />
-            <element signature="method#renewAdapter#0;class#LoadGameAdapter#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2399,14 +2373,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.9590444">
           <caret line="213" column="56" selection-start-line="213" selection-start-column="56" selection-end-line="213" selection-end-column="56" />
-          <folding>
-            <element signature="method#LoadFragment#0;class#LoadFragment#0" expanded="true" />
-            <element signature="method#onCreateView#0;class#LoadFragment#0" expanded="true" />
-            <element signature="method#deleteGame#0;class#LoadFragment#0" expanded="true" />
-            <element signature="method#updateLoadGamesFile#0;class#LoadFragment#0" expanded="true" />
-            <element signature="method#doInBackground#0;class#LoadGameTask#0;class#LoadFragment#0" expanded="true" />
-            <element signature="method#onPostExecute#0;class#LoadGameTask#0;class#LoadFragment#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2414,12 +2380,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3890785">
           <caret line="40" column="64" selection-start-line="40" selection-start-column="64" selection-end-line="40" selection-end-column="64" />
-          <folding>
-            <element signature="method#onCreateView#0;class#HighScoresFragment#0" expanded="true" />
-            <element signature="method#setupSpinner#0;class#HighScoresFragment#0" expanded="true" />
-            <element signature="method#onItemSelected#0;class#5380:6047" expanded="true" />
-            <element signature="method#onNothingSelected#0;class#5380:6047" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2444,10 +2404,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.28668943">
           <caret line="14" column="29" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#onCreateView#0;class#AboutFragment#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2468,10 +2424,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44418332">
+          <caret line="21" column="50" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30375427">
-          <caret line="216" column="24" selection-start-line="216" selection-start-column="24" selection-end-line="216" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
           <folding>
             <element signature="method#Tile#0;class#Tile#0" expanded="true" />
             <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
@@ -2479,12 +2442,21 @@
             <element signature="method#clear#0;class#Tile#0" expanded="true" />
             <element signature="method#toggleMode#0;class#Tile#0" expanded="true" />
             <element signature="method#getNotesOrValue#0;class#Tile#0" expanded="true" />
+            <element signature="method#getValue#0;class#Tile#0" expanded="false" />
             <element signature="method#getNotes#0;class#Tile#0" expanded="true" />
+            <element signature="method#getIndex#0;class#Tile#0" expanded="false" />
+            <element signature="method#getRowNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#getColumnNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#getZoneNumber#0;class#Tile#0" expanded="false" />
+            <element signature="method#isNoteMode#0;class#Tile#0" expanded="false" />
+            <element signature="method#isOrig#0;class#Tile#0" expanded="false" />
             <element signature="method#getJSON#0;class#Tile#0" expanded="true" />
             <element signature="method#unVisit#0;class#Tile#0" expanded="true" />
             <element signature="method#hasBeenVisited#0;class#Tile#0" expanded="true" />
             <element signature="method#tryInitValue#0;class#Tile#0" expanded="true" />
             <element signature="method#allInitValuesTried#0;class#Tile#0" expanded="true" />
+            <element signature="method#resetInitializationState#0;class#Tile#0" expanded="true" />
+            <element signature="method#setOrig#0;class#Tile#0" expanded="false" />
             <element signature="method#loadTileState#0;class#Tile#0" expanded="true" />
           </folding>
         </state>
@@ -2492,8 +2464,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25142208">
-          <caret line="13" column="84" selection-start-line="13" selection-start-column="84" selection-end-line="13" selection-end-column="84" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="75" column="34" selection-start-line="75" selection-start-column="34" selection-end-line="75" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#House#0;class#House#0" expanded="true" />
@@ -2502,28 +2474,22 @@
             <element signature="method#hasValue#0;class#House#0" expanded="true" />
             <element signature="method#getValueCount#0;class#House#0" expanded="true" />
             <element signature="method#getValueTiles#0;class#House#0" expanded="true" />
+            <element signature="e#2135#2136#0" expanded="true" />
+            <element signature="e#2176#2177#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4095563">
-          <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
+        <state vertical-scroll-proportion="0.6775862">
+          <caret line="204" column="0" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#Board#0;class#Board#0" expanded="true" />
             <element signature="method#tileIsNoteMode#0;class#Board#0" expanded="true" />
             <element signature="method#isOrig#0;class#Board#0" expanded="true" />
             <element signature="method#getBoard#0;class#Board#0" expanded="true" />
-            <element signature="e#3018#3019#0" expanded="true" />
-            <element signature="e#3063#3064#0" expanded="true" />
-            <element signature="e#3106#3107#0" expanded="true" />
-            <element signature="e#3145#3146#0" expanded="true" />
-            <element signature="e#3193#3194#0" expanded="true" />
-            <element signature="e#3237#3238#0" expanded="true" />
-            <element signature="e#3297#3298#0" expanded="true" />
-            <element signature="e#3353#3354#0" expanded="true" />
             <element signature="method#getHint#0;class#Board#0" expanded="true" />
             <element signature="method#isGameOver#0;class#Board#0" expanded="true" />
             <element signature="method#solve#0;class#Board#0" expanded="true" />
@@ -2534,17 +2500,9 @@
             <element signature="method#digHoles#0;class#Board#0" expanded="true" />
             <element signature="method#checkBounds#0;class#Board#0" expanded="true" />
             <element signature="method#markOriginals#0;class#Board#0" expanded="true" />
-            <element signature="e#14221#14222#0" expanded="true" />
-            <element signature="e#14255#14256#0" expanded="true" />
+            <element signature="method#checkAndFixBadPairs#0;class#Board#0" expanded="true" />
+            <element signature="method#checkAndFixHoles#0;class#Board#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44418332">
-          <caret line="21" column="50" selection-start-line="21" selection-start-column="50" selection-end-line="21" selection-end-column="50" />
-          <folding />
         </state>
       </provider>
     </entry>
