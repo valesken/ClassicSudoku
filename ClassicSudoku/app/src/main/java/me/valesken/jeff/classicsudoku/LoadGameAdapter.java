@@ -25,13 +25,13 @@ public class LoadGameAdapter extends BaseAdapter implements ListAdapter {
     public LoadGameAdapter(JSONObject _loadGamesJSON, Context _context) {
         length = 0;
         loadGamesJSON = _loadGamesJSON;
+        context = _context;
         try {
             length = loadGamesJSON.getInt(context.getResources().getString(R.string.json_length_id));
         }
         catch (JSONException e) {
             e.printStackTrace();
         }
-        context = _context;
         views = new View[length];
     }
 

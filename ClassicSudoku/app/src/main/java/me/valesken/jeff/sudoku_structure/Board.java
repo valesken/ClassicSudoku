@@ -10,7 +10,7 @@ import java.util.Stack;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 7/12/2015
+ * Last updated on 1/15/2016
  */
 public class Board {
     static public String jsonTimeId = "time";
@@ -26,10 +26,10 @@ public class Board {
 
     /**
      * Constructor for Board. Initializes all objects to be non-null.
+     *
      * @param _boardSize length of one row for this game
      */
-    public Board(int _boardSize)
-    {
+    public Board(int _boardSize) {
         boardSize = _boardSize;
         solution = new int[boardSize*boardSize];
 
@@ -56,58 +56,89 @@ public class Board {
 
     /**
      * Getter for whether or not a Tile is in note-mode.
+     *
      * @param position The index (0 - 80) of the Tile to check
      * @return True: Tile is in note mode. False: Tile is in value mode.
      */
-    public boolean tileIsNoteMode(int position) { return tiles[position].isNoteMode(); }
+    public boolean tileIsNoteMode(int position) {
+        return tiles[position].isNoteMode();
+    }
 
     /**
      * Getter for whether or not a given Tile is an 'original' Tile.
+     *
      * @param position The index (0 - 80) of the Tile to check
      * @return whether or not a given Tile is an 'original' Tile.
      */
-    public boolean isOrig(int position) { return tiles[position].isOrig(); }
+    public boolean isOrig(int position) {
+        return tiles[position].isOrig();
+    }
 
     /**
      * Getter for the current board state. Tile value/notes returned as a list of Integers.
+     *
      * @return list of value/notes for each Tile in the board
      */
-    public LinkedList[] getBoard()
-    {
+    public LinkedList[] getBoard() {
         LinkedList[] list = new LinkedList[tiles.length];
-
         for(int i = 0; i < list.length; ++i)
             list[i] = getTile(i);
-
         return list;
     }
 
     /**
-     * This updates a specific Tile.
+     * This updates a specific Tile with the desired value/note (depending on its mode).
+     *
      * @param position The index (0 - 80) of the Tile to update
      * @param value The new value/note for the Tile
      */
-    public void updateTile(int position, int value)
-    {
+    public void updateTile(int position, int value) {
         tiles[position].update(value);
     }
 
+    /**
+     * This removes all values and hints from the selected Tile.
+     *
+     * @param position The index (0 - 80) of the Tile to clear
+     */
     public void clearTile(int position) {
         tiles[position].clear();
     }
 
-    public void toggleMode(int position)
-    {
+    /**
+     * This toggles the mode of the selected Tile between Note Mode and Value Mode. If it is one,
+     * it will switch to the other.
+     *
+     * @param position The index (0 - 80) of the Tile to toggle the mode of.
+     */
+    public void toggleMode(int position) {
         tiles[position].toggleMode();
     }
 
-    public LinkedList<Integer> getTile(int position)
-    {
+    /**
+     * @param position The index (0 - 80) of the Tile to get.
+     * @return A LinkedList of the current hints on the Tile if the Tile is in Note Mode, or a
+     * Linked List with only 1 value (which is the Tile's current value) if it is in Value Mode.
+     */
+    public LinkedList<Integer> getTile(int position) {
         return tiles[position].getNotesOrValue();
     }
 
-    public int getHint()
-    {
+    /**
+     * @return An Array of all the tiles in the board.
+     */
+    public Tile[] getTiles() {
+        return tiles;
+    }
+
+    /**
+     * This will randomly select one Tile which does not currently have the correct value and it
+     * will assign it the value it should have according to the solution array. It will make that
+     * Tile an "original" Tile so that it cannot be changed later.
+     *
+     * @return The index (0 - 80) of the Tile that was set. -1 if no Tile was set.
+     */
+    public int getHint() {
         LinkedList<Tile> openTiles = new LinkedList<>();
         for(int i = 0; i < tiles.length; ++i)
             if (tiles[i].getValue() == 0 || tiles[i].getValue() != solution[i])
@@ -117,27 +148,27 @@ public class Board {
             Tile tile = openTiles.get(index);
             if (tile.isNoteMode())
                 tile.toggleMode();
-            String s = "set ".concat(Integer.toString(tile.getValue())).concat(" to ");
             tile.update(solution[tile.getIndex()]);
-            s = s.concat(Integer.toString(tile.getValue()));
-            if(tile.getValue() == 0)
-                System.out.println(s);
             tile.setOrig(true);
             return tile.getIndex();
         }
         return -1;
     }
 
-    public boolean isGameOver()
-    {
+    /**
+     * @return True if every Tile on the board has the correct value, otherwise False.
+     */
+    public boolean isGameOver() {
         for(int i = 0; i < tiles.length; ++i)
             if(tiles[i].getValue() != solution[i])
                 return false;
         return true;
     }
 
-    public void solve()
-    {
+    /**
+     * This function will solve the game according to the saved solution.
+     */
+    public void solve() {
         for(int i = 0; i < tiles.length; ++i) {
             if(tiles[i].isNoteMode())
                 tiles[i].toggleMode();
@@ -146,9 +177,14 @@ public class Board {
         }
     }
 
-    // Serializes current time, difficulty, solution board, current Tile states as JSONObject
-    public JSONObject save(String currentTime)
-    {
+    /**
+     * This function will serialize the current time, difficulty, solution board, and Tile states
+     * as a single JSONObject.
+     *
+     * @param currentTime The current time spent on the game in the format of "(m)m:ss"
+     * @return A JSON Object representing the current state of the game.
+     */
+    public JSONObject save(String currentTime) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put(jsonTimeId, currentTime);
@@ -180,31 +216,38 @@ public class Board {
     private String timeElapsed;
 
     /**
-     * Returns the actual difficulty level (useful if 'Random'). Entry point to generate a new game.
+     * To create a new game, but not to load an old game, call this function before anything else.
+     * Returns the actual difficulty level (useful if 'Random').
+     *
      * @param _difficulty difficulty level for the game
      * @return difficulty level for the game
      */
-    public int NewGame(int _difficulty)
-    {
+    public int NewGame(int _difficulty) {
         difficulty = _difficulty;
         randGen = new Random();
         timeElapsed = "00:00";
 
-        /* if 'Random', select between easy, medium, and hard */
+        // if 'Random', select between easy, medium, and hard
         if(difficulty == 0 || difficulty == 4)
             difficulty = randGen.nextInt(3);
 
         initialize();
         digHoles(difficulty);
         checkBounds(difficulty);
-        checkAndFixHoles();
+        runSolver();
         markOriginals();
+        runSolver();
 
         return difficulty;
     }
 
-    public int LoadGame(JSONObject jsonObject)
-    {
+    /**
+     * To load an old game, call this function before anything else.
+     *
+     * @param jsonObject JSON representation of the entire Board.
+     * @return the difficulty level of the game as determined by the provided JSON Object.
+     */
+    public int LoadGame(JSONObject jsonObject) {
         int difficulty = 0;
         randGen = new Random();
         try {
@@ -225,8 +268,12 @@ public class Board {
         return difficulty;
     }
 
-    private void initialize()
-    {
+    /**
+     * This function will generate a new, complete, valid board using a DFS algorithm to backtrack
+     * when an invalid path is encountered. When finished, it will save the resultant values in the
+     * solution array.
+     */
+    private void initialize() {
         Stack<Tile> tileStack = new Stack<>();
         Tile tempTile;
         int count; // to make sure initialization doesn't take TOO long
@@ -298,20 +345,25 @@ public class Board {
                 tileStack.clear();
             }
 
-        }while(count > 50000);
+        } while(count > 50000);
 
         /* Save the current board state as the solution */
         for(int i = 0; i < tiles.length; ++i)
             solution[i] = tiles[i].getValue();
     }
 
-    /* Pick Holes in Board
+    /**
+     * Pick Holes in Board by randomly selecting a set of Tiles as the starting tiles, where the
+     * number of Tiles in the set is determined by the difficulty level.
+     *
+     * DIFFICULTY SELECTION:
      * Case 1: Create a random EASY game. 40 - 49 givens, lower bound of 4 per row/col
      * Case 2: Create a random MEDIUM game. 32 - 39 givens, lower bound of 3 per row/col
      * Case 3: Create a random HARD game. 27 - 31 givens, lower bound of 2 per row/col
-     * Default: Randomly generate a new game */
-    private void digHoles(int difficulty)
-    {
+     *
+     * @param difficulty 1 = Easy, 2 = Medium, otherwise Hard.
+     */
+    private void digHoles(int difficulty) {
         /* calculate number of givens to start game with */
         int numGivens;
         switch(difficulty)
@@ -339,9 +391,15 @@ public class Board {
         }
     }
 
-    private void checkBounds(int difficulty)
-    {
-        int bound = (difficulty > 2) ? 2 : ((difficulty == 2) ? 3 : 4);
+    /**
+     * This function makes sure that no Row or Column contains less than the boundary for the
+     * corresponding difficulty level. E.g. no Row or Column in an Easy game should contain less
+     * than 4 original tiles.
+     *
+     * @param difficulty 3 = Hard, 2 = Medium, otherwise Easy
+     */
+    private void checkBounds(int difficulty) {
+        int bound = (difficulty == 3) ? 2 : ((difficulty == 2) ? 3 : 4);
 
         Stack<House> highHouses = new Stack<>();
         Stack<House> lowHouses = new Stack<>();
@@ -409,57 +467,59 @@ public class Board {
         }
     }
 
-    private void markOriginals()
-    {
+    /**
+     * For all tiles with a value, mark them as originals. Use only in initialization process and
+     * only after boundaries have been checked, but before attempting to solve with the Solver.
+     */
+    private void markOriginals() {
         for(Tile t : tiles)
             if(t.getValue() > 0)
                 t.setOrig(true);
     }
 
-    private void checkAndFixBadPairs(House house1, House house2) {
-        for (int i = 0; i < (int) Math.sqrt(boardSize); ++i) {
-            for (int j = 1; j < (int) Math.sqrt(boardSize); ++j) {
-                Tile[] toCheck = {
-                        house1.getMember(i),
-                        house2.getMember(i),
-                        house1.getMember(j),
-                        house2.getMember(j)
-                };
-                boolean noSeeds = true;
-                for (Tile t : toCheck) {
-                    if (t.getValue() > 0) {
-                        noSeeds = false;
-                        break;
-                    }
-                }
-                if (noSeeds
-                        && solution[toCheck[0].getIndex()] == solution[toCheck[3].getIndex()]
-                        && solution[toCheck[1].getIndex()] == solution[toCheck[2].getIndex()]) {
-                    int tileToUpdate = randGen.nextInt(4);
-                    toCheck[tileToUpdate].update(solution[toCheck[tileToUpdate].getIndex()]);
-                }
-            }
-        }
+    /**
+     * Run Solver and clean up the board when finished. This step makes sure the board is solvable
+     * at the desired difficulty level.
+     */
+    private void runSolver() {
+        (new Solver(this)).solve(this.difficulty);
+        clearBoard();
     }
 
-    // Note: Does pairs only
-    // 0/1, 0/2, 1/2
-    // 3/4, 3/5, 4/5
-    // 6/7, 6/8, 7/8
-    private void checkAndFixHoles() {
-        for(int zoneTriplet = 0; zoneTriplet < 3; ++zoneTriplet) { // Iterate through columns of zones
-            for (int house1 = 0; house1 < 2; ++house1) { // Iterate through columns within zone-column
-                for (int house2 = house1 + 1; house2 < 3; ++house2) {
-                    checkAndFixBadPairs(columns[(3 * zoneTriplet) + house1], columns[(3 * zoneTriplet) + house2]); // vertical
-                    checkAndFixBadPairs(rows[(3 * zoneTriplet) + house1], rows[(3 * zoneTriplet) + house2]); // horizontal
-                }
-            }
-        }
+    /**
+     * Clear every tile that is not an original tile. This essentially resets the board.
+     */
+    public void clearBoard() {
+        for(Tile t : tiles)
+            t.clear();
     }
 
-    public String getTime()
-    {
+    /**
+     * @return The time spent on this game so far. String format will be "(m)m:ss".
+     */
+    public String getTime() {
         return timeElapsed;
+    }
+
+    /**
+     * @return An array of all the rows in the board.
+     */
+    public House[] getRows() {
+        return rows;
+    }
+
+    /**
+     * @return An array of all the columns in the board.
+     */
+    public House[] getColumns() {
+        return columns;
+    }
+
+    /**
+     * @return An array of all the zones in the board.
+     */
+    public House[] getZones() {
+        return zones;
     }
     //endregion
 
