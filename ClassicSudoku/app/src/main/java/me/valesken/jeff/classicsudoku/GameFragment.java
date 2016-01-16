@@ -119,7 +119,7 @@ public class GameFragment extends Fragment {
     {
         boardSize = _boardSize;
         board = new Board(boardSize);
-        difficulty = board.NewGame(_difficulty);
+        difficulty = board.newGame(_difficulty);
         loadJSON = null;
         saveFile = null;
         loadJSONPosition = -1;
@@ -135,7 +135,7 @@ public class GameFragment extends Fragment {
             BufferedReader buff = new BufferedReader(new FileReader(saveFile));
             JSONObject jsonObject = new JSONObject(buff.readLine());
             buff.close();
-            difficulty = board.LoadGame(jsonObject);
+            difficulty = board.loadGame(jsonObject);
         }
         catch (IOException | JSONException e) {
             e.printStackTrace();

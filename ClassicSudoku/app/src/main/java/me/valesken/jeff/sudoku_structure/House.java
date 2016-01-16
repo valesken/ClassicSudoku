@@ -18,7 +18,7 @@ import java.util.LinkedList;
 public class House implements Iterable<Tile> {
 
     @SuppressWarnings("unchecked")
-    private HashSet<Tile>[] valueOwners = new HashSet[9];
+    private HashSet<Integer>[] valueOwners = new HashSet[9];
     private int boardSize;
     private ArrayList<Tile> members;
 
@@ -47,14 +47,14 @@ public class House implements Iterable<Tile> {
      *
      * @param value The 1-9 value to assign (or remove assignment) to the Tile.
      * @param assign Whether to assign or remove assignment of the value to the Tile.
-     * @param tile The Tile that the value will be assigned to.
+     * @param tileIndex The index of the Tile that the value will be assigned to.
      */
-    public void setValueInHouse(int value, boolean assign, Tile tile) {
+    public void setValueInHouse(int value, boolean assign, int tileIndex) {
         --value; // Move values 1-9 to 0-8
         if(assign)
-            valueOwners[value].add(tile);
+            valueOwners[value].add(tileIndex);
         else
-            valueOwners[value].remove(tile);
+            valueOwners[value].remove(tileIndex);
     }
 
     /**
@@ -84,7 +84,7 @@ public class House implements Iterable<Tile> {
      * @return True if this House contains a Tile to which the value is assigned, otherwise False.
      */
     public boolean hasValue(int value) {
-        return valueOwners[value - 1].size() > 0;
+        return (valueOwners[value - 1].size() > 0);
     }
 
     /**

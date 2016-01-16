@@ -48,6 +48,7 @@ public class Tile {
 
         visited = false;
         initValuesTried = new boolean[mBoardSize];
+        lastTried = 0;
     }
 
     //region Setters
@@ -142,9 +143,9 @@ public class Tile {
      * @param inHouse True - assign to the desired value; False - remove from the desired value
      */
     private void setValueInHouses(int value, boolean inHouse) {
-        row.setValueInHouse(value, inHouse, this);
-        column.setValueInHouse(value, inHouse, this);
-        zone.setValueInHouse(value, inHouse, this);
+        row.setValueInHouse(value, inHouse, index);
+        column.setValueInHouse(value, inHouse, index);
+        zone.setValueInHouse(value, inHouse, index);
     }
     //endregion
 
@@ -279,6 +280,7 @@ public class Tile {
 
     private boolean visited;
     private boolean[] initValuesTried;
+    private int lastTried;
 
     /**
      * Mark this Tile as NOT visited in the current initialization path.
@@ -296,6 +298,26 @@ public class Tile {
     }
 
     /**
+     * This function is a slightly faster way of trying initial values than calling tryInitValue()
+     * with the values 1 - 9.
+     *
+     * @return True if this Tile successfully picked a possible initial value, otherwise False
+     */
+    public boolean tryInitialize() {
+        int index;
+        for(int initValue = lastTried + 1; initValue <= boardSize; ++initValue) {
+            index = initValue - 1;
+            if(!(initValuesTried[index] || row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {
+                initValuesTried[index] = true;
+                update(initValue);
+                lastTried = initValue;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @param initValue The value to try as an initial value for this Tile
      * @return true if the value has not yet been tried and doesn't contradict anything already in
      * one of the houses, false otherwise
@@ -304,21 +326,10 @@ public class Tile {
         if(initValuesTried[initValue - 1])
             return false;
         initValuesTried[initValue - 1] = true;
-        if(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {
+        if(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))
             return false;
-        }
         visited = true;
-        this.update(initValue);
-        return true;
-    }
-
-    /**
-     * @return True if all values have been tried; False if there is still an untried value
-     */
-    public boolean allInitValuesTried() {
-        for(boolean b : initValuesTried)
-            if(!b)
-                return false;
+        update(initValue);
         return true;
     }
 
@@ -332,6 +343,7 @@ public class Tile {
             initValuesTried[i] = false;
         value = 0;
         visited = false;
+        lastTried = 0;
     }
 
     /**

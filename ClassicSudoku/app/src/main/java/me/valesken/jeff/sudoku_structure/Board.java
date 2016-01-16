@@ -1,9 +1,12 @@
 package me.valesken.jeff.sudoku_structure;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
@@ -222,7 +225,8 @@ public class Board {
      * @param _difficulty difficulty level for the game
      * @return difficulty level for the game
      */
-    public int NewGame(int _difficulty) {
+    public int newGame(int _difficulty) {
+        Log.d("Debug Info", "Inside newGame().");
         difficulty = _difficulty;
         randGen = new Random();
         timeElapsed = "00:00";
@@ -234,9 +238,8 @@ public class Board {
         initialize();
         digHoles(difficulty);
         checkBounds(difficulty);
-        runSolver();
         markOriginals();
-        runSolver();
+        //runSolver();
 
         return difficulty;
     }
@@ -247,7 +250,7 @@ public class Board {
      * @param jsonObject JSON representation of the entire Board.
      * @return the difficulty level of the game as determined by the provided JSON Object.
      */
-    public int LoadGame(JSONObject jsonObject) {
+    public int loadGame(JSONObject jsonObject) {
         int difficulty = 0;
         randGen = new Random();
         try {
@@ -272,84 +275,48 @@ public class Board {
      * This function will generate a new, complete, valid board using a DFS algorithm to backtrack
      * when an invalid path is encountered. When finished, it will save the resultant values in the
      * solution array.
+     *
+     * @return True if initialization succeeds, false otherwise (i.e. stack becomes empty)
      */
-    private void initialize() {
-        Stack<Tile> tileStack = new Stack<>();
-        Tile tempTile;
-        int count; // to make sure initialization doesn't take TOO long
+    private boolean initialize() {
+        try {
+            Log.d("Debug Info", "Inside initialize().");
+            Stack<Tile> tileStack = new Stack<>();
+            Tile tempTile;
 
-        do {
-            count = 0;
-
-            /* Seed first 9 Tiles */
-            for(int i = 0; i < boardSize; ++i) {
+            // Seed first 9 Tiles
+            for (int i = 0; i < boardSize; ++i) {
                 tempTile = columns[i].getMember(randGen.nextInt(9));
                 tempTile.tryInitValue(i + 1);
                 tileStack.add(tempTile);
             }
 
-            /*
-             * Go through remaining tiles
-             * Set to next available value if not contradiction
-             * If all values contradict, undo previous in stack and try next value
-             */
+            // DFS to fill up the rest of the board
             int startingIndex = tileStack.peek().getIndex();
-            int currentIndex = (startingIndex == (tiles.length-1)) ? 0 : (startingIndex+1);
-            while(tileStack.size() < tiles.length) {
-                if(tileStack.size() == 0) {
-                    count = 50000;
-                    break;
+            int currentIndex = (startingIndex == (tiles.length - 1)) ? 0 : (startingIndex + 1);
+            while (tileStack.size() <= tiles.length) {
+                while (tiles[currentIndex].hasBeenVisited())
+                    currentIndex = (currentIndex == (tiles.length - 1)) ? 0 : (currentIndex + 1);
+                if (tiles[currentIndex].tryInitialize()) {
+                    tileStack.add(tiles[currentIndex]);
+                    currentIndex = (currentIndex == (tiles.length - 1)) ? 0 : (currentIndex + 1);
+                } else {
+                    tiles[currentIndex].resetInitializationState();
+                    currentIndex = tileStack.pop().getIndex();
+                    tiles[currentIndex].clear();
+                    tiles[currentIndex].unVisit();
                 }
-
-                for(int j = 1; j < (boardSize+1); ++j) {
-                    ++count;
-                    if(count > 50000)
-                        break;
-
-                    /* Check if all values have already been tried */
-                    if(tiles[currentIndex].allInitValuesTried()) {
-                        tiles[currentIndex].resetInitializationState();
-                        currentIndex = tileStack.pop().getIndex(); /* Pop stack to get previous state */
-                        tiles[currentIndex].unVisit(); /* unVisit so we can try to visit again */
-                        break;
-                    }
-
-                    /*
-                     * Get here if not the case that all values have already been tried
-                     * Check if tile already visited
-                     */
-                    if(tiles[currentIndex].hasBeenVisited()) {
-                        currentIndex = (currentIndex < (tiles.length-1)) ? currentIndex+1 : 0;
-                        break;
-                    }
-
-                    /*
-                     * Get here if tile not already visited and not the case that all values have already been tried
-                     * Try to add next possible value
-                     */
-                    if(tiles[currentIndex].tryInitValue(j)) {
-                        tileStack.push(tiles[currentIndex]); /* Push current tile onto stack (preserve state) */
-                        currentIndex = (currentIndex < (tiles.length-1)) ? currentIndex+1 : 0;
-                        break;
-                    }
-                }
-
-                if(count > 50000)
-                    break;
             }
 
-            /* Control for boards that take too long to generate */
-            if(count > 50000) {
-                for(Tile t : tiles)
-                    t.resetInitializationState();
-                tileStack.clear();
-            }
+            //Save the current board state as the solution
+            for (int i = 0; i < tiles.length; ++i)
+                solution[i] = tiles[i].getValue();
 
-        } while(count > 50000);
-
-        /* Save the current board state as the solution */
-        for(int i = 0; i < tiles.length; ++i)
-            solution[i] = tiles[i].getValue();
+            // Success
+            return true;
+        } catch (EmptyStackException e) {
+            return false;
+        }
     }
 
     /**
@@ -364,6 +331,7 @@ public class Board {
      * @param difficulty 1 = Easy, 2 = Medium, otherwise Hard.
      */
     private void digHoles(int difficulty) {
+        Log.d("Debug Info", "Inside digHoles().");
         /* calculate number of givens to start game with */
         int numGivens;
         switch(difficulty)
@@ -378,6 +346,7 @@ public class Board {
                 numGivens = Math.abs(randGen.nextInt(5)) + 27;
                 break;
         }
+        Log.d("Debug Info", String.format("Number of givens to start with is %d", numGivens));
 
         /* randomly select tiles to clear - "dig holes" */
         int indexToDig;
@@ -389,6 +358,7 @@ public class Board {
             else
                 --i;
         }
+        Log.d("Debug Info", "Finished in digHoles()");
     }
 
     /**
@@ -399,6 +369,7 @@ public class Board {
      * @param difficulty 3 = Hard, 2 = Medium, otherwise Easy
      */
     private void checkBounds(int difficulty) {
+        Log.d("Debug Info", "Inside checkBounds().");
         int bound = (difficulty == 3) ? 2 : ((difficulty == 2) ? 3 : 4);
 
         Stack<House> highHouses = new Stack<>();
@@ -472,6 +443,7 @@ public class Board {
      * only after boundaries have been checked, but before attempting to solve with the Solver.
      */
     private void markOriginals() {
+        Log.d("Debug Info", "Inside markOriginals().");
         for(Tile t : tiles)
             if(t.getValue() > 0)
                 t.setOrig(true);
