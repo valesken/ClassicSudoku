@@ -62,7 +62,7 @@ public class GameFragment extends Fragment {
     private TextView clock_tv;
     private volatile boolean paused = false;
     private volatile boolean gameOver = false;
-    //endregionNewGameTask
+    //endregion
 
     //region Clock Thread
     private Thread clockThread = new Thread(new Runnable() {
@@ -75,7 +75,7 @@ public class GameFragment extends Fragment {
                 try {
                     do {
                         TimeUnit.SECONDS.sleep(1);
-                    }while(paused);
+                    } while(paused);
                     if(gameOver)
                         break;
                     char[] temp = clock.toCharArray();
