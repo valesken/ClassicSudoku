@@ -114,14 +114,11 @@ public class Tile {
                 int v = 0;
                 for (int i = 0; i < boardSize; ++i) {
                     if (notes[i]) {
-                        if (v == 0)
-                            v = i + 1; // single/first hint
-                        else
-                            v = -1; // multiple hints
+                        v = (v == 0) ? (i + 1) : -1; // 0 if no hints, -1 if multiple hints
                         notes[i] = false;
                     }
                 }
-                if (v > -1) {
+                if (v > 0) {
                     value = v;
                     setValueInHouses(v, true);
                 }
@@ -139,10 +136,12 @@ public class Tile {
     }
 
     /**
+     * To be used internally by Tile only! (Or in tests)
+     *
      * @param value The value you want to assign to or remove from this tile in this tile's houses
      * @param inHouse True - assign to the desired value; False - remove from the desired value
      */
-    private void setValueInHouses(int value, boolean inHouse) {
+    public void setValueInHouses(int value, boolean inHouse) {
         row.setValueInHouse(value, inHouse, index);
         column.setValueInHouse(value, inHouse, index);
         zone.setValueInHouse(value, inHouse, index);
