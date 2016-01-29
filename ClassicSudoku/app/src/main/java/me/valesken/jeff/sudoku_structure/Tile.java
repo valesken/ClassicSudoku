@@ -20,47 +20,76 @@ public class Tile {
     static public String jsonOrigId = "orig";
     static public String jsonValuesId = "notesOrValue";
 
-    private int boardSize;
-    private int index;
-    private int rowNumber;
-    private House row;
-    private int columnNumber;
-    private House column;
-    private int zoneNumber;
-    private House zone;
+    public int houseSize;
+    public int index;
+    public int rowNumber;
+    public House row;
+    public int columnNumber;
+    public House column;
+    public int zoneNumber;
+    public House zone;
+    public int value;
+    public boolean[] notes;
+    public boolean noteMode; // true = notes, false = value
+    public boolean orig; // true = Tile's value & noteMode are unchangeable
 
-    private int value;
-    private boolean [] notes;
 
-    private boolean noteMode; // true = notes, false = value
-    private boolean orig; // true means this Tile's value & noteMode are unchangeable
-
-    public Tile(int mBoardSize, int in) {
-        boardSize = mBoardSize;
-        index = in;
-        rowNumber = index/boardSize;
-        columnNumber = index%boardSize;
-        zoneNumber = (rowNumber/((int)Math.sqrt(boardSize)))*3 + columnNumber/((int)Math.sqrt(boardSize));
+    public Tile(int _rowSize, int _index) {
+        index = _index;
+        houseSize = _rowSize;
+        int zoneWidth = (int) Math.sqrt(houseSize);
+        rowNumber = index / houseSize;
+        columnNumber = index % houseSize;
+        zoneNumber = 3 * (rowNumber / zoneWidth) + columnNumber / zoneWidth;
         noteMode = false;
         orig = false;
-        notes = new boolean[boardSize];
+        notes = new boolean[houseSize];
         clear();
 
         visited = false;
-        initValuesTried = new boolean[mBoardSize];
         lastTried = 0;
     }
 
     //region Setters
+
     /**
      * @param r The row that this tile belongs to.
      * @param c The column that this tile belongs to.
      * @param z The zone that this tile belongs to.
+     * @throws IllegalArgumentException If any House is null or has the wrong index for this Tile.
      */
-    public void setHouses(House r, House c, House z) {
-        row = r;
-        column = c;
-        zone = z;
+    public void setHouses(House r, House c, House z) throws IllegalArgumentException {
+        if (!orig) {
+            if (r == null || c == null || z == null) {
+                throw new IllegalArgumentException("You must not set Houses in the Tile class to null.");
+            }
+            if (r.getHouseIndex() != rowNumber) {
+                throw new IllegalArgumentException("You are passing the wrong row to this Tile");
+            }
+            if (c.getHouseIndex() != columnNumber) {
+                throw new IllegalArgumentException("You are passing the wrong column to this Tile");
+            }
+            if (z.getHouseIndex() != zoneNumber) {
+                throw new IllegalArgumentException("You are passing the wrong zone to this Tile");
+            }
+            row = r;
+            column = c;
+            zone = z;
+        }
+    }
+
+    /**
+     * To be used internally by Tile only! (Or in tests)
+     *
+     * @param value   The value you want to assign to or remove from this tile in this tile's houses
+     * @param inHouse True - assign to the desired value; False - remove from the desired value
+     */
+    public void setValueInHouses(int value, boolean inHouse) {
+        if (!orig && value > 0 && value < houseSize) {
+            row.setValueInHouse(value, inHouse, index);
+            column.setValueInHouse(value, inHouse, index);
+            zone.setValueInHouse(value, inHouse, index);
+        }
     }
 
     /**
@@ -72,14 +101,15 @@ public class Tile {
      * @param v The value you want to update this tile with.
      */
     public void update(int v) {
-        if((v > 0 && v <= boardSize) && !orig)
-        {
+        if ((v > 0 && v <= houseSize) && !orig) {
             if (noteMode)
                 notes[v - 1] = !notes[v - 1];
             else if (value == v) {
                 value = 0;
                 setValueInHouses(v, false);
             } else {
+                if (value > 0)
+                    setValueInHouses(value, false);
                 value = v;
                 setValueInHouses(v, true);
             }
@@ -91,13 +121,13 @@ public class Tile {
      * and will remove all its current notes.
      */
     public void clear() {
-        if(!orig)
-        {
-            if(value > 0)
+        if (!orig) {
+            if (value > 0)
                 setValueInHouses(value, false);
             value = 0;
-            for (int i = 0; i < boardSize; ++i)
+            for (int i = 0; i < houseSize; ++i) {
                 notes[i] = false;
+            }
         }
     }
 
@@ -106,13 +136,11 @@ public class Tile {
      * to the other.
      */
     public void toggleMode() {
-        if(!orig)
-        {
-            if (noteMode) // Switch from notes to value
-            {
+        if (!orig) {
+            if (noteMode) { // Switch from notes to value
                 // If only one hint recorded, make it the new value
                 int v = 0;
-                for (int i = 0; i < boardSize; ++i) {
+                for (int i = 0; i < houseSize; ++i) {
                     if (notes[i]) {
                         v = (v == 0) ? (i + 1) : -1; // 0 if no hints, -1 if multiple hints
                         notes[i] = false;
@@ -122,9 +150,7 @@ public class Tile {
                     value = v;
                     setValueInHouses(v, true);
                 }
-            }
-            else // Switch from value to notes
-            {
+            } else { // Switch from value to notes
                 // If there's a value recorded, make it a hint
                 if (value > 0)
                     notes[value - 1] = true;
@@ -134,33 +160,25 @@ public class Tile {
             noteMode = !noteMode;
         }
     }
-
-    /**
-     * To be used internally by Tile only! (Or in tests)
-     *
-     * @param value The value you want to assign to or remove from this tile in this tile's houses
-     * @param inHouse True - assign to the desired value; False - remove from the desired value
-     */
-    public void setValueInHouses(int value, boolean inHouse) {
-        row.setValueInHouse(value, inHouse, index);
-        column.setValueInHouse(value, inHouse, index);
-        zone.setValueInHouse(value, inHouse, index);
-    }
     //endregion
 
     //region Getters
+
     /**
      * @return A LinkedList containing the current notes in this tile or, if this tile is not in
-     * note mode, a single value which is the current value of this tile.
+     * note mode, a single value which is the current value of this tile (0 if empty).
      */
     public LinkedList<Integer> getNotesOrValue() {
-        if(noteMode)
+        if (noteMode)
             return getNotes();
         LinkedList<Integer> list = new LinkedList<>();
         list.add(getValue());
         return list;
     }
 
+    /**
+     * @return The current value of the Tile. 0 if no current value or the Tile is in Node mode.
+     */
     public int getValue() {
         return value;
     }
@@ -170,14 +188,14 @@ public class Tile {
      * mode, it will return null.
      */
     public LinkedList<Integer> getNotes() {
-        if(noteMode) {
-            LinkedList<Integer> notesList = new LinkedList<>();
-            for (int i = 0; i < boardSize; ++i)
-                if(notes[i])
-                    notesList.add(i+1);
-            return notesList;
+        LinkedList<Integer> notesList = new LinkedList<>();
+        if (noteMode) {
+            for (int i = 0; i < houseSize; ++i) {
+                if (notes[i])
+                    notesList.add(i + 1);
+            }
         }
-        return null;
+        return notesList;
     }
 
     /**
@@ -257,29 +275,19 @@ public class Tile {
             jsonObject.put(jsonZoneId, this.getZoneNumber());
             jsonObject.put(jsonNoteModeId, this.isNoteMode());
             jsonObject.put(jsonOrigId, this.isOrig());
-
-            JSONArray notesOrValueArray = new JSONArray();
-            LinkedList<Integer> notesOrValue = this.getNotesOrValue();
-            for(int i = 0; i < notesOrValue.size(); ++i)
-                notesOrValueArray.put(notesOrValue.get(i));
+            JSONArray notesOrValueArray = new JSONArray(this.getNotesOrValue());
             jsonObject.put(jsonValuesId, notesOrValueArray);
-        }
-        catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
     }
     //endregion
 
-    /**********************************
-     * INITIALIZATION SECTION - START *
-     **********************************/
-
     //region Initialization
 
-    private boolean visited;
-    private boolean[] initValuesTried;
-    private int lastTried;
+    public boolean visited;
+    public int lastTried;
 
     /**
      * Mark this Tile as NOT visited in the current initialization path.
@@ -303,13 +311,11 @@ public class Tile {
      * @return True if this Tile successfully picked a possible initial value, otherwise False
      */
     public boolean tryInitialize() {
-        int index;
-        for(int initValue = lastTried + 1; initValue <= boardSize; ++initValue) {
-            index = initValue - 1;
-            if(!(initValuesTried[index] || row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {
-                initValuesTried[index] = true;
+        for (int initValue = lastTried + 1; initValue <= houseSize; ++initValue) {
+            lastTried = initValue;
+            if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {
                 update(initValue);
-                lastTried = initValue;
+                visited = true;
                 return true;
             }
         }
@@ -317,15 +323,13 @@ public class Tile {
     }
 
     /**
-     * @param initValue The value to try as an initial value for this Tile
-     * @return true if the value has not yet been tried and doesn't contradict anything already in
-     * one of the houses, false otherwise
+     * @param initValue The value to try as an initial value for this Tile (1 - 9)
+     * @return true if the value doesn't contradict anything in any of the houses, false otherwise
      */
     public boolean tryInitValue(int initValue) {
-        if(initValuesTried[initValue - 1])
+        if (initValue < 1 || initValue > houseSize)
             return false;
-        initValuesTried[initValue - 1] = true;
-        if(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))
+        if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))
             return false;
         visited = true;
         update(initValue);
@@ -336,10 +340,8 @@ public class Tile {
      * Call when board initialization has reached a contradiction and needs to clear Tiles.
      */
     public void resetInitializationState() {
-        if(value > 0)
+        if (value > 0)
             setValueInHouses(value, false);
-        for(int i = 0; i < initValuesTried.length; ++i)
-            initValuesTried[i] = false;
         value = 0;
         visited = false;
         lastTried = 0;
@@ -355,28 +357,34 @@ public class Tile {
     }
 
     /**
-     * Only to be used for loading a previous game.
+     * Only to be used for loading a previous game. Will not load any data if the provided json
+     * is corrupted or otherwise incorrect.
      *
      * @param jsonObject A JSON representation of this Tile's state.
      */
-    public void loadTileState(JSONObject jsonObject) {
-        try {
-            this.index = jsonObject.getInt(jsonIndexId);
-            this.rowNumber = jsonObject.getInt(jsonRowId);
-            this.columnNumber = jsonObject.getInt(jsonColumnId);
-            this.zoneNumber = jsonObject.getInt(jsonZoneId);
-            this.noteMode = jsonObject.getBoolean(jsonNoteModeId);
-            this.orig = jsonObject.getBoolean(jsonOrigId);
-
-            JSONArray jsonArray = jsonObject.getJSONArray(jsonValuesId);
-            if(noteMode)
-                for (int i = 0; i < jsonArray.length(); ++i)
-                    notes[jsonArray.getInt(i)-1] = true;
-            else
-                value = jsonArray.getInt(0);
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
+    public void loadTileState(JSONObject jsonObject) throws JSONException {
+        // Get JSON Data
+        int loadedIndex = jsonObject.getInt(jsonIndexId);
+        int loadedRowNumber = jsonObject.getInt(jsonRowId);
+        int loadedColumnNumber = jsonObject.getInt(jsonColumnId);
+        int loadedZoneId = jsonObject.getInt(jsonZoneId);
+        boolean loadedNoteMode = jsonObject.getBoolean(jsonNoteModeId);
+        boolean loadedOrig = jsonObject.getBoolean(jsonOrigId);
+        JSONArray jsonArray = jsonObject.getJSONArray(jsonValuesId);
+        // If no problems, load the data into this Tile
+        this.index = loadedIndex;
+        this.rowNumber = loadedRowNumber;
+        this.columnNumber = loadedColumnNumber;
+        this.zoneNumber = loadedZoneId;
+        this.noteMode = loadedNoteMode;
+        this.orig = loadedOrig;
+        if (noteMode) {
+            value = 0;
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                notes[jsonArray.getInt(i) - 1] = true;
+            }
+        } else {
+            value = jsonArray.getInt(0);
         }
     }
     //endregion

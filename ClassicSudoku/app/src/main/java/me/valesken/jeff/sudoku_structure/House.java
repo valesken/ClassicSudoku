@@ -18,43 +18,55 @@ import java.util.LinkedList;
 public class House implements Iterable<Tile> {
 
     @SuppressWarnings("unchecked")
-    private HashSet<Integer>[] valueOwners = new HashSet[9];
-    private int boardSize;
-    private ArrayList<Tile> members;
+    public HashSet<Integer>[] valueOwners = new HashSet[9];
+    public ArrayList<Tile> members;
+    public int houseIndex;
+    public int houseSize;
+    public int boardSize;
 
-    public House(int mBoardSize) {
-        boardSize = mBoardSize;
-        members = new ArrayList<>(mBoardSize);
-        for(int i = 0; i < 9; ++i)
+    public House(int _houseSize, int _houseIndex) {
+        houseIndex = _houseIndex;
+        houseSize = _houseSize;
+        boardSize = houseSize * houseSize;
+        members = new ArrayList<>(houseSize);
+        for (int i = 0; i < 9; ++i) {
             valueOwners[i] = new HashSet<>();
+        }
     }
 
     //region Setters
+
     /**
      * This function adds a Tile to this House. The order in which Tiles are added corresponds to
-     * the position of the Tiles in the House, so order is important.
+     * the position of the Tiles in the House, so order is important. Cannot add same tile twice.
      *
-     * @param t The next tile to add to this House.
+     * @param tile The next tile to add to this House.
      */
-    public void addMember(Tile t) {
-        if(members.size() <= boardSize)
-            members.add(t); // Add to end - O(1) insert to end, maintains position in House
+    public void addMember(Tile tile) {
+        if (members.size() < houseSize && !members.contains(tile)) {
+            members.add(tile); // Add to end - O(1) insert to end, maintains position in House
+        }
     }
 
     /**
-     * This function will assign (or remove assignment) to a particular value in this House.
-     * E.g. This House will think Tile t claims 4.
+     * This function will assign a Tile (or remove assignment of a Tile from) to a particular value
+     * in this House. E.g. This House will think Tile t claims 4. Because of the AI, it is possible
+     * to assign multiple tiles to a particular value.
      *
-     * @param value The 1-9 value to assign (or remove assignment) to the Tile.
-     * @param assign Whether to assign or remove assignment of the value to the Tile.
+     * @param value     The 1-9 value to assign (or remove assignment) to the Tile.
+     * @param assign    Whether to assign or remove assignment of the value to the Tile.
      * @param tileIndex The index of the Tile that the value will be assigned to.
+     * @return true if successful, false otherwise
      */
-    public void setValueInHouse(int value, boolean assign, int tileIndex) {
-        --value; // Move values 1-9 to 0-8
-        if(assign)
-            valueOwners[value].add(tileIndex);
-        else
-            valueOwners[value].remove(tileIndex);
+    public boolean setValueInHouse(int value, boolean assign, int tileIndex) {
+        if (value > 0 && value <= houseSize && tileIndex > -1 && tileIndex < boardSize) {
+            if (assign) {
+                return valueOwners[value - 1].add(tileIndex);
+            } else {
+                return valueOwners[value - 1].remove(tileIndex);
+            }
+        }
+        return false;
     }
 
     /**
@@ -69,6 +81,7 @@ public class House implements Iterable<Tile> {
     //endregion
 
     //region Getters
+
     /**
      * @param position The 0-8 position within this House to get a Tile from.
      * @return The Tile at the corresponding position in the House.
@@ -92,9 +105,11 @@ public class House implements Iterable<Tile> {
      */
     public int getValueCount() {
         int count = 0;
-        for(Tile t : members)
-            if(t.getValue() > 0)
+        for (Tile t : members) {
+            if (t.getValue() > 0) {
                 ++count;
+            }
+        }
         return count;
     }
 
@@ -104,9 +119,11 @@ public class House implements Iterable<Tile> {
      */
     public LinkedList<Tile> getValueTiles() {
         LinkedList<Tile> valueTiles = new LinkedList<>();
-        for(Tile t : members)
-            if(t.getValue() > 0)
+        for (Tile t : members) {
+            if (t.getValue() > 0) {
                 valueTiles.add(t);
+            }
+        }
         return valueTiles;
     }
     //endregion
@@ -114,5 +131,12 @@ public class House implements Iterable<Tile> {
     @Override
     public Iterator<Tile> iterator() {
         return members.iterator();
+    }
+
+    /**
+     * @return The index (0 - 8) for this house.
+     */
+    public int getHouseIndex() {
+        return houseIndex;
     }
 }

@@ -23,7 +23,7 @@ public class Board {
 
     private int boardSize;
     private int difficulty;
-    private Tile [] tiles;
+    private Tile[] tiles;
     private House[] rows, columns, zones;
     private int[] solution;
 
@@ -34,26 +34,27 @@ public class Board {
      */
     public Board(int _boardSize) {
         boardSize = _boardSize;
-        solution = new int[boardSize*boardSize];
+        solution = new int[boardSize * boardSize];
 
         /* Initialize houses */
         rows = new House[boardSize];
         columns = new House[boardSize];
         zones = new House[boardSize];
-        for(int i = 0; i < boardSize; ++i) {
-            rows[i] = new House(boardSize);
-            columns[i] = new House(boardSize);
-            zones[i] = new House(boardSize);
+        for (int i = 0; i < boardSize; ++i) {
+            rows[i] = new House(boardSize, i);
+            columns[i] = new House(boardSize, i);
+            zones[i] = new House(boardSize, i);
         }
 
         /* Initialize tiles and link them up to the houses */
-        tiles = new Tile[boardSize*boardSize];
-        for(int i = 0; i < (boardSize*boardSize); ++i) {
+        tiles = new Tile[boardSize * boardSize];
+        for (int i = 0; i < (boardSize * boardSize); ++i) {
             tiles[i] = new Tile(boardSize, i);
             rows[tiles[i].getRowNumber()].addMember(tiles[i]);
             columns[tiles[i].getColumnNumber()].addMember(tiles[i]);
             zones[tiles[i].getZoneNumber()].addMember(tiles[i]);
-            tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i].getZoneNumber()]);
+            tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i]
+                    .getZoneNumber()]);
         }
     }
 
@@ -84,8 +85,9 @@ public class Board {
      */
     public LinkedList[] getBoard() {
         LinkedList[] list = new LinkedList[tiles.length];
-        for(int i = 0; i < list.length; ++i)
+        for (int i = 0; i < list.length; ++i) {
             list[i] = getTile(i);
+        }
         return list;
     }
 
@@ -93,7 +95,7 @@ public class Board {
      * This updates a specific Tile with the desired value/note (depending on its mode).
      *
      * @param position The index (0 - 80) of the Tile to update
-     * @param value The new value/note for the Tile
+     * @param value    The new value/note for the Tile
      */
     public void updateTile(int position, int value) {
         tiles[position].update(value);
@@ -143,14 +145,17 @@ public class Board {
      */
     public int getHint() {
         LinkedList<Tile> openTiles = new LinkedList<>();
-        for(int i = 0; i < tiles.length; ++i)
-            if (tiles[i].getValue() == 0 || tiles[i].getValue() != solution[i])
+        for (int i = 0; i < tiles.length; ++i) {
+            if (tiles[i].getValue() == 0 || tiles[i].getValue() != solution[i]) {
                 openTiles.add(tiles[i]);
-        if(openTiles.size() > 0) {
+            }
+        }
+        if (openTiles.size() > 0) {
             int index = randGen.nextInt(openTiles.size());
             Tile tile = openTiles.get(index);
-            if (tile.isNoteMode())
+            if (tile.isNoteMode()) {
                 tile.toggleMode();
+            }
             tile.update(solution[tile.getIndex()]);
             tile.setOrig(true);
             return tile.getIndex();
@@ -162,9 +167,11 @@ public class Board {
      * @return True if every Tile on the board has the correct value, otherwise False.
      */
     public boolean isGameOver() {
-        for(int i = 0; i < tiles.length; ++i)
-            if(tiles[i].getValue() != solution[i])
+        for (int i = 0; i < tiles.length; ++i) {
+            if (tiles[i].getValue() != solution[i]) {
                 return false;
+            }
+        }
         return true;
     }
 
@@ -172,11 +179,13 @@ public class Board {
      * This function will solve the game according to the saved solution.
      */
     public void solve() {
-        for(int i = 0; i < tiles.length; ++i) {
-            if(tiles[i].isNoteMode())
+        for (int i = 0; i < tiles.length; ++i) {
+            if (tiles[i].isNoteMode()) {
                 tiles[i].toggleMode();
-            if(tiles[i].getValue() != solution[i])
+            }
+            if (tiles[i].getValue() != solution[i]) {
                 tiles[i].update(solution[i]);
+            }
         }
     }
 
@@ -194,16 +203,17 @@ public class Board {
             jsonObject.put(jsonDifficultyId, difficulty);
 
             JSONArray solutionArray = new JSONArray();
-            for (int solution_value : solution)
+            for (int solution_value : solution) {
                 solutionArray.put(solution_value);
+            }
             jsonObject.put(jsonSolutionId, solutionArray);
 
             JSONArray tilesArray = new JSONArray();
-            for (Tile tile : tiles)
+            for (Tile tile : tiles) {
                 tilesArray.put(tile.getJSON());
+            }
             jsonObject.put(jsonTilesId, tilesArray);
-        }
-        catch(JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
@@ -232,8 +242,9 @@ public class Board {
         timeElapsed = "00:00";
 
         // if 'Random', select between easy, medium, and hard
-        if(difficulty == 0 || difficulty == 4)
+        if (difficulty == 0 || difficulty == 4) {
             difficulty = randGen.nextInt(3);
+        }
 
         initialize();
         digHoles(difficulty);
@@ -257,15 +268,16 @@ public class Board {
             difficulty = jsonObject.getInt(jsonDifficultyId);
             timeElapsed = jsonObject.getString(jsonTimeId);
             JSONArray jsonArray = jsonObject.getJSONArray(jsonSolutionId);
-            for(int i = 0; i < jsonArray.length(); ++i)
+            for (int i = 0; i < jsonArray.length(); ++i) {
                 solution[i] = jsonArray.getInt(i);
+            }
             jsonArray = jsonObject.getJSONArray(jsonTilesId);
             for (int i = 0; i < jsonArray.length(); ++i) {
                 tiles[i].loadTileState(jsonArray.getJSONObject(i));
-                tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i].getZoneNumber()]);
+                tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i]
+                        .getZoneNumber()]);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         return difficulty;
@@ -295,8 +307,9 @@ public class Board {
             int startingIndex = tileStack.peek().getIndex();
             int currentIndex = (startingIndex == (tiles.length - 1)) ? 0 : (startingIndex + 1);
             while (tileStack.size() <= tiles.length) {
-                while (tiles[currentIndex].hasBeenVisited())
+                while (tiles[currentIndex].hasBeenVisited()) {
                     currentIndex = (currentIndex == (tiles.length - 1)) ? 0 : (currentIndex + 1);
+                }
                 if (tiles[currentIndex].tryInitialize()) {
                     tileStack.add(tiles[currentIndex]);
                     currentIndex = (currentIndex == (tiles.length - 1)) ? 0 : (currentIndex + 1);
@@ -309,8 +322,9 @@ public class Board {
             }
 
             //Save the current board state as the solution
-            for (int i = 0; i < tiles.length; ++i)
+            for (int i = 0; i < tiles.length; ++i) {
                 solution[i] = tiles[i].getValue();
+            }
 
             // Success
             return true;
@@ -334,8 +348,7 @@ public class Board {
         Log.d("Debug Info", "Inside digHoles().");
         /* calculate number of givens to start game with */
         int numGivens;
-        switch(difficulty)
-        {
+        switch (difficulty) {
             case 1: /* easy */
                 numGivens = Math.abs(randGen.nextInt(10)) + 40;
                 break;
@@ -350,13 +363,13 @@ public class Board {
 
         /* randomly select tiles to clear - "dig holes" */
         int indexToDig;
-        for(int i = numGivens; i < tiles.length; ++i)
-        {
+        for (int i = numGivens; i < tiles.length; ++i) {
             indexToDig = Math.abs(randGen.nextInt(tiles.length));
-            if(tiles[indexToDig].getValue() > 0)
+            if (tiles[indexToDig].getValue() > 0) {
                 tiles[indexToDig].clear();
-            else
+            } else {
                 --i;
+            }
         }
         Log.d("Debug Info", "Finished in digHoles()");
     }
@@ -380,27 +393,27 @@ public class Board {
         LinkedList<Tile> highHouseValues;
 
         /* Check rows */
-        for(House row : rows)
-        {
-            if(row.getValueCount() > bound)
+        for (House row : rows) {
+            if (row.getValueCount() > bound) {
                 highHouses.push(row);
-            else if(row.getValueCount() < bound)
+            } else if (row.getValueCount() < bound) {
                 lowHouses.push(row);
+            }
         }
         highHouse = highHouses.pop();
         highHouseValues = highHouse.getValueTiles();
-        while(lowHouses.size() > 0) {
+        while (lowHouses.size() > 0) {
             lowHouse = lowHouses.pop();
-            while(lowHouse.getValueCount() < bound) {
+            while (lowHouse.getValueCount() < bound) {
                 for (Tile t : highHouseValues) {
                     tile = lowHouse.getMember(t.getColumnNumber());
-                    if(tile.getValue() == 0) {
+                    if (tile.getValue() == 0) {
                         tile.update(solution[tile.getIndex()]);
                         t.clear();
                         break;
                     }
                 }
-                if(highHouse.getValueCount() == bound) {
+                if (highHouse.getValueCount() == bound) {
                     highHouse = highHouses.pop();
                     highHouseValues = highHouse.getValueTiles();
                 }
@@ -410,27 +423,27 @@ public class Board {
         /* Check columns */
         highHouses.clear();
         lowHouses.clear();
-        for(House column : columns)
-        {
-            if(column.getValueCount() > bound)
+        for (House column : columns) {
+            if (column.getValueCount() > bound) {
                 highHouses.push(column);
-            else if(column.getValueCount() < bound)
+            } else if (column.getValueCount() < bound) {
                 lowHouses.push(column);
+            }
         }
         highHouse = highHouses.pop();
         highHouseValues = highHouse.getValueTiles();
-        while(lowHouses.size() > 0) {
+        while (lowHouses.size() > 0) {
             lowHouse = lowHouses.pop();
-            while(lowHouse.getValueCount() < bound) {
-                for(Tile t : highHouseValues) {
+            while (lowHouse.getValueCount() < bound) {
+                for (Tile t : highHouseValues) {
                     tile = lowHouse.getMember(t.getRowNumber());
-                    if(tile.getValue() == 0) {
+                    if (tile.getValue() == 0) {
                         tile.update(solution[tile.getIndex()]);
                         t.clear();
                         break;
                     }
                 }
-                if(highHouse.getValueCount() == bound) {
+                if (highHouse.getValueCount() == bound) {
                     highHouse = highHouses.pop();
                     highHouseValues = highHouse.getValueTiles();
                 }
@@ -444,9 +457,11 @@ public class Board {
      */
     private void markOriginals() {
         Log.d("Debug Info", "Inside markOriginals().");
-        for(Tile t : tiles)
-            if(t.getValue() > 0)
+        for (Tile t : tiles) {
+            if (t.getValue() > 0) {
                 t.setOrig(true);
+            }
+        }
     }
 
     /**
@@ -462,8 +477,9 @@ public class Board {
      * Clear every tile that is not an original tile. This essentially resets the board.
      */
     public void clearBoard() {
-        for(Tile t : tiles)
+        for (Tile t : tiles) {
             t.clear();
+        }
     }
 
     /**
