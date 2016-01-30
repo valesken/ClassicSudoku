@@ -39,10 +39,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Board.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Board.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
+            <state vertical-scroll-proportion="11.10572">
               <caret line="368" column="42" selection-start-line="368" selection-start-column="42" selection-end-line="368" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -72,93 +72,57 @@
             <state vertical-scroll-proportion="0.0">
               <caret line="92" column="7" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
               <folding>
-                <element signature="e#598#628#0" expanded="true" />
                 <element signature="e#1117#1133#0" expanded="false" />
                 <element signature="method#addMember#0;class#House#0" expanded="true" />
-                <element signature="e#4746#4747#0" expanded="true" />
-                <element signature="e#4779#4780#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HouseTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="HouseTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/HouseTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.06239168">
-              <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
               <folding>
+                <element signature="imports" expanded="true" />
                 <element signature="e#473#487#0" expanded="false" />
                 <element signature="method#setUp#0;class#HouseTest#0" expanded="true" />
                 <element signature="e#642#668#0" expanded="false" />
                 <element signature="method#testConstructorPass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#1156#1182#0" expanded="false" />
+                <element signature="e#1157#1183#0" expanded="false" />
                 <element signature="method#testAddFirstMemberPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testCanAddNineMembersPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testCannotAddMoreThanNineMembersFail#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testCannotAddSameTileTwiceFail#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#2512#2544#0" expanded="false" />
+                <element signature="e#2541#2573#0" expanded="false" />
                 <element signature="method#testSetValueNoClaimPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testSetValueOneClaimPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testRemoveValueOneClaimPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testRemoveValueTwoClaimsPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testAddSameTileTwiceFail#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#3915#3916#0" expanded="true" />
-                <element signature="e#3977#3978#0" expanded="true" />
-                <element signature="e#4033#4034#0" expanded="true" />
-                <element signature="e#4096#4097#0" expanded="true" />
-                <element signature="e#4149#4150#0" expanded="true" />
-                <element signature="e#4214#4215#0" expanded="true" />
-                <element signature="e#4274#4275#0" expanded="true" />
-                <element signature="e#4337#4338#0" expanded="true" />
-                <element signature="e#4394#4395#0" expanded="true" />
-                <element signature="e#4459#4460#0" expanded="true" />
-                <element signature="e#4518#4519#0" expanded="true" />
-                <element signature="e#4581#4582#0" expanded="true" />
                 <element signature="method#testRemoveMissingValueOneClaimFail#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#4878#4912#0" expanded="false" />
+                <element signature="e#4907#4941#0" expanded="false" />
                 <element signature="method#testClearOneValueInHousePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testClearMultipleValuesInHousePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testClearNoValuesInHousePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testClearDoesNotAffectOtherValuesPass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#5890#5891#0" expanded="true" />
-                <element signature="e#5945#5946#0" expanded="true" />
-                <element signature="e#6003#6004#0" expanded="true" />
-                <element signature="e#6059#6060#0" expanded="true" />
-                <element signature="e#6114#6115#0" expanded="true" />
-                <element signature="e#6172#6173#0" expanded="true" />
-                <element signature="e#6195#6221#0" expanded="false" />
+                <element signature="e#6224#6250#0" expanded="false" />
                 <element signature="method#testGetMemberZeroPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testGetMemberLaterPass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#6636#6637#0" expanded="true" />
-                <element signature="e#6682#6683#0" expanded="true" />
-                <element signature="e#6744#6745#0" expanded="true" />
-                <element signature="e#6791#6792#0" expanded="true" />
-                <element signature="e#6850#6851#0" expanded="true" />
-                <element signature="e#6899#6900#0" expanded="true" />
-                <element signature="e#6922#6947#0" expanded="false" />
+                <element signature="e#6951#6976#0" expanded="false" />
                 <element signature="method#testOneTileHasValuePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testMultipleTilesHaveValuePass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#7317#7318#0" expanded="true" />
-                <element signature="e#7363#7364#0" expanded="true" />
-                <element signature="e#7415#7416#0" expanded="true" />
-                <element signature="e#7461#7462#0" expanded="true" />
-                <element signature="e#7517#7518#0" expanded="true" />
-                <element signature="e#7564#7565#0" expanded="true" />
-                <element signature="e#7617#7618#0" expanded="true" />
-                <element signature="e#7666#7667#0" expanded="true" />
-                <element signature="e#7689#7719#0" expanded="false" />
+                <element signature="e#7718#7748#0" expanded="false" />
                 <element signature="method#testDefaultValueCountZeroPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testValueCountOnePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testValueCountAllPass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#8626#8656#0" expanded="false" />
+                <element signature="e#8658#8688#0" expanded="false" />
                 <element signature="method#testDefaultValueTilesEmptyPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testOneValueGetValueTilesPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testMultipleValuesGetValueTilesPass#0;class#HouseTest#0" expanded="true" />
-                <element signature="e#9950#9980#0" expanded="false" />
-                <element signature="e#10024#10025#0" expanded="true" />
-                <element signature="e#10087#10088#0" expanded="true" />
-                <element signature="e#10110#10133#0" expanded="false" />
+                <element signature="e#9986#10016#0" expanded="false" />
+                <element signature="e#10146#10169#0" expanded="false" />
                 <element signature="method#testIterateOverNoTilesPass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testIterateOverOneTilePass#0;class#HouseTest#0" expanded="true" />
                 <element signature="method#testIterateOverMultipleTilesPass#0;class#HouseTest#0" expanded="true" />
@@ -1707,10 +1671,10 @@
         <option value="$PROJECT_DIR$/app/src/test/java/TileTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/classicsudoku/GridManager.java" />
         <option value="$PROJECT_DIR$/app/build.gradle" />
-        <option value="$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/TileTest.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java" />
+        <option value="$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/TileTest.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/HouseTest.java" />
       </list>
     </option>
@@ -2384,7 +2348,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44493392" sideWeight="0.49786553" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33038673" sideWeight="0.4967983" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33038673" sideWeight="0.4967983" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -2800,31 +2764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="368" column="42" selection-start-line="368" selection-start-column="42" selection-end-line="368" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Board#0;class#Board#0" expanded="true" />
-            <element signature="method#getBoard#0;class#Board#0" expanded="true" />
-            <element signature="e#4158#4159#0" expanded="true" />
-            <element signature="e#4214#4215#0" expanded="true" />
-            <element signature="method#getHint#0;class#Board#0" expanded="true" />
-            <element signature="method#isGameOver#0;class#Board#0" expanded="true" />
-            <element signature="method#solve#0;class#Board#0" expanded="true" />
-            <element signature="method#save#0;class#Board#0" expanded="true" />
-            <element signature="method#newGame#0;class#Board#0" expanded="true" />
-            <element signature="method#loadGame#0;class#Board#0" expanded="true" />
-            <element signature="method#initialize#0;class#Board#0" expanded="true" />
-            <element signature="method#checkBounds#0;class#Board#0" expanded="true" />
-            <element signature="method#markOriginals#0;class#Board#0" expanded="true" />
-            <element signature="method#runSolver#0;class#Board#0" expanded="true" />
-            <element signature="method#clearBoard#0;class#Board#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.12651646">
@@ -2854,7 +2793,7 @@
             <element signature="method#testConstructorClearsStatePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testConstructorIndicesPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testConstructorInitializationVarsPass#0;class#TileTest#0" expanded="true" />
-            <element signature="e#2913#2939#0" expanded="false" />
+            <element signature="e#2914#2940#0" expanded="false" />
             <element signature="method#testSetHousesPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetHousesRowNullExcept#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetHousesColumnNullExcept#0;class#TileTest#0" expanded="true" />
@@ -2864,7 +2803,7 @@
             <element signature="method#testSetHousesBadColumnIndexExcept#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetHousesBadZoneIndexExcept#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetHousesOrigTileIgnore#0;class#TileTest#0" expanded="true" />
-            <element signature="e#6620#6653#0" expanded="false" />
+            <element signature="e#6621#6654#0" expanded="false" />
             <element signature="method#testSetValueInHousesPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetValueInHousesZeroIgnored#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetValueInHousesNegativeIgnored#0;class#TileTest#0" expanded="true" />
@@ -2924,13 +2863,13 @@
             <element signature="method#testTileInNoteModeJSONPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTileWithNotesJSONPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testOrigTileJSONPass#0;class#TileTest#0" expanded="true" />
-            <element signature="e#25494#25518#0" expanded="false" />
+            <element signature="e#25507#25531#0" expanded="false" />
             <element signature="method#testUnVisitVisited#0;class#TileTest#0" expanded="true" />
             <element signature="method#testUnVisitUnvisited#0;class#TileTest#0" expanded="true" />
-            <element signature="e#25830#25861#0" expanded="false" />
+            <element signature="e#25843#25874#0" expanded="false" />
             <element signature="method#testHasBeenVisitedPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testHasNotBeenVisitedPass#0;class#TileTest#0" expanded="true" />
-            <element signature="e#26151#26181#0" expanded="false" />
+            <element signature="e#26164#26194#0" expanded="false" />
             <element signature="method#testTryInitializeFromZeroNoContradictionsPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitializeFromOneNoContradictionsPass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitializeFromZeroRowContradictsOnePass#0;class#TileTest#0" expanded="true" />
@@ -2938,20 +2877,20 @@
             <element signature="method#testTryInitializeFromZeroZoneContradictsOnePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitializeFromZeroAllContradictFail#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitializeFromOneAllContradictFail#0;class#TileTest#0" expanded="true" />
-            <element signature="e#30774#30803#0" expanded="false" />
+            <element signature="e#30813#30842#0" expanded="false" />
             <element signature="method#testTryInitValuePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitValueSmallFail#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitValueBigFail#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitValueRowConflictFail#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitValueColumnConflictFail#0;class#TileTest#0" expanded="true" />
             <element signature="method#testTryInitValueZoneConflictFail#0;class#TileTest#0" expanded="true" />
-            <element signature="e#33314#33355#0" expanded="false" />
+            <element signature="e#33353#33394#0" expanded="false" />
             <element signature="method#testResetFromDefaultStatePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testResetFromNonDefaultStatePass#0;class#TileTest#0" expanded="true" />
-            <element signature="e#34067#34091#0" expanded="false" />
+            <element signature="e#34106#34130#0" expanded="false" />
             <element signature="method#testSetOrigTruePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testSetOrigFalsePass#0;class#TileTest#0" expanded="true" />
-            <element signature="e#34347#34377#0" expanded="false" />
+            <element signature="e#34386#34416#0" expanded="false" />
             <element signature="method#testLoadTileOrigWithValuePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testLoadTileNotOrigWithValuePass#0;class#TileTest#0" expanded="true" />
             <element signature="method#testLoadTileWithNotesPass#0;class#TileTest#0" expanded="true" />
@@ -2965,94 +2904,83 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="92" column="7" selection-start-line="92" selection-start-column="7" selection-end-line="92" selection-end-column="7" />
           <folding>
-            <element signature="e#598#628#0" expanded="true" />
             <element signature="e#1117#1133#0" expanded="false" />
             <element signature="method#addMember#0;class#House#0" expanded="true" />
-            <element signature="e#4746#4747#0" expanded="true" />
-            <element signature="e#4779#4780#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/HouseTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06239168">
-          <caret line="2" column="24" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="23" selection-start-line="14" selection-start-column="23" selection-end-line="14" selection-end-column="23" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="e#473#487#0" expanded="false" />
             <element signature="method#setUp#0;class#HouseTest#0" expanded="true" />
             <element signature="e#642#668#0" expanded="false" />
             <element signature="method#testConstructorPass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#1156#1182#0" expanded="false" />
+            <element signature="e#1157#1183#0" expanded="false" />
             <element signature="method#testAddFirstMemberPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testCanAddNineMembersPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testCannotAddMoreThanNineMembersFail#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testCannotAddSameTileTwiceFail#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#2512#2544#0" expanded="false" />
+            <element signature="e#2541#2573#0" expanded="false" />
             <element signature="method#testSetValueNoClaimPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testSetValueOneClaimPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testRemoveValueOneClaimPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testRemoveValueTwoClaimsPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testAddSameTileTwiceFail#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#3915#3916#0" expanded="true" />
-            <element signature="e#3977#3978#0" expanded="true" />
-            <element signature="e#4033#4034#0" expanded="true" />
-            <element signature="e#4096#4097#0" expanded="true" />
-            <element signature="e#4149#4150#0" expanded="true" />
-            <element signature="e#4214#4215#0" expanded="true" />
-            <element signature="e#4274#4275#0" expanded="true" />
-            <element signature="e#4337#4338#0" expanded="true" />
-            <element signature="e#4394#4395#0" expanded="true" />
-            <element signature="e#4459#4460#0" expanded="true" />
-            <element signature="e#4518#4519#0" expanded="true" />
-            <element signature="e#4581#4582#0" expanded="true" />
             <element signature="method#testRemoveMissingValueOneClaimFail#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#4878#4912#0" expanded="false" />
+            <element signature="e#4907#4941#0" expanded="false" />
             <element signature="method#testClearOneValueInHousePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testClearMultipleValuesInHousePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testClearNoValuesInHousePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testClearDoesNotAffectOtherValuesPass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#5890#5891#0" expanded="true" />
-            <element signature="e#5945#5946#0" expanded="true" />
-            <element signature="e#6003#6004#0" expanded="true" />
-            <element signature="e#6059#6060#0" expanded="true" />
-            <element signature="e#6114#6115#0" expanded="true" />
-            <element signature="e#6172#6173#0" expanded="true" />
-            <element signature="e#6195#6221#0" expanded="false" />
+            <element signature="e#6224#6250#0" expanded="false" />
             <element signature="method#testGetMemberZeroPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testGetMemberLaterPass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#6636#6637#0" expanded="true" />
-            <element signature="e#6682#6683#0" expanded="true" />
-            <element signature="e#6744#6745#0" expanded="true" />
-            <element signature="e#6791#6792#0" expanded="true" />
-            <element signature="e#6850#6851#0" expanded="true" />
-            <element signature="e#6899#6900#0" expanded="true" />
-            <element signature="e#6922#6947#0" expanded="false" />
+            <element signature="e#6951#6976#0" expanded="false" />
             <element signature="method#testOneTileHasValuePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testMultipleTilesHaveValuePass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#7317#7318#0" expanded="true" />
-            <element signature="e#7363#7364#0" expanded="true" />
-            <element signature="e#7415#7416#0" expanded="true" />
-            <element signature="e#7461#7462#0" expanded="true" />
-            <element signature="e#7517#7518#0" expanded="true" />
-            <element signature="e#7564#7565#0" expanded="true" />
-            <element signature="e#7617#7618#0" expanded="true" />
-            <element signature="e#7666#7667#0" expanded="true" />
-            <element signature="e#7689#7719#0" expanded="false" />
+            <element signature="e#7718#7748#0" expanded="false" />
             <element signature="method#testDefaultValueCountZeroPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testValueCountOnePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testValueCountAllPass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#8626#8656#0" expanded="false" />
+            <element signature="e#8658#8688#0" expanded="false" />
             <element signature="method#testDefaultValueTilesEmptyPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testOneValueGetValueTilesPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testMultipleValuesGetValueTilesPass#0;class#HouseTest#0" expanded="true" />
-            <element signature="e#9950#9980#0" expanded="false" />
-            <element signature="e#10024#10025#0" expanded="true" />
-            <element signature="e#10087#10088#0" expanded="true" />
-            <element signature="e#10110#10133#0" expanded="false" />
+            <element signature="e#9986#10016#0" expanded="false" />
+            <element signature="e#10146#10169#0" expanded="false" />
             <element signature="method#testIterateOverNoTilesPass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testIterateOverOneTilePass#0;class#HouseTest#0" expanded="true" />
             <element signature="method#testIterateOverMultipleTilesPass#0;class#HouseTest#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Board.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="11.10572">
+          <caret line="368" column="42" selection-start-line="368" selection-start-column="42" selection-end-line="368" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Board#0;class#Board#0" expanded="true" />
+            <element signature="method#getBoard#0;class#Board#0" expanded="true" />
+            <element signature="e#4158#4159#0" expanded="true" />
+            <element signature="e#4214#4215#0" expanded="true" />
+            <element signature="method#getHint#0;class#Board#0" expanded="true" />
+            <element signature="method#isGameOver#0;class#Board#0" expanded="true" />
+            <element signature="method#solve#0;class#Board#0" expanded="true" />
+            <element signature="method#save#0;class#Board#0" expanded="true" />
+            <element signature="method#newGame#0;class#Board#0" expanded="true" />
+            <element signature="method#loadGame#0;class#Board#0" expanded="true" />
+            <element signature="method#initialize#0;class#Board#0" expanded="true" />
+            <element signature="method#checkBounds#0;class#Board#0" expanded="true" />
+            <element signature="method#markOriginals#0;class#Board#0" expanded="true" />
+            <element signature="method#runSolver#0;class#Board#0" expanded="true" />
+            <element signature="method#clearBoard#0;class#Board#0" expanded="true" />
           </folding>
         </state>
       </provider>

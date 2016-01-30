@@ -77,7 +77,7 @@ public class House implements Iterable<Tile> {
      * @return true if successful, false otherwise
      */
     public boolean clearValueInHouse(int value) {
-        if(value > 0 && value <= houseSize) {
+        if (value > 0 && value <= houseSize) {
             valueOwners[value - 1].clear();
             return true;
         }

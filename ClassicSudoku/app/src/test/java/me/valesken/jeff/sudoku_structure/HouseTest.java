@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 1/28/16.
- * Last Updated on 1/28/2016.
+ * Last Updated on 1/29/2016.
  */
 public class HouseTest {
 
@@ -38,7 +38,7 @@ public class HouseTest {
         assertEquals(0, house.members.size());
         assertNotNull(house.valueOwners);
         assertEquals(9, house.valueOwners.length);
-        for(HashSet set : house.valueOwners) {
+        for (HashSet set : house.valueOwners) {
             assertNotNull(set);
             assertEquals(0, set.size());
         }
@@ -56,25 +56,27 @@ public class HouseTest {
     @Test
     public void testCanAddNineMembersPass() {
         Tile[] tiles = new Tile[houseSize];
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             tiles[i] = mock(Tile.class);
             house.addMember(tiles[i]);
         }
         assertEquals(9, house.members.size());
-        for(int i = 0; i < houseSize; ++i)
+        for (int i = 0; i < houseSize; ++i) {
             assertEquals(tiles[i], house.members.get(i));
+        }
     }
 
     @Test
     public void testCannotAddMoreThanNineMembersFail() {
         Tile[] tiles = new Tile[houseSize + 1];
-        for(int i = 0; i < (houseSize + 1); ++i) {
+        for (int i = 0; i < (houseSize + 1); ++i) {
             tiles[i] = mock(Tile.class);
             house.addMember(tiles[i]);
         }
         assertEquals(9, house.members.size());
-        for(int i = 0; i < houseSize; ++i)
+        for (int i = 0; i < houseSize; ++i) {
             assertEquals(tiles[i], house.members.get(i));
+        }
         assertFalse(house.members.contains(tiles[houseSize]));
     }
 
@@ -283,7 +285,7 @@ public class HouseTest {
     @Test
     public void testDefaultValueCountZeroPass() {
         assertEquals(0, house.getValueCount());
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
         assertEquals(0, house.getValueCount());
@@ -293,7 +295,7 @@ public class HouseTest {
     public void testValueCountOnePass() {
         when(mockedTile.getValue()).thenReturn(1);
         house.members.add(mockedTile);
-        for(int i = 1; i < houseSize; ++i) {
+        for (int i = 1; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
         assertEquals(1, house.getValueCount());
@@ -301,7 +303,7 @@ public class HouseTest {
 
     @Test
     public void testValueCountAllPass() {
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             Tile tempMockTile = mock(Tile.class);
             when(tempMockTile.getValue()).thenReturn(i + 1);
             house.members.add(tempMockTile);
@@ -314,7 +316,7 @@ public class HouseTest {
     @Test
     public void testDefaultValueTilesEmptyPass() {
         assertEquals(0, house.getValueTiles().size());
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
         assertEquals(0, house.getValueTiles().size());
@@ -324,7 +326,7 @@ public class HouseTest {
     public void testOneValueGetValueTilesPass() {
         when(mockedTile.getValue()).thenReturn(1);
         house.members.add(mockedTile);
-        for(int i = 1; i < houseSize; ++i) {
+        for (int i = 1; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
         LinkedList<Tile> values = house.getValueTiles();
@@ -335,7 +337,7 @@ public class HouseTest {
     @Test
     public void testMultipleValuesGetValueTilesPass() {
         Tile[] tempTiles = new Tile[houseSize];
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             Tile tempMockTile = mock(Tile.class);
             when(tempMockTile.getValue()).thenReturn(i + 1);
             tempTiles[i] = tempMockTile;
@@ -343,7 +345,7 @@ public class HouseTest {
         }
         LinkedList<Tile> values = house.getValueTiles();
         assertEquals(9, values.size());
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             assertEquals(tempTiles[i], values.get(i));
         }
     }
@@ -360,7 +362,7 @@ public class HouseTest {
     @Test
     public void testIterateOverNoTilesPass() {
         int count = 0;
-        for(Tile ignored : house) {
+        for (Tile ignored : house) {
             ++count;
         }
         assertEquals(0, count);
@@ -370,7 +372,7 @@ public class HouseTest {
     public void testIterateOverOneTilePass() {
         int count = 0;
         house.members.add(mockedTile);
-        for(Tile tile : house) {
+        for (Tile tile : house) {
             assertEquals(tile, mockedTile);
             ++count;
         }
@@ -381,12 +383,12 @@ public class HouseTest {
     public void testIterateOverMultipleTilesPass() {
         int count = 0;
         HashSet<Tile> tempTiles = new HashSet<>();
-        for(int i = 0; i < houseSize; ++i) {
+        for (int i = 0; i < houseSize; ++i) {
             Tile tempMockTile = mock(Tile.class);
             tempTiles.add(tempMockTile);
             house.members.add(tempMockTile);
         }
-        for(Tile tile : house) {
+        for (Tile tile : house) {
             assertTrue(tempTiles.contains(tile));
             ++count;
         }

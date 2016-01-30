@@ -76,7 +76,7 @@ public class TileTest {
         int columnNumber;
         int zoneNumber;
         int boardSize = 81;
-        for(int index = 0; index < boardSize; ++index) {
+        for (int index = 0; index < boardSize; ++index) {
             tile = new Tile(houseSize, index);
             rowNumber = index / houseSize;
             columnNumber = index % houseSize;
@@ -217,7 +217,7 @@ public class TileTest {
     }
 
     @Test
-    public  void testSetValueInHousesOrigTileIgnored() {
+    public void testSetValueInHousesOrigTileIgnored() {
         tile.orig = true;
         tile.setValueInHouses(1, true);
         verify(mockedHouse, never()).setValueInHouse(1, true, tileIndex);
@@ -743,8 +743,9 @@ public class TileTest {
         JSONArray jsonNotes = tileObject.getJSONArray(Tile.jsonValuesId);
         assertEquals(2, jsonNotes.length());
         HashSet<Integer> notes = new HashSet<>();
-        for(int i = 0; i < jsonNotes.length(); ++i)
+        for (int i = 0; i < jsonNotes.length(); ++i) {
             notes.add(jsonNotes.getInt(i));
+        }
         assertTrue(notes.contains(1));
         assertTrue(notes.contains(2));
     }
@@ -916,8 +917,9 @@ public class TileTest {
         when(mockedHouse.hasValue(anyInt())).thenReturn(true);
         assertFalse(spy.tryInitialize());
         // Verify method calls
-        for(int value = 1; value <= houseSize; ++value)
+        for (int value = 1; value <= houseSize; ++value) {
             verify(mockedHouse).hasValue(value);
+        }
         verify(spy, never()).update(anyInt());
         // Verify results
         assertEquals(0, spy.value);
@@ -934,8 +936,9 @@ public class TileTest {
         assertFalse(spy.tryInitialize());
         // Verify method calls
         verify(mockedHouse, never()).hasValue(1); // Not ideal, but expected to ignore this
-        for(int value = 2; value <= houseSize; ++value)
+        for (int value = 2; value <= houseSize; ++value) {
             verify(mockedHouse).hasValue(value);
+        }
         verify(spy, never()).update(anyInt());
         // Verify results
         assertEquals(0, spy.value);
