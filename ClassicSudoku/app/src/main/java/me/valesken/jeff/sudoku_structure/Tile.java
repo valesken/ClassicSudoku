@@ -34,9 +34,9 @@ public class Tile {
     public boolean orig; // true = Tile's value & noteMode are unchangeable
 
 
-    public Tile(int _rowSize, int _index) {
+    public Tile(int _houseSize, int _index) {
         index = _index;
-        houseSize = _rowSize;
+        houseSize = _houseSize;
         int zoneWidth = (int) Math.sqrt(houseSize);
         rowNumber = index / houseSize;
         columnNumber = index % houseSize;

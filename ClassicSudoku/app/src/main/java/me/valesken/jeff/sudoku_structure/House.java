@@ -74,9 +74,14 @@ public class House implements Iterable<Tile> {
      * value in this house. E.g. This House no longer thinks 4 is claimed by any Tile.
      *
      * @param value The 1-9 value in the House to clear.
+     * @return true if successful, false otherwise
      */
-    public void clearValueInHouse(int value) {
-        valueOwners[value - 1].clear();
+    public boolean clearValueInHouse(int value) {
+        if(value > 0 && value <= houseSize) {
+            valueOwners[value - 1].clear();
+            return true;
+        }
+        return false;
     }
     //endregion
 
@@ -84,9 +89,12 @@ public class House implements Iterable<Tile> {
 
     /**
      * @param position The 0-8 position within this House to get a Tile from.
-     * @return The Tile at the corresponding position in the House.
+     * @return The Tile at the corresponding position in the House, null if no Tile at that position.
      */
     public Tile getMember(int position) {
+        if (position < 0 || position >= members.size()) {
+            return null;
+        }
         return members.get(position);
     }
 
@@ -97,7 +105,7 @@ public class House implements Iterable<Tile> {
      * @return True if this House contains a Tile to which the value is assigned, otherwise False.
      */
     public boolean hasValue(int value) {
-        return (valueOwners[value - 1].size() > 0);
+        return (value > 0 && value <= houseSize && valueOwners[value - 1].size() > 0);
     }
 
     /**
@@ -126,17 +134,17 @@ public class House implements Iterable<Tile> {
         }
         return valueTiles;
     }
-    //endregion
-
-    @Override
-    public Iterator<Tile> iterator() {
-        return members.iterator();
-    }
 
     /**
      * @return The index (0 - 8) for this house.
      */
     public int getHouseIndex() {
         return houseIndex;
+    }
+    //endregion
+
+    @Override
+    public Iterator<Tile> iterator() {
+        return members.iterator();
     }
 }
