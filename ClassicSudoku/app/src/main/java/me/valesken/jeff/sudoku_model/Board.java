@@ -1,4 +1,4 @@
-package me.valesken.jeff.sudoku_structure;
+package me.valesken.jeff.sudoku_model;
 
 import android.util.Log;
 
@@ -13,7 +13,7 @@ import java.util.Stack;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 1/15/2016
+ * Last updated on 2/8/2016
  */
 public class Board {
     static public String jsonTimeId = "time";
@@ -21,40 +21,75 @@ public class Board {
     static public String jsonSolutionId = "solution";
     static public String jsonTilesId = "tiles";
 
-    private int boardSize;
-    private int difficulty;
-    private Tile[] tiles;
-    private House[] rows, columns, zones;
-    private int[] solution;
+    public int houseSize;
+    public int boardSize;
+    public int difficulty;
+    public Tile[] tiles;
+    public House[] rows, columns, zones;
+    public int[] solution;
 
     /**
      * Constructor for Board. Initializes all objects to be non-null.
      *
-     * @param _boardSize length of one row for this game
+     * @param houseSize Number of Tiles one House can contain in this game.
      */
-    public Board(int _boardSize) {
-        boardSize = _boardSize;
-        solution = new int[boardSize * boardSize];
+    public Board(int houseSize) {
+        this.houseSize = houseSize;
+        boardSize = houseSize * houseSize;
+        solution = new int[boardSize];
+        rows = new House[houseSize];
+        columns = new House[houseSize];
+        zones = new House[houseSize];
+        tiles = new Tile[boardSize];
+    }
 
-        /* Initialize houses */
-        rows = new House[boardSize];
-        columns = new House[boardSize];
-        zones = new House[boardSize];
-        for (int i = 0; i < boardSize; ++i) {
-            rows[i] = new House(boardSize, i);
-            columns[i] = new House(boardSize, i);
-            zones[i] = new House(boardSize, i);
+    public void initializeHouses() {
+        for (int i = 0; i < houseSize; ++i) {
+            rows[i] = new House(houseSize, i);
+            columns[i] = new House(houseSize, i);
+            zones[i] = new House(houseSize, i);
         }
+    }
 
-        /* Initialize tiles and link them up to the houses */
-        tiles = new Tile[boardSize * boardSize];
-        for (int i = 0; i < (boardSize * boardSize); ++i) {
-            tiles[i] = new Tile(boardSize, i);
+    public void initializeTiles() {
+        for (int i = 0; i < tiles.length; ++i) {
+            tiles[i] = new Tile(houseSize, i);
             rows[tiles[i].getRowNumber()].addMember(tiles[i]);
             columns[tiles[i].getColumnNumber()].addMember(tiles[i]);
             zones[tiles[i].getZoneNumber()].addMember(tiles[i]);
             tiles[i].setHouses(rows[tiles[i].getRowNumber()], columns[tiles[i].getColumnNumber()], zones[tiles[i]
                     .getZoneNumber()]);
+        }
+    }
+
+    /**
+     * Constructor to be used ONLY FOR TESTING. Used for dependency injection.
+     *
+     * @param houseSize Number of Tiles one House can contain in this game.
+     * @param mockTile Mocked Tile. Not a real Tile.
+     * @param mockRow Mocked House. Not a real House.
+     * @param mockColumn Mocked House. Not a real House.
+     * @param mockZone Mocked House. Not a real House.
+     */
+    public Board(int houseSize, Tile mockTile, House mockRow, House mockColumn, House mockZone) {
+        this.houseSize = houseSize;
+        boardSize = houseSize * houseSize;
+        solution = new int[boardSize];
+
+        /* Initialize houses */
+        rows = new House[houseSize];
+        columns = new House[houseSize];
+        zones = new House[houseSize];
+        for (int i = 0; i < houseSize; ++i) {
+            rows[i] = mockRow;
+            columns[i] = mockColumn;
+            zones[i] = mockZone;
+        }
+
+        /* Initialize tiles */
+        tiles = new Tile[boardSize];
+        for(int i = 0; i < tiles.length; ++i) {
+            tiles[i] = mockTile;
         }
     }
 
@@ -297,7 +332,7 @@ public class Board {
             Tile tempTile;
 
             // Seed first 9 Tiles
-            for (int i = 0; i < boardSize; ++i) {
+            for (int i = 0; i < houseSize; ++i) {
                 tempTile = columns[i].getMember(randGen.nextInt(9));
                 tempTile.tryInitValue(i + 1);
                 tileStack.add(tempTile);

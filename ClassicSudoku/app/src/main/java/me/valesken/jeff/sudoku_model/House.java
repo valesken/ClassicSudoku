@@ -1,4 +1,4 @@
-package me.valesken.jeff.sudoku_structure;
+package me.valesken.jeff.sudoku_model;
 
 import java.util.ArrayList;
 import java.util.HashSet;

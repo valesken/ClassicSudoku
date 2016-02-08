@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import me.valesken.jeff.sudoku_structure.Board;
+import me.valesken.jeff.sudoku_model_api.SudokuModelAPI;
 
 /**
  * Created by Jeff on 7/12/2015.
@@ -45,7 +45,6 @@ public class GameFragment extends Fragment {
     private MainActivity activity;
     private int difficulty;
     private int boardSize;
-    private Board board;
     private GridManager gridManager;
     private View currentTile;
     private int currentPosition;
@@ -118,8 +117,8 @@ public class GameFragment extends Fragment {
     public void newGame(int _boardSize, int _difficulty)
     {
         boardSize = _boardSize;
-        board = new Board(boardSize);
-        difficulty = board.newGame(_difficulty);
+        SudokuModelAPI.initializeNewBoard(boardSize);
+        difficulty = SudokuModelAPI.newGame(_difficulty);
         loadJSON = null;
         saveFile = null;
         loadJSONPosition = -1;
@@ -131,11 +130,11 @@ public class GameFragment extends Fragment {
             loadJSONPosition = _loadJSONPosition;
             saveFile = _saveFile;
             boardSize = _boardSize;
-            board = new Board(boardSize);
+            SudokuModelAPI.initializeNewBoard(boardSize);
             BufferedReader buff = new BufferedReader(new FileReader(saveFile));
             JSONObject jsonObject = new JSONObject(buff.readLine());
             buff.close();
-            difficulty = board.loadGame(jsonObject);
+            difficulty = SudokuModelAPI.loadGame(jsonObject);
         }
         catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -192,7 +191,7 @@ public class GameFragment extends Fragment {
 
         //region Playing Grid Setup
         TableLayout grid = (TableLayout) rootView.findViewById(R.id.grid);
-        gridManager = new GridManager(rootView.getContext(), board, boardSize, grid, this);
+        gridManager = new GridManager(rootView.getContext(), boardSize, grid, this);
         gridManager.initializeGrid();
         //endregion
 
@@ -452,7 +451,7 @@ public class GameFragment extends Fragment {
 
         //region Start Clock
         clock_tv = (TextView)rootView.findViewById(R.id.clock);
-        clock_tv.setText(board.getTime());
+        clock_tv.setText(SudokuModelAPI.getTime());
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -535,7 +534,7 @@ public class GameFragment extends Fragment {
             if (!gameOver) {
                 File saveFile = new File(activity.getFilesDir(), getResources().getString(R.string.autosave_filename));
                 BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
-                JSONObject jsonObject = board.save((String) clock_tv.getText());
+                JSONObject jsonObject = SudokuModelAPI.save((String) clock_tv.getText());
                 buff.write(jsonObject.toString());
                 buff.flush();
                 buff.close();
@@ -571,7 +570,7 @@ public class GameFragment extends Fragment {
             // Write game state to file
             File saveFile = new File(saveDir, _filename.concat(".txt"));
             BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
-            JSONObject jsonObject = board.save(clock_text);
+            JSONObject jsonObject = SudokuModelAPI.save(clock_text);
             buff.write(jsonObject.toString());
             buff.flush();
             buff.close();

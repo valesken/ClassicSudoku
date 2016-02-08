@@ -1,4 +1,4 @@
-package me.valesken.jeff.sudoku_structure;
+package me.valesken.jeff.sudoku_model;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,13 +11,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by jeff on 1/28/16.
- * Last Updated on 1/29/2016.
+ * Created by jeff on 1/28/2016.
+ * Last Updated on 2/8/2016.
  */
 public class HouseTest {
 
     private House house;
-    Tile mockedTile;
+    private Tile mockedTile;
     private int houseSize = 9;
     private int houseIndex = 0;
 

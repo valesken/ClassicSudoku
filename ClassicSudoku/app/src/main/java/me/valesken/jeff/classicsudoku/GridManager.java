@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.LinkedList;
 
-import me.valesken.jeff.sudoku_structure.Board;
+import me.valesken.jeff.sudoku_model_api.SudokuModelAPI;
 
 /**
  * Created by Jeff on 7/4/2015.
@@ -22,7 +22,6 @@ import me.valesken.jeff.sudoku_structure.Board;
  */
 public class GridManager {
     private Context context;
-    private Board board;
     private int boardSize;
     private TableLayout grid;
     private LinkedList[] values;
@@ -30,20 +29,19 @@ public class GridManager {
     private GameFragment gameFragment;
     private int currentGridIndex;
 
-    public GridManager(Context _context, Board _board, int _boardSize, TableLayout _grid, GameFragment _gameFragment) {
+    public GridManager(Context _context, int _boardSize, TableLayout _grid, GameFragment _gameFragment) {
         this.context = _context;
-        this.board = _board;
         this.grid = _grid;
         this.boardSize = _boardSize;
         this.gameFragment = _gameFragment;
-        this.values = board.getBoard();
+        this.values = SudokuModelAPI.getBoard();
         this.currentGridIndex = -1;
         this.views = new View[values.length];
     }
 
     @SuppressLint("InflateParams")
     public void initializeGrid() {
-        values = board.getBoard();
+        values = SudokuModelAPI.getBoard();
         LayoutInflater inflater = LayoutInflater.from(context);
         View tile;
         int gridIndex;
@@ -113,7 +111,7 @@ public class GridManager {
         for(View v : tileNoteViews)
             v.setVisibility(View.INVISIBLE);
         // value tile
-        if(!board.tileIsNoteMode(gridIndex)) {
+        if(!SudokuModelAPI.tileIsNoteMode(gridIndex)) {
             TextView textView = (TextView) tile.findViewById(R.id.tile_value_text);
             textView.setVisibility(View.VISIBLE);
             if ((Integer)values[gridIndex].get(0) > 0)
@@ -121,7 +119,7 @@ public class GridManager {
             else
                 textView.setText(" ");
 
-            if(board.isOrig(gridIndex)) {
+            if(SudokuModelAPI.tileIsOrig(gridIndex)) {
                 textView.setTypeface(Typeface.DEFAULT_BOLD);
                 textView.setTextColor(Color.BLACK);
             }
@@ -136,41 +134,41 @@ public class GridManager {
 
     public boolean updateTile(int gridIndex, int value)
     {
-        board.updateTile(gridIndex, value);
-        values[gridIndex] = board.getTile(gridIndex);
+        SudokuModelAPI.updateTile(gridIndex, value);
+        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
-        return board.isGameOver();
+        return SudokuModelAPI.isGameOver();
     }
 
     public void clearTile(int gridIndex)
     {
-        board.clearTile(gridIndex);
-        values[gridIndex] = board.getTile(gridIndex);
+        SudokuModelAPI.clearTile(gridIndex);
+        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
     }
 
     public void toggleMode(int gridIndex)
     {
-        board.toggleMode(gridIndex);
-        values[gridIndex] = board.getTile(gridIndex);
+        SudokuModelAPI.toggleMode(gridIndex);
+        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
     }
 
     public boolean getHint()
     {
-        int gridIndex = board.getHint();
+        int gridIndex = SudokuModelAPI.getHint();
         if (gridIndex > -1) {
-            values[gridIndex] = board.getTile(gridIndex);
+            values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
             this.updateItem(gridIndex, views[gridIndex]);
         }
-        return board.isGameOver();
+        return SudokuModelAPI.isGameOver();
     }
 
     public void solve()
     {
-        board.solve();
+        SudokuModelAPI.solve();
         for(int i = 0; i < values.length; ++i) {
-            values[i] = board.getTile(i);
+            values[i] = SudokuModelAPI.getTile(i);
             this.updateItem(i, views[i]);
         }
     }

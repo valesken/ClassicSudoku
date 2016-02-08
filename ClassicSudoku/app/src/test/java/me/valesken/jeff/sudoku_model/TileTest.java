@@ -1,4 +1,4 @@
-package me.valesken.jeff.sudoku_structure;
+package me.valesken.jeff.sudoku_model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
