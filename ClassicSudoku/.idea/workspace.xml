@@ -23,6 +23,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/ClassicSudoku$BoardTest_and_2_more.coverage" NAME="BoardTest and 2 more Coverage Results" MODIFIED="1455171721526" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/ClassicSudoku$BoardTest.coverage" NAME="BoardTest Coverage Results" MODIFIED="1455171691673" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>me.valesken.jeff.sudoku_model.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/ClassicSudoku$HouseTest.coverage" NAME="HouseTest Coverage Results" MODIFIED="1455171766574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>me.valesken.jeff.sudoku_model.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/ClassicSudoku$TileTest.coverage" NAME="TileTest Coverage Results" MODIFIED="1455171800589" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>me.valesken.jeff.sudoku_model.*</FILTER>
+    </SUITE>
+  </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
@@ -73,11 +85,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BoardTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BoardTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_model/BoardTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.79173553">
-              <caret line="1115" column="4" selection-start-line="1115" selection-start-column="4" selection-end-line="1115" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="1115" column="0" selection-start-line="1115" selection-start-column="0" selection-end-line="1115" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1345#1359#0" expanded="false" />
@@ -212,6 +224,34 @@
                 <element signature="method#testSolveFullBoardPartiallyRightNoNotesPass#0;class#BoardTest#0" expanded="true" />
                 <element signature="e#36062#36083#0" expanded="false" />
                 <element signature="method#testSavePass#0;class#BoardTest#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Tile.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model/Tile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.25619835">
+              <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#Tile#0;class#Tile#0" expanded="true" />
+                <element signature="e#1459#1475#0" expanded="false" />
+                <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
+                <element signature="e#7682#7683#0" expanded="true" />
+                <element signature="e#7713#7714#0" expanded="true" />
+                <element signature="e#8761#8784#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -472,6 +512,16 @@
                 <option name="description" value="Installs and runs the tests for debug on connected devices." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="connectedDebugAndroidTest" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Creates JaCoCo test coverage report from data gathered on the device." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="createDebugAndroidTestCoverageReport" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Creates test coverage reports for the debug variant." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="createDebugCoverageReport" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Installs and runs instrumentation tests using all Device Providers." />
@@ -761,6 +811,10 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="transformClassesWithJacocoForDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="transformNative_libsWithMergeJniLibsForDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
@@ -810,6 +864,10 @@
                 <option name="description" value="Uninstalls the Release build." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
                 <option name="name" value="uninstallRelease" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
+                <option name="name" value="unzipJacocoAgent" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$" />
@@ -994,6 +1052,16 @@
                 <option name="description" value="Installs and runs the tests for debug on connected devices." />
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="connectedDebugAndroidTest" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Creates JaCoCo test coverage report from data gathered on the device." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="createDebugAndroidTestCoverageReport" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="description" value="Creates test coverage reports for the debug variant." />
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="createDebugCoverageReport" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="description" value="Displays all dependencies declared in project ':app'." />
@@ -1318,6 +1386,10 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="transformClassesWithJacocoForDebug" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="transformNative_libsWithMergeJniLibsForDebug" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
@@ -1370,6 +1442,10 @@
               </ExternalTaskPojo>
               <ExternalTaskPojo>
                 <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
+                <option name="name" value="unzipJacocoAgent" />
+              </ExternalTaskPojo>
+              <ExternalTaskPojo>
+                <option name="linkedExternalProjectPath" value="$PROJECT_DIR$/app" />
                 <option name="name" value="validateDebugSigning" />
               </ExternalTaskPojo>
               <ExternalTaskPojo>
@@ -1383,7 +1459,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4355256182328" />
+        <entry key="$PROJECT_DIR$" value="4356477542283" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1754,7 +1830,6 @@
         <option value="$PROJECT_DIR$/app/src/androidTest/java/me/valesken/jeff/classicsudoku/TileTests.java" />
         <option value="$PROJECT_DIR$/app/src/androidTest/java/me/valesken/jeff/classicsudoku/TileTest.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/TileTest.java" />
-        <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/Tile.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_structure/House.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_structure/TileTest.java" />
@@ -1767,6 +1842,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model_api/SudokuModelAPI.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model/Board.java" />
         <option value="$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_model/BoardTest.java" />
+        <option value="$PROJECT_DIR$/app/build.gradle" />
       </list>
     </option>
   </component>
@@ -2135,27 +2211,7 @@
       <recent name="me.valesken.jeff.classicsudoku" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.BoardTest">
-    <configuration default="false" name="TileTest (1)" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true" nameIsGenerated="true">
-      <module name="app" />
-      <option name="TESTING_TYPE" value="2" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="TileTest" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="EXTRA_OPTIONS" value="" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <method />
-    </configuration>
+  <component name="RunManager" selected="JUnit.TileTest">
     <configuration default="false" name="All Tests" type="AndroidTestRunConfigurationType" factoryName="Android Tests" temporary="true" nameIsGenerated="true">
       <module name="app" />
       <option name="TESTING_TYPE" value="0" />
@@ -2252,6 +2308,31 @@
       </option>
       <envs />
       <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="BoardTest and 2 more" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="app" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="pattern" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns>
+        <pattern testClass="me.valesken.jeff.sudoku_model.BoardTest" />
+        <pattern testClass="me.valesken.jeff.sudoku_model.HouseTest" />
+        <pattern testClass="me.valesken.jeff.sudoku_model.TileTest" />
+      </patterns>
       <method />
     </configuration>
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
@@ -2419,19 +2500,19 @@
     <list size="7">
       <item index="0" class="java.lang.String" itemvalue="Android Application.app" />
       <item index="1" class="java.lang.String" itemvalue="Android Tests.Tests in 'me.valesken.jeff.classicsudoku'" />
-      <item index="2" class="java.lang.String" itemvalue="Android Tests.TileTest (1)" />
-      <item index="3" class="java.lang.String" itemvalue="Android Tests.All Tests" />
-      <item index="4" class="java.lang.String" itemvalue="JUnit.TileTest" />
-      <item index="5" class="java.lang.String" itemvalue="JUnit.HouseTest" />
-      <item index="6" class="java.lang.String" itemvalue="JUnit.BoardTest" />
+      <item index="2" class="java.lang.String" itemvalue="Android Tests.All Tests" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TileTest" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.HouseTest" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.BoardTest" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.BoardTest and 2 more" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.BoardTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.TileTest" />
         <item index="1" class="java.lang.String" itemvalue="JUnit.HouseTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.TileTest" />
-        <item index="3" class="java.lang.String" itemvalue="Android Tests.All Tests" />
-        <item index="4" class="java.lang.String" itemvalue="Android Tests.TileTest (1)" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.BoardTest and 2 more" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.BoardTest" />
+        <item index="4" class="java.lang.String" itemvalue="Android Tests.All Tests" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
@@ -2471,7 +2552,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="1919" y="0" width="1922" height="1080" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32928178" sideWeight="0.49786553" order="7" side_tool="false" content_ui="tabs" />
@@ -2484,6 +2565,7 @@
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44493392" sideWeight="0.49786553" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32047158" sideWeight="0.4967983" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32977587" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -3056,14 +3138,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7758621">
-          <caret line="25" column="39" selection-start-line="25" selection-start-column="39" selection-end-line="25" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model/Solver.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.46551725">
@@ -3076,22 +3150,6 @@
             <element signature="method#execute#0;class#Remainder#0;class#Solver#0" expanded="true" />
             <element signature="e#8092#8118#0" expanded="false" />
             <element signature="e#8663#8687#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model/Tile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33275864">
-          <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Tile#0;class#Tile#0" expanded="true" />
-            <element signature="e#1459#1475#0" expanded="false" />
-            <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
-            <element signature="e#7682#7683#0" expanded="true" />
-            <element signature="e#7713#7714#0" expanded="true" />
-            <element signature="e#8761#8784#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -3130,8 +3188,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/test/java/me/valesken/jeff/sudoku_model/BoardTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.79173553">
-          <caret line="1115" column="4" selection-start-line="1115" selection-start-column="4" selection-end-line="1115" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1115" column="0" selection-start-line="1115" selection-start-column="0" selection-end-line="1115" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1345#1359#0" expanded="false" />
@@ -3266,6 +3324,30 @@
             <element signature="method#testSolveFullBoardPartiallyRightNoNotesPass#0;class#BoardTest#0" expanded="true" />
             <element signature="e#36062#36083#0" expanded="false" />
             <element signature="method#testSavePass#0;class#BoardTest#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/me/valesken/jeff/sudoku_model/Tile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.25619835">
+          <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Tile#0;class#Tile#0" expanded="true" />
+            <element signature="e#1459#1475#0" expanded="false" />
+            <element signature="method#setHouses#0;class#Tile#0" expanded="true" />
+            <element signature="e#7682#7683#0" expanded="true" />
+            <element signature="e#7713#7714#0" expanded="true" />
+            <element signature="e#8761#8784#0" expanded="false" />
           </folding>
         </state>
       </provider>
