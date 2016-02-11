@@ -54,7 +54,7 @@ public class Solver {
     public void solve(int difficulty) {
         while(!isSolvable(difficulty)) {
             Log.d("Debug Info", "Board not solvable, getting a hint.");
-            board.getHint();
+            board.useHint();
             board.clearBoard();
         }
         Log.d("Debug Info", "Solved.");

@@ -60,7 +60,7 @@ public class SudokuModelAPI {
     }
 
     public static boolean tileIsOrig(int position) {
-        return board != null && board.isOrig(position);
+        return board != null && board.tileIsOrig(position);
     }
 
     public static void updateTile(int position, int value) {
@@ -73,7 +73,7 @@ public class SudokuModelAPI {
         if(board == null) {
             return null;
         }
-        return board.getTile(position);
+        return board.getTileNotesOrValue(position);
     }
 
     public static boolean isGameOver() {
@@ -96,7 +96,7 @@ public class SudokuModelAPI {
         if(board == null) {
             return -1;
         }
-        return board.getHint();
+        return board.useHint();
     }
 
     public static void solve() {
