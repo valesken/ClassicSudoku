@@ -1,0 +1,318 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: HighScoresFragment</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">me.valesken.jeff.classicsudoku</a> ]
+</div>
+
+<h1>Coverage Summary for Class: HighScoresFragment (me.valesken.jeff.classicsudoku)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">HighScoresFragment</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 44)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">HighScoresFragment$1</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">HighScoresFragment$2</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 15)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">HighScoresFragment$3</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 2)
+  </span>
+</td>
+  </tr>
+  <tr>
+    <td class="name">HighScoresFragment$4</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 7)
+  </span>
+</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 13)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/ 70)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package me.valesken.jeff.classicsudoku;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import android.app.Fragment;
+<i>4</i>&nbsp;import android.os.Bundle;
+<i>5</i>&nbsp;import android.view.LayoutInflater;
+<i>6</i>&nbsp;import android.view.MotionEvent;
+<i>7</i>&nbsp;import android.view.View;
+<i>8</i>&nbsp;import android.view.ViewGroup;
+<i>9</i>&nbsp;import android.widget.AdapterView;
+<i>10</i>&nbsp;import android.widget.ArrayAdapter;
+<i>11</i>&nbsp;import android.widget.Button;
+<i>12</i>&nbsp;import android.widget.ListView;
+<i>13</i>&nbsp;import android.widget.Spinner;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;import org.json.JSONArray;
+<i>16</i>&nbsp;import org.json.JSONException;
+<i>17</i>&nbsp;import org.json.JSONObject;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;import java.io.BufferedWriter;
+<i>20</i>&nbsp;import java.io.File;
+<i>21</i>&nbsp;import java.io.FileWriter;
+<i>22</i>&nbsp;import java.io.IOException;
+<i>23</i>&nbsp;
+<i>24</i>&nbsp;/**
+<i>25</i>&nbsp; * Created by Jeff on 7/12/2015.
+<i>26</i>&nbsp; *
+<i>27</i>&nbsp; * This fragment contains the current high scores for each difficulty level
+<i>28</i>&nbsp; */
+<b class="nc"><i>29</i>&nbsp;public class HighScoresFragment extends Fragment {</b>
+<i>30</i>&nbsp;    private static int currentPosition;
+<i>31</i>&nbsp;    private View rootView;
+<i>32</i>&nbsp;    private MainActivity activity;
+<i>33</i>&nbsp;    private static JSONObject highScoresJSON;
+<i>34</i>&nbsp;    private String easyString, mediumString, hardString;
+<i>35</i>&nbsp;
+<b class="nc"><i>36</i>&nbsp;    public HighScoresFragment() {</b>
+<b class="nc"><i>37</i>&nbsp;        currentPosition = 0;</b>
+<i>38</i>&nbsp;    }
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    @Override
+<i>41</i>&nbsp;    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+<b class="nc"><i>42</i>&nbsp;        rootView = inflater.inflate(R.layout.fragment_high_score, container, false);</b>
+<b class="nc"><i>43</i>&nbsp;        activity = (MainActivity)getActivity();</b>
+<i>44</i>&nbsp;
+<b class="nc"><i>45</i>&nbsp;        easyString = getResources().getString(R.string.easy);</b>
+<b class="nc"><i>46</i>&nbsp;        mediumString = getResources().getString(R.string.medium);</b>
+<b class="nc"><i>47</i>&nbsp;        hardString = getResources().getString(R.string.hard);</b>
+<i>48</i>&nbsp;
+<b class="nc"><i>49</i>&nbsp;        activity.setTitle(getResources().getString(R.string.app_name).concat(&quot; - High Scores&quot;));</b>
+<b class="nc"><i>50</i>&nbsp;        final File highScores = new File(activity.getFilesDir(), &quot;HighScores.txt&quot;);</b>
+<b class="nc"><i>51</i>&nbsp;        highScoresJSON = activity.getHighScoresJSON();</b>
+<i>52</i>&nbsp;
+<i>53</i>&nbsp;        /* This OnTouchListener ensures the user cannot accidentally touch Views from the previous fragment. */
+<b class="nc"><i>54</i>&nbsp;        rootView.setOnTouchListener(new View.OnTouchListener()</b>
+<b class="nc"><i>55</i>&nbsp;        {</b>
+<i>56</i>&nbsp;            @Override
+<b class="nc"><i>57</i>&nbsp;            public boolean onTouch(View v, MotionEvent event) { return true; }</b>
+<i>58</i>&nbsp;        });
+<i>59</i>&nbsp;
+<b class="nc"><i>60</i>&nbsp;        setupSpinner();</b>
+<i>61</i>&nbsp;
+<i>62</i>&nbsp;        //region Reset Button
+<b class="nc"><i>63</i>&nbsp;        Button resetButton = (Button) rootView.findViewById(R.id.high_scores_reset_button);</b>
+<b class="nc"><i>64</i>&nbsp;        resetButton.setOnClickListener(new View.OnClickListener() {</b>
+<i>65</i>&nbsp;            @Override
+<i>66</i>&nbsp;            public void onClick(View v) {
+<i>67</i>&nbsp;                try {
+<b class="nc"><i>68</i>&nbsp;                    JSONArray jsonArray = new JSONArray();</b>
+<b class="nc"><i>69</i>&nbsp;                    for (int i = 0; i &lt; 10; ++i)</b>
+<b class="nc"><i>70</i>&nbsp;                        jsonArray.put(&quot;&quot;);</b>
+<b class="nc"><i>71</i>&nbsp;                    highScoresJSON.put(easyString, new JSONArray(jsonArray.toString()));</b>
+<b class="nc"><i>72</i>&nbsp;                    highScoresJSON.put(mediumString, new JSONArray(jsonArray.toString()));</b>
+<b class="nc"><i>73</i>&nbsp;                    highScoresJSON.put(hardString, new JSONArray(jsonArray.toString()));</b>
+<b class="nc"><i>74</i>&nbsp;                    BufferedWriter buff = new BufferedWriter(new FileWriter(highScores, false));</b>
+<b class="nc"><i>75</i>&nbsp;                    buff.write(highScoresJSON.toString());</b>
+<b class="nc"><i>76</i>&nbsp;                    buff.flush();</b>
+<b class="nc"><i>77</i>&nbsp;                    buff.close();</b>
+<b class="nc"><i>78</i>&nbsp;                    setupSpinner();</b>
+<i>79</i>&nbsp;                }
+<b class="nc"><i>80</i>&nbsp;                catch (JSONException | IOException e) {</b>
+<b class="nc"><i>81</i>&nbsp;                    e.printStackTrace();</b>
+<b class="nc"><i>82</i>&nbsp;                }</b>
+<i>83</i>&nbsp;            }
+<i>84</i>&nbsp;        });
+<i>85</i>&nbsp;        //endregion
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;        Button backButton = (Button) rootView.findViewById(R.id.high_scores_back_button);</b>
+<b class="nc"><i>88</i>&nbsp;        backButton.setOnClickListener(new View.OnClickListener() {</b>
+<i>89</i>&nbsp;            @Override
+<b class="nc"><i>90</i>&nbsp;            public void onClick(View v) { activity.onBackPressed(); }</b>
+<i>91</i>&nbsp;        });
+<i>92</i>&nbsp;
+<b class="nc"><i>93</i>&nbsp;        return rootView;</b>
+<i>94</i>&nbsp;    }
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    private void setupSpinner() {
+<b class="nc"><i>97</i>&nbsp;        final ListView[] lists = {</b>
+<b class="nc"><i>98</i>&nbsp;            (ListView)rootView.findViewById(R.id.easy_high_scores),</b>
+<b class="nc"><i>99</i>&nbsp;            (ListView)rootView.findViewById(R.id.medium_high_scores),</b>
+<b class="nc"><i>100</i>&nbsp;            (ListView)rootView.findViewById(R.id.hard_high_scores)</b>
+<i>101</i>&nbsp;        };
+<i>102</i>&nbsp;        try {
+<i>103</i>&nbsp;            //region easy scores
+<b class="nc"><i>104</i>&nbsp;            JSONArray easy = highScoresJSON.getJSONArray(easyString);</b>
+<b class="nc"><i>105</i>&nbsp;            String[] easyScores = new String[10];</b>
+<b class="nc"><i>106</i>&nbsp;            for(int i = 0; i &lt; 10; ++i)</b>
+<b class="nc"><i>107</i>&nbsp;                easyScores[i] = easy.getString(i);</b>
+<b class="nc"><i>108</i>&nbsp;            lists[0].setAdapter(new ArrayAdapter&lt;&gt;(rootView.getContext(), android.R.layout.simple_list_item_1, easyScores));</b>
+<i>109</i>&nbsp;            //endregion
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;            //region medium scores
+<b class="nc"><i>112</i>&nbsp;            JSONArray medium = highScoresJSON.getJSONArray(mediumString);</b>
+<b class="nc"><i>113</i>&nbsp;            String[] mediumScores = new String[10];</b>
+<b class="nc"><i>114</i>&nbsp;            for(int i = 0; i &lt; 10; ++i)</b>
+<b class="nc"><i>115</i>&nbsp;                mediumScores[i] = medium.getString(i);</b>
+<b class="nc"><i>116</i>&nbsp;            lists[1].setAdapter(new ArrayAdapter&lt;&gt;(rootView.getContext(), android.R.layout.simple_list_item_1, mediumScores));</b>
+<i>117</i>&nbsp;            //endregion
+<i>118</i>&nbsp;
+<i>119</i>&nbsp;            //region hard scores
+<b class="nc"><i>120</i>&nbsp;            JSONArray hard = highScoresJSON.getJSONArray(hardString);</b>
+<b class="nc"><i>121</i>&nbsp;            String[] hardScores = new String[10];</b>
+<b class="nc"><i>122</i>&nbsp;            for(int i = 0; i &lt; 10; ++i)</b>
+<b class="nc"><i>123</i>&nbsp;                hardScores[i] = hard.getString(i);</b>
+<b class="nc"><i>124</i>&nbsp;            lists[2].setAdapter(new ArrayAdapter&lt;&gt;(rootView.getContext(), android.R.layout.simple_list_item_1, hardScores));</b>
+<i>125</i>&nbsp;            //endregion
+<i>126</i>&nbsp;
+<i>127</i>&nbsp;            //region Spinner
+<b class="nc"><i>128</i>&nbsp;            final String[] difficulties = {easyString, mediumString, hardString};</b>
+<b class="nc"><i>129</i>&nbsp;            final Spinner highScoresSpinner = (Spinner) rootView.findViewById(R.id.high_scores_spinner);</b>
+<b class="nc"><i>130</i>&nbsp;            highScoresSpinner.setAdapter(new ArrayAdapter&lt;&gt;(rootView.getContext(), android.R.layout.simple_spinner_dropdown_item, difficulties));</b>
+<b class="nc"><i>131</i>&nbsp;            highScoresSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {</b>
+<i>132</i>&nbsp;                @Override
+<i>133</i>&nbsp;                public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) {
+<b class="nc"><i>134</i>&nbsp;                    lists[currentPosition].setVisibility(View.INVISIBLE);</b>
+<b class="nc"><i>135</i>&nbsp;                    currentPosition = position;</b>
+<b class="nc"><i>136</i>&nbsp;                    lists[currentPosition].setVisibility(View.VISIBLE);</b>
+<i>137</i>&nbsp;                }
+<i>138</i>&nbsp;
+<i>139</i>&nbsp;                @Override
+<i>140</i>&nbsp;                public void onNothingSelected(AdapterView&lt;?&gt; parent) {
+<b class="nc"><i>141</i>&nbsp;                    for(ListView l : lists)</b>
+<b class="nc"><i>142</i>&nbsp;                        l.setVisibility(View.INVISIBLE);</b>
+<b class="nc"><i>143</i>&nbsp;                    lists[0].setVisibility(View.VISIBLE);</b>
+<i>144</i>&nbsp;                }
+<i>145</i>&nbsp;            });
+<i>146</i>&nbsp;            //endregion
+<i>147</i>&nbsp;        }
+<b class="nc"><i>148</i>&nbsp;        catch (JSONException e) {</b>
+<b class="nc"><i>149</i>&nbsp;            e.printStackTrace();</b>
+<b class="nc"><i>150</i>&nbsp;        }</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2016-02-11 09:11</div>
+</div>
+</body>
+</html>
