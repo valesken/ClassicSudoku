@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.LinkedList;
 
-import me.valesken.jeff.sudoku_model_api.SudokuModelAPI;
+import me.valesken.jeff.sudoku_model.ModelAPI;
 
 /**
  * Created by Jeff on 7/4/2015.
@@ -34,14 +34,14 @@ public class GridManager {
         this.grid = _grid;
         this.boardSize = _boardSize;
         this.gameFragment = _gameFragment;
-        this.values = SudokuModelAPI.getBoard();
+        this.values = ModelAPI.getBoard();
         this.currentGridIndex = -1;
         this.views = new View[values.length];
     }
 
     @SuppressLint("InflateParams")
     public void initializeGrid() {
-        values = SudokuModelAPI.getBoard();
+        values = ModelAPI.getBoard();
         LayoutInflater inflater = LayoutInflater.from(context);
         View tile;
         int gridIndex;
@@ -111,7 +111,7 @@ public class GridManager {
         for(View v : tileNoteViews)
             v.setVisibility(View.INVISIBLE);
         // value tile
-        if(!SudokuModelAPI.tileIsNoteMode(gridIndex)) {
+        if(!ModelAPI.tileIsNoteMode(gridIndex)) {
             TextView textView = (TextView) tile.findViewById(R.id.tile_value_text);
             textView.setVisibility(View.VISIBLE);
             if ((Integer)values[gridIndex].get(0) > 0)
@@ -119,7 +119,7 @@ public class GridManager {
             else
                 textView.setText(" ");
 
-            if(SudokuModelAPI.tileIsOrig(gridIndex)) {
+            if(ModelAPI.tileIsOrig(gridIndex)) {
                 textView.setTypeface(Typeface.DEFAULT_BOLD);
                 textView.setTextColor(Color.BLACK);
             }
@@ -134,41 +134,41 @@ public class GridManager {
 
     public boolean updateTile(int gridIndex, int value)
     {
-        SudokuModelAPI.updateTile(gridIndex, value);
-        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
+        ModelAPI.updateTile(gridIndex, value);
+        values[gridIndex] = ModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
-        return SudokuModelAPI.isGameOver();
+        return ModelAPI.isGameOver();
     }
 
     public void clearTile(int gridIndex)
     {
-        SudokuModelAPI.clearTile(gridIndex);
-        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
+        ModelAPI.clearTile(gridIndex);
+        values[gridIndex] = ModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
     }
 
     public void toggleMode(int gridIndex)
     {
-        SudokuModelAPI.toggleMode(gridIndex);
-        values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
+        ModelAPI.toggleMode(gridIndex);
+        values[gridIndex] = ModelAPI.getTile(gridIndex);
         this.updateItem(gridIndex, views[gridIndex]);
     }
 
     public boolean getHint()
     {
-        int gridIndex = SudokuModelAPI.getHint();
+        int gridIndex = ModelAPI.getHint();
         if (gridIndex > -1) {
-            values[gridIndex] = SudokuModelAPI.getTile(gridIndex);
+            values[gridIndex] = ModelAPI.getTile(gridIndex);
             this.updateItem(gridIndex, views[gridIndex]);
         }
-        return SudokuModelAPI.isGameOver();
+        return ModelAPI.isGameOver();
     }
 
     public void solve()
     {
-        SudokuModelAPI.solve();
+        ModelAPI.solve();
         for(int i = 0; i < values.length; ++i) {
-            values[i] = SudokuModelAPI.getTile(i);
+            values[i] = ModelAPI.getTile(i);
             this.updateItem(i, views[i]);
         }
     }

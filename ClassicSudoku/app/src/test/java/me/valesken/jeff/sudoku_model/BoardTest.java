@@ -9,6 +9,8 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.Random;
 
+import me.valesken.jeff.util.Logger;
+
 import static org.hamcrest.CoreMatchers.either;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.*;
@@ -22,6 +24,7 @@ import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.intThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -65,6 +68,8 @@ public class BoardTest {
         assertEquals(houseSize, board.columns.length);
         assertNotNull(board.zones);
         assertEquals(houseSize, board.zones.length);
+        assertNotNull(board.logger);
+        assertNotNull(board.randGen);
     }
     //endregion
 
@@ -1111,6 +1116,106 @@ public class BoardTest {
             assertEquals(i % 9, solution.getInt(i));
             assertEquals(object, tiles.getJSONObject(i));
         }
+    }
+    //endregion
+
+    //region newGame() tests
+    @Test
+    public void testNewGameEasyPass() {
+        // Setup
+        int difficulty = 1;
+        Board spy = spy(board);
+        doReturn(true).when(spy).initialize();
+        doNothing().when(spy).digHoles(anyInt());
+        doNothing().when(spy).checkBounds(anyInt());
+        doNothing().when(spy).markOriginals();
+        spy.randGen = mock(Random.class);
+        spy.logger = mock(Logger.class);
+        // Execute
+        assertEquals(difficulty, spy.newGame(difficulty));
+        // Verify
+        assertEquals(difficulty, spy.difficulty);
+        assertEquals("00:00", spy.timeElapsed);
+        verify(spy.logger).logDebugMessage("Inside newGame().");
+        verify(spy).initialize();
+        verify(spy).digHoles(difficulty);
+        verify(spy).checkBounds(difficulty);
+        verify(spy).markOriginals();
+        verify(spy.randGen, never()).nextInt(anyInt());
+    }
+
+    @Test
+    public void testNewGameMediumPass() {
+        // Setup
+        int difficulty = 2;
+        Board spy = spy(board);
+        doReturn(true).when(spy).initialize();
+        doNothing().when(spy).digHoles(anyInt());
+        doNothing().when(spy).checkBounds(anyInt());
+        doNothing().when(spy).markOriginals();
+        spy.randGen = mock(Random.class);
+        spy.logger = mock(Logger.class);
+        // Execute
+        assertEquals(difficulty, spy.newGame(difficulty));
+        // Verify
+        assertEquals(difficulty, spy.difficulty);
+        assertEquals("00:00", spy.timeElapsed);
+        verify(spy.logger).logDebugMessage("Inside newGame().");
+        verify(spy).initialize();
+        verify(spy).digHoles(difficulty);
+        verify(spy).checkBounds(difficulty);
+        verify(spy).markOriginals();
+        verify(spy.randGen, never()).nextInt(anyInt());
+    }
+
+    @Test
+    public void testNewGameHardPass() {
+        // Setup
+        int difficulty = 1;
+        Board spy = spy(board);
+        doReturn(true).when(spy).initialize();
+        doNothing().when(spy).digHoles(anyInt());
+        doNothing().when(spy).checkBounds(anyInt());
+        doNothing().when(spy).markOriginals();
+        spy.randGen = mock(Random.class);
+        spy.logger = mock(Logger.class);
+        // Execute
+        assertEquals(difficulty, spy.newGame(difficulty));
+        // Verify
+        assertEquals(difficulty, spy.difficulty);
+        assertEquals("00:00", spy.timeElapsed);
+        verify(spy.logger).logDebugMessage("Inside newGame().");
+        verify(spy).initialize();
+        verify(spy).digHoles(difficulty);
+        verify(spy).checkBounds(difficulty);
+        verify(spy).markOriginals();
+        verify(spy.randGen, never()).nextInt(anyInt());
+    }
+
+    @Test
+    public void testNewGameRandomPass() {
+        // Setup
+        int difficulty = 4;
+        int resultantDifficulty = 2;
+        Board spy = spy(board);
+        doReturn(true).when(spy).initialize();
+        doNothing().when(spy).digHoles(anyInt());
+        doNothing().when(spy).checkBounds(anyInt());
+        doNothing().when(spy).markOriginals();
+        spy.randGen = mock(Random.class);
+        when(spy.randGen.nextInt(3)).thenReturn(resultantDifficulty - 1);
+        spy.logger = mock(Logger.class);
+        // Execute
+        assertEquals(resultantDifficulty, spy.newGame(difficulty));
+        // Verify
+        assertEquals(resultantDifficulty, spy.difficulty);
+        assertEquals("00:00", spy.timeElapsed);
+        verify(spy.logger).logDebugMessage("Inside newGame().");
+        verify(spy.randGen).nextInt(3);
+        verify(spy).initialize();
+        verify(spy).digHoles(resultantDifficulty);
+        verify(spy).checkBounds(resultantDifficulty);
+        verify(spy).markOriginals();
     }
     //endregion
 

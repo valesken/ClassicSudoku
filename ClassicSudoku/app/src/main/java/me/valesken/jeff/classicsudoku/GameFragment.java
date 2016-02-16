@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import me.valesken.jeff.sudoku_model_api.SudokuModelAPI;
+import me.valesken.jeff.sudoku_model.ModelAPI;
 
 /**
  * Created by Jeff on 7/12/2015.
@@ -117,8 +117,8 @@ public class GameFragment extends Fragment {
     public void newGame(int _boardSize, int _difficulty)
     {
         boardSize = _boardSize;
-        SudokuModelAPI.initializeNewBoard(boardSize);
-        difficulty = SudokuModelAPI.newGame(_difficulty);
+        ModelAPI.initializeNewBoard(boardSize);
+        difficulty = ModelAPI.newGame(_difficulty);
         loadJSON = null;
         saveFile = null;
         loadJSONPosition = -1;
@@ -130,11 +130,11 @@ public class GameFragment extends Fragment {
             loadJSONPosition = _loadJSONPosition;
             saveFile = _saveFile;
             boardSize = _boardSize;
-            SudokuModelAPI.initializeNewBoard(boardSize);
+            ModelAPI.initializeNewBoard(boardSize);
             BufferedReader buff = new BufferedReader(new FileReader(saveFile));
             JSONObject jsonObject = new JSONObject(buff.readLine());
             buff.close();
-            difficulty = SudokuModelAPI.loadGame(jsonObject);
+            difficulty = ModelAPI.loadGame(jsonObject);
         }
         catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -451,7 +451,7 @@ public class GameFragment extends Fragment {
 
         //region Start Clock
         clock_tv = (TextView)rootView.findViewById(R.id.clock);
-        clock_tv.setText(SudokuModelAPI.getTime());
+        clock_tv.setText(ModelAPI.getTime());
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -534,7 +534,7 @@ public class GameFragment extends Fragment {
             if (!gameOver) {
                 File saveFile = new File(activity.getFilesDir(), getResources().getString(R.string.autosave_filename));
                 BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
-                JSONObject jsonObject = SudokuModelAPI.save((String) clock_tv.getText());
+                JSONObject jsonObject = ModelAPI.save((String) clock_tv.getText());
                 buff.write(jsonObject.toString());
                 buff.flush();
                 buff.close();
@@ -570,7 +570,7 @@ public class GameFragment extends Fragment {
             // Write game state to file
             File saveFile = new File(saveDir, _filename.concat(".txt"));
             BufferedWriter buff = new BufferedWriter(new FileWriter(saveFile, false));
-            JSONObject jsonObject = SudokuModelAPI.save(clock_text);
+            JSONObject jsonObject = ModelAPI.save(clock_text);
             buff.write(jsonObject.toString());
             buff.flush();
             buff.close();

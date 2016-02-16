@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Stack;
 
+import me.valesken.jeff.util.Logger;
+
 /**
  * Created by Jeff on 2/28/2015.
  * Last updated on 2/10/2016
@@ -21,6 +23,7 @@ public class Board {
     static public String jsonSolutionId = "solution";
     static public String jsonTilesId = "tiles";
 
+    public Logger logger;
     public int houseSize;
     public int boardSize;
     public int difficulty;
@@ -45,6 +48,8 @@ public class Board {
         columns = new House[houseSize];
         zones = new House[houseSize];
         tiles = new Tile[boardSize];
+        logger = new Logger();
+        randGen = new Random();
     }
 
     /**
@@ -382,19 +387,18 @@ public class Board {
 
     /**
      * To create a new game, but not to load an old game, call this function before anything else.
-     * Returns the actual difficulty level (useful if 'Random').
+     * Returns the actual difficulty level (useful if 'Random'). 1 = Easy, 2 = Medium, 3 = Hard.
      *
      * @param _difficulty difficulty level for the game
      * @return difficulty level for the game
      */
     public int newGame(int _difficulty) {
-        Log.d("Debug Info", "Inside newGame().");
+        logger.logDebugMessage("Inside newGame().");
         difficulty = _difficulty;
-        randGen = new Random();
         timeElapsed = "00:00";
 
         // if 'Random', select between easy, medium, and hard
-        if (difficulty == 0 || difficulty == 4) {
+        if (difficulty < 1 || difficulty > 3) {
             difficulty = randGen.nextInt(3) + 1;
         }
 

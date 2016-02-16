@@ -1,4 +1,4 @@
-package me.valesken.jeff.sudoku_model_api;
+package me.valesken.jeff.sudoku_model;
 
 import org.json.JSONObject;
 
@@ -10,7 +10,7 @@ import me.valesken.jeff.sudoku_model.*;
  * Created by jeff on 2/8/2016.
  * Last updated on 2/8/2016.
  */
-public class SudokuModelAPI {
+public class ModelAPI {
 
     public static Board board;
 
