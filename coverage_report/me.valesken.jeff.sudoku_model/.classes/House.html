@@ -55,7 +55,7 @@
 </td>
 </tr>
   <tr>
-    <td class="name">House$$EnhancerByMockitoWithCGLIB$$5a98a409</td>
+    <td class="name">House$$EnhancerByMockitoWithCGLIB$$29b0cd22</td>
   </tr>
 <tr>
   <td class="name"><strong>total</strong></td>
@@ -99,16 +99,16 @@
 <i>15</i>&nbsp; * House can return a tile at the specified position in the House.
 <i>16</i>&nbsp; * House does not need to do anything else;
 <i>17</i>&nbsp; */
-<i>18</i>&nbsp;public class House implements Iterable&lt;Tile&gt; {
+<i>18</i>&nbsp;class House implements Iterable&lt;Tile&gt; {
 <i>19</i>&nbsp;
 <b class="fc"><i>20</i>&nbsp;    @SuppressWarnings(&quot;unchecked&quot;)</b>
-<i>21</i>&nbsp;    public HashSet&lt;Integer&gt;[] valueOwners = new HashSet[9];
-<i>22</i>&nbsp;    public ArrayList&lt;Tile&gt; members;
-<i>23</i>&nbsp;    public int houseIndex;
-<i>24</i>&nbsp;    public int houseSize;
-<i>25</i>&nbsp;    public int boardSize;
+<i>21</i>&nbsp;    protected HashSet&lt;Integer&gt;[] valueOwners = new HashSet[9];
+<i>22</i>&nbsp;    protected ArrayList&lt;Tile&gt; members;
+<i>23</i>&nbsp;    protected int houseIndex;
+<i>24</i>&nbsp;    protected int houseSize;
+<i>25</i>&nbsp;    protected int boardSize;
 <i>26</i>&nbsp;
-<b class="fc"><i>27</i>&nbsp;    public House(int _houseSize, int _houseIndex) {</b>
+<b class="fc"><i>27</i>&nbsp;    protected House(int _houseSize, int _houseIndex) {</b>
 <b class="fc"><i>28</i>&nbsp;        houseIndex = _houseIndex;</b>
 <b class="fc"><i>29</i>&nbsp;        houseSize = _houseSize;</b>
 <b class="fc"><i>30</i>&nbsp;        boardSize = houseSize * houseSize;</b>
@@ -126,7 +126,7 @@
 <i>42</i>&nbsp;     *
 <i>43</i>&nbsp;     * @param tile The next tile to add to this House.
 <i>44</i>&nbsp;     */
-<i>45</i>&nbsp;    public void addMember(Tile tile) {
+<i>45</i>&nbsp;    protected void addMember(Tile tile) {
 <b class="fc"><i>46</i>&nbsp;        if (members.size() &lt; houseSize &amp;&amp; !members.contains(tile)) {</b>
 <b class="fc"><i>47</i>&nbsp;            members.add(tile); // Add to end - O(1) insert to end, maintains position in House</b>
 <i>48</i>&nbsp;        }
@@ -142,7 +142,7 @@
 <i>58</i>&nbsp;     * @param tileIndex The index of the Tile that the value will be assigned to.
 <i>59</i>&nbsp;     * @return true if successful, false otherwise
 <i>60</i>&nbsp;     */
-<i>61</i>&nbsp;    public boolean setValueInHouse(int value, boolean assign, int tileIndex) {
+<i>61</i>&nbsp;    protected boolean setValueInHouse(int value, boolean assign, int tileIndex) {
 <b class="fc"><i>62</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize &amp;&amp; tileIndex &gt; -1 &amp;&amp; tileIndex &lt; boardSize) {</b>
 <b class="fc"><i>63</i>&nbsp;            if (assign) {</b>
 <b class="fc"><i>64</i>&nbsp;                return valueOwners[value - 1].add(tileIndex);</b>
@@ -160,7 +160,7 @@
 <i>76</i>&nbsp;     * @param value The 1-9 value in the House to clear.
 <i>77</i>&nbsp;     * @return true if successful, false otherwise
 <i>78</i>&nbsp;     */
-<i>79</i>&nbsp;    public boolean clearValueInHouse(int value) {
+<i>79</i>&nbsp;    protected boolean clearValueInHouse(int value) {
 <b class="fc"><i>80</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
 <b class="fc"><i>81</i>&nbsp;            valueOwners[value - 1].clear();</b>
 <b class="fc"><i>82</i>&nbsp;            return true;</b>
@@ -175,7 +175,7 @@
 <i>91</i>&nbsp;     * @param position The 0-8 position within this House to get a Tile from.
 <i>92</i>&nbsp;     * @return The Tile at the corresponding position in the House, null if no Tile at that position.
 <i>93</i>&nbsp;     */
-<i>94</i>&nbsp;    public Tile getMember(int position) {
+<i>94</i>&nbsp;    protected Tile getMember(int position) {
 <b class="fc"><i>95</i>&nbsp;        if (position &lt; 0 || position &gt;= members.size()) {</b>
 <b class="fc"><i>96</i>&nbsp;            return null;</b>
 <i>97</i>&nbsp;        }
@@ -188,14 +188,14 @@
 <i>104</i>&nbsp;     * @param value The 1-9 value to check for.
 <i>105</i>&nbsp;     * @return True if this House contains a Tile to which the value is assigned, otherwise False.
 <i>106</i>&nbsp;     */
-<i>107</i>&nbsp;    public boolean hasValue(int value) {
+<i>107</i>&nbsp;    protected boolean hasValue(int value) {
 <b class="fc"><i>108</i>&nbsp;        return (value &gt; 0 &amp;&amp; value &lt;= houseSize &amp;&amp; valueOwners[value - 1].size() &gt; 0);</b>
 <i>109</i>&nbsp;    }
 <i>110</i>&nbsp;
 <i>111</i>&nbsp;    /**
 <i>112</i>&nbsp;     * @return The number of Tiles in this House which have an assigned value.
 <i>113</i>&nbsp;     */
-<i>114</i>&nbsp;    public int getValueCount() {
+<i>114</i>&nbsp;    protected int getValueCount() {
 <b class="fc"><i>115</i>&nbsp;        int count = 0;</b>
 <b class="fc"><i>116</i>&nbsp;        for (Tile t : members) {</b>
 <b class="fc"><i>117</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
@@ -209,7 +209,7 @@
 <i>125</i>&nbsp;     * @return A LinkedList of Tiles in this House which have an assigned value. If no such Tiles,
 <i>126</i>&nbsp;     * the LinkedList will simply be an empty list.
 <i>127</i>&nbsp;     */
-<i>128</i>&nbsp;    public LinkedList&lt;Tile&gt; getValueTiles() {
+<i>128</i>&nbsp;    protected LinkedList&lt;Tile&gt; getValueTiles() {
 <b class="fc"><i>129</i>&nbsp;        LinkedList&lt;Tile&gt; valueTiles = new LinkedList&lt;&gt;();</b>
 <b class="fc"><i>130</i>&nbsp;        for (Tile t : members) {</b>
 <b class="fc"><i>131</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
@@ -222,7 +222,7 @@
 <i>138</i>&nbsp;    /**
 <i>139</i>&nbsp;     * @return The index (0 - 8) for this house.
 <i>140</i>&nbsp;     */
-<i>141</i>&nbsp;    public int getHouseIndex() {
+<i>141</i>&nbsp;    protected int getHouseIndex() {
 <b class="fc"><i>142</i>&nbsp;        return houseIndex;</b>
 <i>143</i>&nbsp;    }
 <i>144</i>&nbsp;    //endregion
@@ -237,7 +237,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-02-11 09:11</div>
+    <div style="float:right;">generated on 2016-04-14 15:06</div>
 </div>
 </body>
 </html>

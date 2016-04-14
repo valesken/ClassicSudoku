@@ -15,16 +15,16 @@ import java.util.LinkedList;
  * House can return a tile at the specified position in the House.
  * House does not need to do anything else;
  */
-public class House implements Iterable<Tile> {
+class House implements Iterable<Tile> {
 
     @SuppressWarnings("unchecked")
-    public HashSet<Integer>[] valueOwners = new HashSet[9];
-    public ArrayList<Tile> members;
-    public int houseIndex;
-    public int houseSize;
-    public int boardSize;
+    protected HashSet<Integer>[] valueOwners = new HashSet[9];
+    protected ArrayList<Tile> members;
+    protected int houseIndex;
+    protected int houseSize;
+    protected int boardSize;
 
-    public House(int _houseSize, int _houseIndex) {
+    protected House(int _houseSize, int _houseIndex) {
         houseIndex = _houseIndex;
         houseSize = _houseSize;
         boardSize = houseSize * houseSize;
@@ -42,7 +42,7 @@ public class House implements Iterable<Tile> {
      *
      * @param tile The next tile to add to this House.
      */
-    public void addMember(Tile tile) {
+    protected void addMember(Tile tile) {
         if (members.size() < houseSize && !members.contains(tile)) {
             members.add(tile); // Add to end - O(1) insert to end, maintains position in House
         }
@@ -58,7 +58,7 @@ public class House implements Iterable<Tile> {
      * @param tileIndex The index of the Tile that the value will be assigned to.
      * @return true if successful, false otherwise
      */
-    public boolean setValueInHouse(int value, boolean assign, int tileIndex) {
+    protected boolean setValueInHouse(int value, boolean assign, int tileIndex) {
         if (value > 0 && value <= houseSize && tileIndex > -1 && tileIndex < boardSize) {
             if (assign) {
                 return valueOwners[value - 1].add(tileIndex);
@@ -76,7 +76,7 @@ public class House implements Iterable<Tile> {
      * @param value The 1-9 value in the House to clear.
      * @return true if successful, false otherwise
      */
-    public boolean clearValueInHouse(int value) {
+    protected boolean clearValueInHouse(int value) {
         if (value > 0 && value <= houseSize) {
             valueOwners[value - 1].clear();
             return true;
@@ -91,7 +91,7 @@ public class House implements Iterable<Tile> {
      * @param position The 0-8 position within this House to get a Tile from.
      * @return The Tile at the corresponding position in the House, null if no Tile at that position.
      */
-    public Tile getMember(int position) {
+    protected Tile getMember(int position) {
         if (position < 0 || position >= members.size()) {
             return null;
         }
@@ -104,14 +104,14 @@ public class House implements Iterable<Tile> {
      * @param value The 1-9 value to check for.
      * @return True if this House contains a Tile to which the value is assigned, otherwise False.
      */
-    public boolean hasValue(int value) {
+    protected boolean hasValue(int value) {
         return (value > 0 && value <= houseSize && valueOwners[value - 1].size() > 0);
     }
 
     /**
      * @return The number of Tiles in this House which have an assigned value.
      */
-    public int getValueCount() {
+    protected int getValueCount() {
         int count = 0;
         for (Tile t : members) {
             if (t.getValue() > 0) {
@@ -125,7 +125,7 @@ public class House implements Iterable<Tile> {
      * @return A LinkedList of Tiles in this House which have an assigned value. If no such Tiles,
      * the LinkedList will simply be an empty list.
      */
-    public LinkedList<Tile> getValueTiles() {
+    protected LinkedList<Tile> getValueTiles() {
         LinkedList<Tile> valueTiles = new LinkedList<>();
         for (Tile t : members) {
             if (t.getValue() > 0) {
@@ -138,7 +138,7 @@ public class House implements Iterable<Tile> {
     /**
      * @return The index (0 - 8) for this house.
      */
-    public int getHouseIndex() {
+    protected int getHouseIndex() {
         return houseIndex;
     }
     //endregion

@@ -17,13 +17,13 @@ public class ModelAPI {
     public static void initializeNewBoard(int houseSize) {
         board = new Board(houseSize);
         board.initializeHouses();
-        board.initializeTiles();
     }
 
     public static int newGame(int difficulty) {
         if(board == null) {
             return -1;
         }
+        board.initializeTiles();
         return board.newGame(difficulty);
     }
 
