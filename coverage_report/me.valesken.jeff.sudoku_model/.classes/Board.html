@@ -47,18 +47,18 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    97.9%
+    98%
   </span>
   <span class="absValue">
-    (235/ 240)
+    (242/ 247)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Board$$EnhancerByMockitoWithCGLIB$$98ee09b8</td>
+    <td class="name">Board$$EnhancerByMockitoWithCGLIB$$6bdb9ee3</td>
   </tr>
   <tr>
-    <td class="name">Board$$EnhancerByMockitoWithCGLIB$$98ee09b8$$FastClassByMockitoWithCGLIB$$ec3c0253</td>
+    <td class="name">Board$$EnhancerByMockitoWithCGLIB$$6bdb9ee3$$FastClassByMockitoWithCGLIB$$6083d219</td>
   </tr>
   <tr>
     <td class="name">Board$$FastClassByMockitoWithCGLIB$$2c54f4b9</td>
@@ -75,10 +75,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    97.9%
+    98%
   </span>
   <span class="absValue">
-    (235/ 240)
+    (242/ 247)
   </span>
 </td>
 </tr>
@@ -90,783 +90,797 @@
 
 <div class="sourceCode"><i>1</i>&nbsp;package me.valesken.jeff.sudoku_model;
 <i>2</i>&nbsp;
-<i>3</i>&nbsp;import android.util.Log;
-<i>4</i>&nbsp;
-<i>5</i>&nbsp;import org.json.JSONArray;
-<i>6</i>&nbsp;import org.json.JSONException;
-<i>7</i>&nbsp;import org.json.JSONObject;
-<i>8</i>&nbsp;
-<i>9</i>&nbsp;import java.util.EmptyStackException;
-<i>10</i>&nbsp;import java.util.LinkedList;
-<i>11</i>&nbsp;import java.util.List;
-<i>12</i>&nbsp;import java.util.Random;
-<i>13</i>&nbsp;import java.util.Stack;
+<i>3</i>&nbsp;import org.json.JSONArray;
+<i>4</i>&nbsp;import org.json.JSONException;
+<i>5</i>&nbsp;import org.json.JSONObject;
+<i>6</i>&nbsp;
+<i>7</i>&nbsp;import java.util.EmptyStackException;
+<i>8</i>&nbsp;import java.util.LinkedList;
+<i>9</i>&nbsp;import java.util.List;
+<i>10</i>&nbsp;import java.util.Random;
+<i>11</i>&nbsp;import java.util.Stack;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import me.valesken.jeff.util.Logger;
 <i>14</i>&nbsp;
-<i>15</i>&nbsp;import me.valesken.jeff.util.Logger;
-<i>16</i>&nbsp;
-<i>17</i>&nbsp;/**
-<i>18</i>&nbsp; * Created by Jeff on 2/28/2015.
-<i>19</i>&nbsp; * Last updated on 2/10/2016
-<i>20</i>&nbsp; */
-<i>21</i>&nbsp;class Board {
-<b class="fc"><i>22</i>&nbsp;    static protected String jsonTimeId = &quot;time&quot;;</b>
-<b class="fc"><i>23</i>&nbsp;    static protected String jsonDifficultyId = &quot;difficulty&quot;;</b>
-<b class="fc"><i>24</i>&nbsp;    static protected String jsonSolutionId = &quot;solution&quot;;</b>
-<b class="fc"><i>25</i>&nbsp;    static protected String jsonTilesId = &quot;tiles&quot;;</b>
-<i>26</i>&nbsp;
-<i>27</i>&nbsp;    protected Logger logger;
-<i>28</i>&nbsp;    protected int houseSize;
-<i>29</i>&nbsp;    protected int boardSize;
-<i>30</i>&nbsp;    protected int difficulty;
-<i>31</i>&nbsp;    protected Tile[] tiles;
-<i>32</i>&nbsp;    protected House[] rows, columns, zones;
-<i>33</i>&nbsp;    protected int[] solution;
-<i>34</i>&nbsp;    protected Random randGen;
-<i>35</i>&nbsp;    protected String timeElapsed;
+<i>15</i>&nbsp;/**
+<i>16</i>&nbsp; * Created by Jeff on 2/28/2015.
+<i>17</i>&nbsp; * Last updated on 4/14/2016
+<i>18</i>&nbsp; */
+<i>19</i>&nbsp;class Board {
+<b class="fc"><i>20</i>&nbsp;    static protected String jsonTimeId = &quot;time&quot;;</b>
+<b class="fc"><i>21</i>&nbsp;    static protected String jsonDifficultyId = &quot;difficulty&quot;;</b>
+<b class="fc"><i>22</i>&nbsp;    static protected String jsonSolutionId = &quot;solution&quot;;</b>
+<b class="fc"><i>23</i>&nbsp;    static protected String jsonTilesId = &quot;tiles&quot;;</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    protected Logger logger;
+<i>26</i>&nbsp;    protected int houseSize;
+<i>27</i>&nbsp;    protected int boardSize;
+<i>28</i>&nbsp;    protected int difficulty;
+<i>29</i>&nbsp;    protected Tile[] tiles;
+<i>30</i>&nbsp;    protected House[] rows, columns, zones;
+<i>31</i>&nbsp;    protected int[] solution;
+<i>32</i>&nbsp;    protected Random randGen;
+<i>33</i>&nbsp;    protected String timeElapsed;
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    //region Construction Methods
 <i>36</i>&nbsp;
-<i>37</i>&nbsp;    //region Construction Methods
-<i>38</i>&nbsp;
-<i>39</i>&nbsp;    /**
-<i>40</i>&nbsp;     * Constructor for Board. Initializes all objects to be non-null.
-<i>41</i>&nbsp;     *
-<i>42</i>&nbsp;     * @param houseSize Number of Tiles one House can contain in this game.
-<i>43</i>&nbsp;     */
-<b class="fc"><i>44</i>&nbsp;    protected Board(int houseSize) {</b>
-<b class="fc"><i>45</i>&nbsp;        this.houseSize = houseSize;</b>
-<b class="fc"><i>46</i>&nbsp;        boardSize = houseSize * houseSize;</b>
-<b class="fc"><i>47</i>&nbsp;        solution = new int[boardSize];</b>
-<b class="fc"><i>48</i>&nbsp;        rows = new House[houseSize];</b>
-<b class="fc"><i>49</i>&nbsp;        columns = new House[houseSize];</b>
-<b class="fc"><i>50</i>&nbsp;        zones = new House[houseSize];</b>
-<b class="fc"><i>51</i>&nbsp;        tiles = new Tile[boardSize];</b>
-<b class="fc"><i>52</i>&nbsp;        logger = new Logger();</b>
-<b class="fc"><i>53</i>&nbsp;        randGen = new Random();</b>
-<b class="fc"><i>54</i>&nbsp;        timeElapsed = &quot;&quot;;</b>
-<b class="fc"><i>55</i>&nbsp;    }</b>
-<i>56</i>&nbsp;
-<i>57</i>&nbsp;    /**
-<i>58</i>&nbsp;     * This will populate the House arrays with actual Houses. For use in initialization of the Board.
-<i>59</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
-<i>60</i>&nbsp;     */
-<i>61</i>&nbsp;    protected void initializeHouses() {
-<b class="fc"><i>62</i>&nbsp;        for (int i = 0; i &lt; houseSize; ++i) {</b>
-<b class="fc"><i>63</i>&nbsp;            rows[i] = buildHouse(i);</b>
-<b class="fc"><i>64</i>&nbsp;            columns[i] = buildHouse(i);</b>
-<b class="fc"><i>65</i>&nbsp;            zones[i] = buildHouse(i);</b>
-<i>66</i>&nbsp;        }
-<b class="fc"><i>67</i>&nbsp;    }</b>
-<i>68</i>&nbsp;
-<i>69</i>&nbsp;    /**
-<i>70</i>&nbsp;     * This will populate the Tile array with the actual Tiles. It will also put the Tile in the appropriate Houses.
-<i>71</i>&nbsp;     * //TODO: Make self-healing if error occurs during initialization
-<i>72</i>&nbsp;     */
-<i>73</i>&nbsp;    protected void initializeTiles() {
-<b class="fc"><i>74</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
-<b class="fc"><i>75</i>&nbsp;            Tile tile = buildTile(i);</b>
-<b class="fc"><i>76</i>&nbsp;            tiles[i] = tile;</b>
-<b class="fc"><i>77</i>&nbsp;            addTileToHouses(tile, tile.getRowNumber(), tile.getColumnNumber(), tile.getZoneNumber());</b>
-<i>78</i>&nbsp;        }
-<b class="fc"><i>79</i>&nbsp;    }</b>
-<i>80</i>&nbsp;
-<i>81</i>&nbsp;    /**
-<i>82</i>&nbsp;     * This function puts a Tile into the specified Houses.
-<i>83</i>&nbsp;     * //TODO: Make self-healing if error occurs during initialization
-<i>84</i>&nbsp;     *
-<i>85</i>&nbsp;     * @param tile         The Tile to insert.
-<i>86</i>&nbsp;     * @param rowNumber    The index of the row to insert the Tile into.
-<i>87</i>&nbsp;     * @param columnNumber The index of the column to insert the Tile into.
-<i>88</i>&nbsp;     * @param zoneNumber   The index of the zone to insert the Tile into.
-<i>89</i>&nbsp;     */
-<i>90</i>&nbsp;    protected void addTileToHouses(Tile tile, int rowNumber, int columnNumber, int zoneNumber) {
-<b class="fc"><i>91</i>&nbsp;        House row = (rowNumber &gt; -1 &amp;&amp; rowNumber &lt; houseSize) ? getRow(rowNumber) : null;</b>
-<b class="fc"><i>92</i>&nbsp;        House column = (columnNumber &gt; -1 &amp;&amp; columnNumber &lt; houseSize) ? getColumn(columnNumber) : null;</b>
-<b class="fc"><i>93</i>&nbsp;        House zone = (zoneNumber &gt; -1 &amp;&amp; zoneNumber &lt; houseSize) ? getZone(zoneNumber) : null;</b>
-<b class="fc"><i>94</i>&nbsp;        if (row != null &amp;&amp; column != null &amp;&amp; zone != null) {</b>
-<b class="fc"><i>95</i>&nbsp;            row.addMember(tile);</b>
-<b class="fc"><i>96</i>&nbsp;            column.addMember(tile);</b>
-<b class="fc"><i>97</i>&nbsp;            zone.addMember(tile);</b>
-<b class="fc"><i>98</i>&nbsp;            tile.setHouses(row, column, zone);</b>
-<i>99</i>&nbsp;        }
-<b class="fc"><i>100</i>&nbsp;    }</b>
-<i>101</i>&nbsp;
-<i>102</i>&nbsp;    /**
-<i>103</i>&nbsp;     * This will create a House with the specified index.
-<i>104</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
-<i>105</i>&nbsp;     *
-<i>106</i>&nbsp;     * @param index The index for the House. E.g. Row 5 has index 5.
-<i>107</i>&nbsp;     * @return The resultant House.
-<i>108</i>&nbsp;     */
-<i>109</i>&nbsp;    protected House buildHouse(int index) {
-<b class="fc"><i>110</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? new House(houseSize, index) : null;</b>
-<i>111</i>&nbsp;    }
-<i>112</i>&nbsp;
-<i>113</i>&nbsp;    /**
-<i>114</i>&nbsp;     * This will create a Tile with the specified index.
-<i>115</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
-<i>116</i>&nbsp;     *
-<i>117</i>&nbsp;     * @param index The index for the Tile. E.g. Tile 63 has index 63.
-<i>118</i>&nbsp;     * @return The resultant Tile.
-<i>119</i>&nbsp;     */
-<i>120</i>&nbsp;    protected Tile buildTile(int index) {
-<b class="fc"><i>121</i>&nbsp;        if (index &gt; -1 &amp;&amp; index &lt; boardSize) {</b>
-<b class="fc"><i>122</i>&nbsp;            return new Tile(houseSize, index);</b>
-<i>123</i>&nbsp;        }
-<b class="fc"><i>124</i>&nbsp;        return null;</b>
-<i>125</i>&nbsp;    }
+<i>37</i>&nbsp;    /**
+<i>38</i>&nbsp;     * Constructor for Board. Initializes all objects to be non-null.
+<i>39</i>&nbsp;     *
+<i>40</i>&nbsp;     * @param houseSize Number of Tiles one House can contain in this game.
+<i>41</i>&nbsp;     */
+<b class="fc"><i>42</i>&nbsp;    protected Board(int houseSize) {</b>
+<b class="fc"><i>43</i>&nbsp;        this.houseSize = houseSize;</b>
+<b class="fc"><i>44</i>&nbsp;        boardSize = houseSize * houseSize;</b>
+<b class="fc"><i>45</i>&nbsp;        solution = new int[boardSize];</b>
+<b class="fc"><i>46</i>&nbsp;        rows = new House[houseSize];</b>
+<b class="fc"><i>47</i>&nbsp;        columns = new House[houseSize];</b>
+<b class="fc"><i>48</i>&nbsp;        zones = new House[houseSize];</b>
+<b class="fc"><i>49</i>&nbsp;        tiles = new Tile[boardSize];</b>
+<b class="fc"><i>50</i>&nbsp;        logger = new Logger();</b>
+<b class="fc"><i>51</i>&nbsp;        randGen = new Random();</b>
+<b class="fc"><i>52</i>&nbsp;        timeElapsed = &quot;&quot;;</b>
+<b class="fc"><i>53</i>&nbsp;    }</b>
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    /**
+<i>56</i>&nbsp;     * This will populate the House arrays with actual Houses. For use in initialization of the Board.
+<i>57</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
+<i>58</i>&nbsp;     */
+<i>59</i>&nbsp;    protected void initializeHouses() {
+<b class="fc"><i>60</i>&nbsp;        for (int i = 0; i &lt; houseSize; ++i) {</b>
+<b class="fc"><i>61</i>&nbsp;            rows[i] = buildHouse(i);</b>
+<b class="fc"><i>62</i>&nbsp;            columns[i] = buildHouse(i);</b>
+<b class="fc"><i>63</i>&nbsp;            zones[i] = buildHouse(i);</b>
+<i>64</i>&nbsp;        }
+<b class="fc"><i>65</i>&nbsp;    }</b>
+<i>66</i>&nbsp;
+<i>67</i>&nbsp;    /**
+<i>68</i>&nbsp;     * This will populate the Tile array with the actual Tiles. It will also put the Tile in the appropriate Houses.
+<i>69</i>&nbsp;     * //TODO: Make self-healing if error occurs during initialization
+<i>70</i>&nbsp;     */
+<i>71</i>&nbsp;    protected void initializeTiles() {
+<b class="fc"><i>72</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
+<b class="fc"><i>73</i>&nbsp;            Tile tile = buildTile(i);</b>
+<b class="fc"><i>74</i>&nbsp;            tiles[i] = tile;</b>
+<b class="fc"><i>75</i>&nbsp;            addTileToHouses(tile, tile.getRowNumber(), tile.getColumnNumber(), tile.getZoneNumber());</b>
+<i>76</i>&nbsp;        }
+<b class="fc"><i>77</i>&nbsp;    }</b>
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;    /**
+<i>80</i>&nbsp;     * This function puts a Tile into the specified Houses.
+<i>81</i>&nbsp;     * //TODO: Make self-healing if error occurs during initialization
+<i>82</i>&nbsp;     *
+<i>83</i>&nbsp;     * @param tile         The Tile to insert.
+<i>84</i>&nbsp;     * @param rowNumber    The index of the row to insert the Tile into.
+<i>85</i>&nbsp;     * @param columnNumber The index of the column to insert the Tile into.
+<i>86</i>&nbsp;     * @param zoneNumber   The index of the zone to insert the Tile into.
+<i>87</i>&nbsp;     */
+<i>88</i>&nbsp;    protected void addTileToHouses(Tile tile, int rowNumber, int columnNumber, int zoneNumber) {
+<b class="fc"><i>89</i>&nbsp;        House row = (rowNumber &gt; -1 &amp;&amp; rowNumber &lt; houseSize) ? getRow(rowNumber) : null;</b>
+<b class="fc"><i>90</i>&nbsp;        House column = (columnNumber &gt; -1 &amp;&amp; columnNumber &lt; houseSize) ? getColumn(columnNumber) : null;</b>
+<b class="fc"><i>91</i>&nbsp;        House zone = (zoneNumber &gt; -1 &amp;&amp; zoneNumber &lt; houseSize) ? getZone(zoneNumber) : null;</b>
+<b class="fc"><i>92</i>&nbsp;        if (row != null &amp;&amp; column != null &amp;&amp; zone != null) {</b>
+<b class="fc"><i>93</i>&nbsp;            row.addMember(tile);</b>
+<b class="fc"><i>94</i>&nbsp;            column.addMember(tile);</b>
+<b class="fc"><i>95</i>&nbsp;            zone.addMember(tile);</b>
+<b class="fc"><i>96</i>&nbsp;            tile.setHouses(row, column, zone);</b>
+<i>97</i>&nbsp;        }
+<b class="fc"><i>98</i>&nbsp;    }</b>
+<i>99</i>&nbsp;
+<i>100</i>&nbsp;    /**
+<i>101</i>&nbsp;     * This will create a House with the specified index.
+<i>102</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
+<i>103</i>&nbsp;     *
+<i>104</i>&nbsp;     * @param index The index for the House. E.g. Row 5 has index 5.
+<i>105</i>&nbsp;     * @return The resultant House.
+<i>106</i>&nbsp;     */
+<i>107</i>&nbsp;    protected House buildHouse(int index) {
+<b class="fc"><i>108</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? new House(houseSize, index) : null;</b>
+<i>109</i>&nbsp;    }
+<i>110</i>&nbsp;
+<i>111</i>&nbsp;    /**
+<i>112</i>&nbsp;     * This will create a Tile with the specified index.
+<i>113</i>&nbsp;     * TODO: Make self-healing if error occurs during initialization
+<i>114</i>&nbsp;     *
+<i>115</i>&nbsp;     * @param index The index for the Tile. E.g. Tile 63 has index 63.
+<i>116</i>&nbsp;     * @return The resultant Tile.
+<i>117</i>&nbsp;     */
+<i>118</i>&nbsp;    protected Tile buildTile(int index) {
+<b class="fc"><i>119</i>&nbsp;        if (index &gt; -1 &amp;&amp; index &lt; boardSize) {</b>
+<b class="fc"><i>120</i>&nbsp;            return new Tile(houseSize, index);</b>
+<i>121</i>&nbsp;        }
+<b class="fc"><i>122</i>&nbsp;        return null;</b>
+<i>123</i>&nbsp;    }
+<i>124</i>&nbsp;
+<i>125</i>&nbsp;    //endregion
 <i>126</i>&nbsp;
-<i>127</i>&nbsp;    //endregion
+<i>127</i>&nbsp;    //region Getters
 <i>128</i>&nbsp;
-<i>129</i>&nbsp;    //region Getters
-<i>130</i>&nbsp;
-<i>131</i>&nbsp;    /**
-<i>132</i>&nbsp;     * @param index The 0-8 index of the row you want.
-<i>133</i>&nbsp;     * @return The desired row (House). Null if index is out of bounds.
-<i>134</i>&nbsp;     */
-<i>135</i>&nbsp;    protected House getRow(int index) {
-<b class="fc"><i>136</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? rows[index] : null;</b>
-<i>137</i>&nbsp;    }
-<i>138</i>&nbsp;
-<i>139</i>&nbsp;    /**
-<i>140</i>&nbsp;     * @param index The 0-8 index of the column you want.
-<i>141</i>&nbsp;     * @return The desired column (House). Null if index is out of bounds.
-<i>142</i>&nbsp;     */
-<i>143</i>&nbsp;    protected House getColumn(int index) {
-<b class="fc"><i>144</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? columns[index] : null;</b>
-<i>145</i>&nbsp;    }
-<i>146</i>&nbsp;
-<i>147</i>&nbsp;    /**
-<i>148</i>&nbsp;     * @param index The 0-8 index of the zone you want.
-<i>149</i>&nbsp;     * @return The desired zone (House). Null if index is out of bounds.
-<i>150</i>&nbsp;     */
-<i>151</i>&nbsp;    protected House getZone(int index) {
-<b class="fc"><i>152</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? zones[index] : null;</b>
-<i>153</i>&nbsp;    }
-<i>154</i>&nbsp;
-<i>155</i>&nbsp;    /**
-<i>156</i>&nbsp;     * @param index The 0-80 index of the tile you want.
-<i>157</i>&nbsp;     * @return The desired Tile. Null if index is out of bounds.
-<i>158</i>&nbsp;     */
-<i>159</i>&nbsp;    protected Tile getTile(int index) {
-<b class="fc"><i>160</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; boardSize) ? tiles[index] : null;</b>
-<i>161</i>&nbsp;    }
-<i>162</i>&nbsp;
-<i>163</i>&nbsp;    /**
-<i>164</i>&nbsp;     * @param index The 0-80 index of the solution tile you want.
-<i>165</i>&nbsp;     * @return The desired solution value. -1 if index is out of bounds.
-<i>166</i>&nbsp;     */
-<i>167</i>&nbsp;    protected int getSolutionTile(int index) {
-<b class="fc"><i>168</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; boardSize) ? solution[index] : -1;</b>
-<i>169</i>&nbsp;    }
-<i>170</i>&nbsp;
-<i>171</i>&nbsp;    /**
-<i>172</i>&nbsp;     * @param position The index (0 - 80) of the Tile to get.
-<i>173</i>&nbsp;     * @return A LinkedList of the current hints on the Tile if the Tile is in Note Mode, or a Linked List with only
-<i>174</i>&nbsp;     * 1 value (which is the Tile&#39;s current value) if it is in Value Mode. Return null if the index is invalid.
-<i>175</i>&nbsp;     */
-<i>176</i>&nbsp;    protected LinkedList&lt;Integer&gt; getTileNotesOrValue(int position) {
-<b class="fc"><i>177</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
-<b class="fc"><i>178</i>&nbsp;            return getTile(position).getNotesOrValue();</b>
-<i>179</i>&nbsp;        }
-<b class="fc"><i>180</i>&nbsp;        return null;</b>
-<i>181</i>&nbsp;    }
-<i>182</i>&nbsp;
-<i>183</i>&nbsp;    /**
-<i>184</i>&nbsp;     * Getter for whether or not a Tile is in note-mode.
-<i>185</i>&nbsp;     *
-<i>186</i>&nbsp;     * @param index The index (0 - 80) of the Tile to check
-<i>187</i>&nbsp;     * @return True: Tile is in note mode. False: Tile is in value mode or does not exist.
-<i>188</i>&nbsp;     */
-<i>189</i>&nbsp;    protected boolean tileIsNoteMode(int index) {
-<b class="fc"><i>190</i>&nbsp;        Tile tile = getTile(index);</b>
-<b class="fc"><i>191</i>&nbsp;        return tile != null &amp;&amp; tile.isNoteMode();</b>
-<i>192</i>&nbsp;    }
-<i>193</i>&nbsp;
-<i>194</i>&nbsp;    /**
-<i>195</i>&nbsp;     * Getter for whether or not a given Tile is an &#39;original&#39; Tile.
-<i>196</i>&nbsp;     *
-<i>197</i>&nbsp;     * @param index The index (0 - 80) of the Tile to check
-<i>198</i>&nbsp;     * @return True: Tile is an &#39;original&#39; Tile. False: Tile is open to be changed or does not exist.
-<i>199</i>&nbsp;     */
-<i>200</i>&nbsp;    protected boolean tileIsOrig(int index) {
-<b class="fc"><i>201</i>&nbsp;        Tile tile = getTile(index);</b>
-<b class="fc"><i>202</i>&nbsp;        return tile != null &amp;&amp; tile.isOrig();</b>
-<i>203</i>&nbsp;    }
-<i>204</i>&nbsp;
-<i>205</i>&nbsp;    /**
-<i>206</i>&nbsp;     * @return An Array of all the tiles in the board.
-<i>207</i>&nbsp;     */
-<i>208</i>&nbsp;    protected Tile[] getTiles() {
-<b class="fc"><i>209</i>&nbsp;        return tiles;</b>
-<i>210</i>&nbsp;    }
-<i>211</i>&nbsp;
-<i>212</i>&nbsp;    /**
-<i>213</i>&nbsp;     * @return An array of all the rows in the board.
-<i>214</i>&nbsp;     */
-<i>215</i>&nbsp;    protected House[] getRows() {
-<b class="fc"><i>216</i>&nbsp;        return rows;</b>
-<i>217</i>&nbsp;    }
-<i>218</i>&nbsp;
-<i>219</i>&nbsp;    /**
-<i>220</i>&nbsp;     * @return An array of all the columns in the board.
-<i>221</i>&nbsp;     */
-<i>222</i>&nbsp;    protected House[] getColumns() {
-<b class="fc"><i>223</i>&nbsp;        return columns;</b>
-<i>224</i>&nbsp;    }
-<i>225</i>&nbsp;
-<i>226</i>&nbsp;    /**
-<i>227</i>&nbsp;     * @return An array of all the zones in the board.
-<i>228</i>&nbsp;     */
-<i>229</i>&nbsp;    protected House[] getZones() {
-<b class="fc"><i>230</i>&nbsp;        return zones;</b>
-<i>231</i>&nbsp;    }
-<i>232</i>&nbsp;
-<i>233</i>&nbsp;    /**
-<i>234</i>&nbsp;     * Getter for the current board state. Tile value/notes returned as a list of Integers.
-<i>235</i>&nbsp;     *
-<i>236</i>&nbsp;     * @return list of value/notes for each Tile in the board
-<i>237</i>&nbsp;     */
-<i>238</i>&nbsp;    protected LinkedList[] getBoard() {
-<b class="fc"><i>239</i>&nbsp;        LinkedList[] list = new LinkedList[tiles.length];</b>
-<b class="fc"><i>240</i>&nbsp;        for (int i = 0; i &lt; list.length; ++i) {</b>
-<b class="fc"><i>241</i>&nbsp;            list[i] = getTileNotesOrValue(i);</b>
-<i>242</i>&nbsp;        }
-<b class="fc"><i>243</i>&nbsp;        return list;</b>
-<i>244</i>&nbsp;    }
-<i>245</i>&nbsp;
-<i>246</i>&nbsp;    /**
-<i>247</i>&nbsp;     * @return A list of all Tiles that currently are assigned the wrong value in the board.
-<i>248</i>&nbsp;     */
-<i>249</i>&nbsp;    protected LinkedList&lt;Tile&gt; getWrongTiles() {
-<b class="fc"><i>250</i>&nbsp;        LinkedList&lt;Tile&gt; wrongTiles = new LinkedList&lt;&gt;();</b>
-<b class="fc"><i>251</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
-<b class="fc"><i>252</i>&nbsp;            Tile tile = getTile(i);</b>
-<b class="fc"><i>253</i>&nbsp;            int solvedValue = getSolutionTile(i);</b>
-<b class="fc"><i>254</i>&nbsp;            if (tile.getValue() == 0 || tile.getValue() != solvedValue) {</b>
-<b class="fc"><i>255</i>&nbsp;                wrongTiles.add(tile);</b>
-<i>256</i>&nbsp;            }
-<i>257</i>&nbsp;        }
-<b class="fc"><i>258</i>&nbsp;        return wrongTiles;</b>
-<i>259</i>&nbsp;    }
-<i>260</i>&nbsp;
-<i>261</i>&nbsp;    /**
-<i>262</i>&nbsp;     * @return True if every Tile on the board has the correct value, otherwise False.
-<i>263</i>&nbsp;     */
-<i>264</i>&nbsp;    protected boolean isGameOver() {
-<b class="fc"><i>265</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
-<b class="fc"><i>266</i>&nbsp;            if (getTile(i).getValue() != getSolutionTile(i)) {</b>
-<b class="fc"><i>267</i>&nbsp;                return false;</b>
-<i>268</i>&nbsp;            }
-<i>269</i>&nbsp;        }
-<b class="fc"><i>270</i>&nbsp;        return true;</b>
-<i>271</i>&nbsp;    }
-<i>272</i>&nbsp;
-<i>273</i>&nbsp;    /**
-<i>274</i>&nbsp;     * @return The time spent on this game so far. String format will be &quot;(m)m:ss&quot;.
-<i>275</i>&nbsp;     */
-<i>276</i>&nbsp;    protected String getTime() {
-<b class="fc"><i>277</i>&nbsp;        return timeElapsed;</b>
-<i>278</i>&nbsp;    }
-<i>279</i>&nbsp;    //endregion
+<i>129</i>&nbsp;    /**
+<i>130</i>&nbsp;     * @param index The 0-8 index of the row you want.
+<i>131</i>&nbsp;     * @return The desired row (House). Null if index is out of bounds.
+<i>132</i>&nbsp;     */
+<i>133</i>&nbsp;    protected House getRow(int index) {
+<b class="fc"><i>134</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? rows[index] : null;</b>
+<i>135</i>&nbsp;    }
+<i>136</i>&nbsp;
+<i>137</i>&nbsp;    /**
+<i>138</i>&nbsp;     * @param index The 0-8 index of the column you want.
+<i>139</i>&nbsp;     * @return The desired column (House). Null if index is out of bounds.
+<i>140</i>&nbsp;     */
+<i>141</i>&nbsp;    protected House getColumn(int index) {
+<b class="fc"><i>142</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? columns[index] : null;</b>
+<i>143</i>&nbsp;    }
+<i>144</i>&nbsp;
+<i>145</i>&nbsp;    /**
+<i>146</i>&nbsp;     * @param index The 0-8 index of the zone you want.
+<i>147</i>&nbsp;     * @return The desired zone (House). Null if index is out of bounds.
+<i>148</i>&nbsp;     */
+<i>149</i>&nbsp;    protected House getZone(int index) {
+<b class="fc"><i>150</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; houseSize) ? zones[index] : null;</b>
+<i>151</i>&nbsp;    }
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;    /**
+<i>154</i>&nbsp;     * @param index The 0-80 index of the tile you want.
+<i>155</i>&nbsp;     * @return The desired Tile. Null if index is out of bounds.
+<i>156</i>&nbsp;     */
+<i>157</i>&nbsp;    protected Tile getTile(int index) {
+<b class="fc"><i>158</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; boardSize) ? tiles[index] : null;</b>
+<i>159</i>&nbsp;    }
+<i>160</i>&nbsp;
+<i>161</i>&nbsp;    /**
+<i>162</i>&nbsp;     * @param index The 0-80 index of the solution tile you want.
+<i>163</i>&nbsp;     * @return The desired solution value. -1 if index is out of bounds.
+<i>164</i>&nbsp;     */
+<i>165</i>&nbsp;    protected int getSolutionTile(int index) {
+<b class="fc"><i>166</i>&nbsp;        return (index &gt; -1 &amp;&amp; index &lt; boardSize) ? solution[index] : -1;</b>
+<i>167</i>&nbsp;    }
+<i>168</i>&nbsp;
+<i>169</i>&nbsp;    /**
+<i>170</i>&nbsp;     * @param position The index (0 - 80) of the Tile to get.
+<i>171</i>&nbsp;     * @return A LinkedList of the current hints on the Tile if the Tile is in Note Mode, or a Linked List with only
+<i>172</i>&nbsp;     * 1 value (which is the Tile&#39;s current value) if it is in Value Mode. Return null if the index is invalid.
+<i>173</i>&nbsp;     */
+<i>174</i>&nbsp;    protected LinkedList&lt;Integer&gt; getTileNotesOrValue(int position) {
+<b class="fc"><i>175</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
+<b class="fc"><i>176</i>&nbsp;            return getTile(position).getNotesOrValue();</b>
+<i>177</i>&nbsp;        }
+<b class="fc"><i>178</i>&nbsp;        return null;</b>
+<i>179</i>&nbsp;    }
+<i>180</i>&nbsp;
+<i>181</i>&nbsp;    /**
+<i>182</i>&nbsp;     * Getter for whether or not a Tile is in note-mode.
+<i>183</i>&nbsp;     *
+<i>184</i>&nbsp;     * @param index The index (0 - 80) of the Tile to check
+<i>185</i>&nbsp;     * @return True: Tile is in note mode. False: Tile is in value mode or does not exist.
+<i>186</i>&nbsp;     */
+<i>187</i>&nbsp;    protected boolean tileIsNoteMode(int index) {
+<b class="fc"><i>188</i>&nbsp;        Tile tile = getTile(index);</b>
+<b class="fc"><i>189</i>&nbsp;        return tile != null &amp;&amp; tile.isNoteMode();</b>
+<i>190</i>&nbsp;    }
+<i>191</i>&nbsp;
+<i>192</i>&nbsp;    /**
+<i>193</i>&nbsp;     * Getter for whether or not a given Tile is an &#39;original&#39; Tile.
+<i>194</i>&nbsp;     *
+<i>195</i>&nbsp;     * @param index The index (0 - 80) of the Tile to check
+<i>196</i>&nbsp;     * @return True: Tile is an &#39;original&#39; Tile. False: Tile is open to be changed or does not exist.
+<i>197</i>&nbsp;     */
+<i>198</i>&nbsp;    protected boolean tileIsOrig(int index) {
+<b class="fc"><i>199</i>&nbsp;        Tile tile = getTile(index);</b>
+<b class="fc"><i>200</i>&nbsp;        return tile != null &amp;&amp; tile.isOrig();</b>
+<i>201</i>&nbsp;    }
+<i>202</i>&nbsp;
+<i>203</i>&nbsp;    /**
+<i>204</i>&nbsp;     * @return An Array of all the tiles in the board.
+<i>205</i>&nbsp;     */
+<i>206</i>&nbsp;    protected Tile[] getTiles() {
+<b class="fc"><i>207</i>&nbsp;        return tiles;</b>
+<i>208</i>&nbsp;    }
+<i>209</i>&nbsp;
+<i>210</i>&nbsp;    /**
+<i>211</i>&nbsp;     * @return An array of all the rows in the board.
+<i>212</i>&nbsp;     */
+<i>213</i>&nbsp;    protected House[] getRows() {
+<b class="fc"><i>214</i>&nbsp;        return rows;</b>
+<i>215</i>&nbsp;    }
+<i>216</i>&nbsp;
+<i>217</i>&nbsp;    /**
+<i>218</i>&nbsp;     * @return An array of all the columns in the board.
+<i>219</i>&nbsp;     */
+<i>220</i>&nbsp;    protected House[] getColumns() {
+<b class="fc"><i>221</i>&nbsp;        return columns;</b>
+<i>222</i>&nbsp;    }
+<i>223</i>&nbsp;
+<i>224</i>&nbsp;    /**
+<i>225</i>&nbsp;     * @return An array of all the zones in the board.
+<i>226</i>&nbsp;     */
+<i>227</i>&nbsp;    protected House[] getZones() {
+<b class="fc"><i>228</i>&nbsp;        return zones;</b>
+<i>229</i>&nbsp;    }
+<i>230</i>&nbsp;
+<i>231</i>&nbsp;    /**
+<i>232</i>&nbsp;     * Getter for the current board state. Tile value/notes returned as a list of Integers.
+<i>233</i>&nbsp;     *
+<i>234</i>&nbsp;     * @return list of value/notes for each Tile in the board
+<i>235</i>&nbsp;     */
+<i>236</i>&nbsp;    protected LinkedList[] getBoard() {
+<b class="fc"><i>237</i>&nbsp;        LinkedList[] list = new LinkedList[tiles.length];</b>
+<b class="fc"><i>238</i>&nbsp;        for (int i = 0; i &lt; list.length; ++i) {</b>
+<b class="fc"><i>239</i>&nbsp;            list[i] = getTileNotesOrValue(i);</b>
+<i>240</i>&nbsp;        }
+<b class="fc"><i>241</i>&nbsp;        return list;</b>
+<i>242</i>&nbsp;    }
+<i>243</i>&nbsp;
+<i>244</i>&nbsp;    /**
+<i>245</i>&nbsp;     * @return A list of all Tiles that currently are assigned the wrong value in the board.
+<i>246</i>&nbsp;     */
+<i>247</i>&nbsp;    protected LinkedList&lt;Tile&gt; getWrongTiles() {
+<b class="fc"><i>248</i>&nbsp;        LinkedList&lt;Tile&gt; wrongTiles = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>249</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
+<b class="fc"><i>250</i>&nbsp;            Tile tile = getTile(i);</b>
+<b class="fc"><i>251</i>&nbsp;            int solvedValue = getSolutionTile(i);</b>
+<b class="fc"><i>252</i>&nbsp;            if (tile.getValue() == 0 || tile.getValue() != solvedValue) {</b>
+<b class="fc"><i>253</i>&nbsp;                wrongTiles.add(tile);</b>
+<i>254</i>&nbsp;            }
+<i>255</i>&nbsp;        }
+<b class="fc"><i>256</i>&nbsp;        return wrongTiles;</b>
+<i>257</i>&nbsp;    }
+<i>258</i>&nbsp;
+<i>259</i>&nbsp;    /**
+<i>260</i>&nbsp;     * @return True if every Tile on the board has the correct value, otherwise False.
+<i>261</i>&nbsp;     */
+<i>262</i>&nbsp;    protected boolean isGameOver() {
+<b class="fc"><i>263</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
+<b class="fc"><i>264</i>&nbsp;            if (getTile(i).getValue() != getSolutionTile(i)) {</b>
+<b class="fc"><i>265</i>&nbsp;                return false;</b>
+<i>266</i>&nbsp;            }
+<i>267</i>&nbsp;        }
+<b class="fc"><i>268</i>&nbsp;        return true;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * @return The time spent on this game so far. String format will be &quot;(m)m:ss&quot;.
+<i>273</i>&nbsp;     */
+<i>274</i>&nbsp;    protected String getTime() {
+<b class="fc"><i>275</i>&nbsp;        return timeElapsed;</b>
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;    //endregion
+<i>278</i>&nbsp;
+<i>279</i>&nbsp;    //region Setters
 <i>280</i>&nbsp;
-<i>281</i>&nbsp;    //region Setters
-<i>282</i>&nbsp;
-<i>283</i>&nbsp;    /**
-<i>284</i>&nbsp;     * This updates a specific Tile with the desired value/note (depending on its mode).
-<i>285</i>&nbsp;     *
-<i>286</i>&nbsp;     * @param position The index (0 - 80) of the Tile to update
-<i>287</i>&nbsp;     * @param value    The new value/note for the Tile
-<i>288</i>&nbsp;     */
-<i>289</i>&nbsp;    protected void updateTile(int position, int value) {
-<b class="fc"><i>290</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
-<b class="fc"><i>291</i>&nbsp;            getTile(position).update(value);</b>
-<i>292</i>&nbsp;        }
-<b class="fc"><i>293</i>&nbsp;    }</b>
-<i>294</i>&nbsp;
-<i>295</i>&nbsp;    /**
-<i>296</i>&nbsp;     * This removes all values and hints from the selected Tile.
-<i>297</i>&nbsp;     *
-<i>298</i>&nbsp;     * @param position The index (0 - 80) of the Tile to clear
-<i>299</i>&nbsp;     */
-<i>300</i>&nbsp;    protected void clearTile(int position) {
-<b class="fc"><i>301</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
-<b class="fc"><i>302</i>&nbsp;            getTile(position).clear();</b>
-<i>303</i>&nbsp;        }
-<b class="fc"><i>304</i>&nbsp;    }</b>
-<i>305</i>&nbsp;
-<i>306</i>&nbsp;    /**
-<i>307</i>&nbsp;     * This toggles the mode of the selected Tile between Note Mode and Value Mode. If it is one, it will switch to
-<i>308</i>&nbsp;     * the other.
-<i>309</i>&nbsp;     *
-<i>310</i>&nbsp;     * @param position The index (0 - 80) of the Tile to toggle the mode of.
-<i>311</i>&nbsp;     */
-<i>312</i>&nbsp;    protected void toggleMode(int position) {
-<b class="fc"><i>313</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
-<b class="fc"><i>314</i>&nbsp;            getTile(position).toggleMode();</b>
-<i>315</i>&nbsp;        }
-<b class="fc"><i>316</i>&nbsp;    }</b>
-<i>317</i>&nbsp;
-<i>318</i>&nbsp;    /**
-<i>319</i>&nbsp;     * This will randomly select one Tile which does not currently have the correct value and it will assign it the
-<i>320</i>&nbsp;     * value it should have according to the solution array. It will make that Tile an &quot;original&quot; Tile so that it
-<i>321</i>&nbsp;     * cannot be changed later.
-<i>322</i>&nbsp;     *
-<i>323</i>&nbsp;     * @return The index (0 - 80) of the Tile that was set. -1 if no Tile was set.
-<i>324</i>&nbsp;     */
-<i>325</i>&nbsp;    protected int useHint() {
-<b class="fc"><i>326</i>&nbsp;        LinkedList&lt;Tile&gt; wrongTiles = getWrongTiles();</b>
-<b class="fc"><i>327</i>&nbsp;        if (wrongTiles.size() &gt; 0) {</b>
-<b class="fc"><i>328</i>&nbsp;            Tile tile = wrongTiles.get(randGen.nextInt(wrongTiles.size()));</b>
-<b class="fc"><i>329</i>&nbsp;            int index = tile.getIndex();</b>
-<b class="fc"><i>330</i>&nbsp;            if (tile.isNoteMode()) {</b>
-<b class="nc"><i>331</i>&nbsp;                tile.toggleMode();</b>
-<i>332</i>&nbsp;            }
-<b class="fc"><i>333</i>&nbsp;            tile.update(getSolutionTile(index));</b>
-<b class="fc"><i>334</i>&nbsp;            tile.setOrig(true);</b>
-<b class="fc"><i>335</i>&nbsp;            return index;</b>
-<i>336</i>&nbsp;        }
-<b class="fc"><i>337</i>&nbsp;        return -1;</b>
-<i>338</i>&nbsp;    }
-<i>339</i>&nbsp;
-<i>340</i>&nbsp;    /**
-<i>341</i>&nbsp;     * This function will solve the game according to the saved solution.
-<i>342</i>&nbsp;     */
-<i>343</i>&nbsp;    protected void solve() {
-<b class="fc"><i>344</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
-<b class="fc"><i>345</i>&nbsp;            Tile tile = getTile(i);</b>
-<b class="fc"><i>346</i>&nbsp;            if (tile.isNoteMode()) {</b>
-<b class="fc"><i>347</i>&nbsp;                tile.toggleMode();</b>
-<i>348</i>&nbsp;            }
-<b class="fc"><i>349</i>&nbsp;            if (tile.getValue() != getSolutionTile(i)) {</b>
-<b class="fc"><i>350</i>&nbsp;                tile.update(getSolutionTile(i));</b>
-<i>351</i>&nbsp;            }
-<i>352</i>&nbsp;        }
-<b class="fc"><i>353</i>&nbsp;    }</b>
-<i>354</i>&nbsp;    //endregion
-<i>355</i>&nbsp;
-<i>356</i>&nbsp;    //region Save Game Methods
-<i>357</i>&nbsp;
-<i>358</i>&nbsp;    /**
-<i>359</i>&nbsp;     * This function will serialize the current time, difficulty, solution board, and Tile states
-<i>360</i>&nbsp;     * as a single JSONObject.
-<i>361</i>&nbsp;     *
-<i>362</i>&nbsp;     * @param currentTime The current time spent on the game in the format of &quot;(m)m:ss&quot;
-<i>363</i>&nbsp;     * @return A JSON Object representing the current state of the game.
-<i>364</i>&nbsp;     */
-<i>365</i>&nbsp;    protected JSONObject save(String currentTime) {
-<b class="fc"><i>366</i>&nbsp;        JSONObject jsonObject = new JSONObject();</b>
-<i>367</i>&nbsp;        try {
-<b class="fc"><i>368</i>&nbsp;            jsonObject.put(jsonTimeId, currentTime);</b>
-<b class="fc"><i>369</i>&nbsp;            jsonObject.put(jsonDifficultyId, difficulty);</b>
-<i>370</i>&nbsp;
-<b class="fc"><i>371</i>&nbsp;            JSONArray solutionArray = new JSONArray();</b>
-<b class="fc"><i>372</i>&nbsp;            for (int solution_value : solution) {</b>
-<b class="fc"><i>373</i>&nbsp;                solutionArray.put(solution_value);</b>
-<i>374</i>&nbsp;            }
-<b class="fc"><i>375</i>&nbsp;            jsonObject.put(jsonSolutionId, solutionArray);</b>
-<i>376</i>&nbsp;
-<b class="fc"><i>377</i>&nbsp;            JSONArray tilesArray = new JSONArray();</b>
-<b class="fc"><i>378</i>&nbsp;            for (Tile tile : tiles) {</b>
-<b class="fc"><i>379</i>&nbsp;                tilesArray.put(tile.getJSON());</b>
-<i>380</i>&nbsp;            }
-<b class="fc"><i>381</i>&nbsp;            jsonObject.put(jsonTilesId, tilesArray);</b>
-<b class="nc"><i>382</i>&nbsp;        } catch (JSONException e) {</b>
-<b class="nc"><i>383</i>&nbsp;            e.printStackTrace();</b>
-<b class="fc"><i>384</i>&nbsp;        }</b>
-<b class="fc"><i>385</i>&nbsp;        return jsonObject;</b>
-<i>386</i>&nbsp;    }
-<i>387</i>&nbsp;    //endregion
-<i>388</i>&nbsp;
-<i>389</i>&nbsp;    //region Load Game Methods
+<i>281</i>&nbsp;    /**
+<i>282</i>&nbsp;     * This updates a specific Tile with the desired value/note (depending on its mode).
+<i>283</i>&nbsp;     *
+<i>284</i>&nbsp;     * @param position The index (0 - 80) of the Tile to update
+<i>285</i>&nbsp;     * @param value    The new value/note for the Tile
+<i>286</i>&nbsp;     * @return The new values of the Tile, or null if the index is &lt; 0 or &gt; 80
+<i>287</i>&nbsp;     */
+<i>288</i>&nbsp;    protected LinkedList&lt;Integer&gt; updateTile(int position, int value) {
+<b class="fc"><i>289</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
+<b class="fc"><i>290</i>&nbsp;            Tile tile = getTile(position);</b>
+<b class="fc"><i>291</i>&nbsp;            tile.update(value);</b>
+<b class="fc"><i>292</i>&nbsp;            return tile.getNotesOrValue();</b>
+<i>293</i>&nbsp;        }
+<b class="fc"><i>294</i>&nbsp;        return null;</b>
+<i>295</i>&nbsp;    }
+<i>296</i>&nbsp;
+<i>297</i>&nbsp;    /**
+<i>298</i>&nbsp;     * This removes all values and hints from the selected Tile.
+<i>299</i>&nbsp;     *
+<i>300</i>&nbsp;     * @param position The index (0 - 80) of the Tile to clear
+<i>301</i>&nbsp;     * @return The new values of the Tile, or null if the index is &lt; 0 or &gt; 80
+<i>302</i>&nbsp;     */
+<i>303</i>&nbsp;    protected LinkedList&lt;Integer&gt; clearTile(int position) {
+<b class="fc"><i>304</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
+<b class="fc"><i>305</i>&nbsp;            Tile tile = getTile(position);</b>
+<b class="fc"><i>306</i>&nbsp;            getTile(position).clear();</b>
+<b class="fc"><i>307</i>&nbsp;            return tile.getNotesOrValue();</b>
+<i>308</i>&nbsp;        }
+<b class="fc"><i>309</i>&nbsp;        return null;</b>
+<i>310</i>&nbsp;    }
+<i>311</i>&nbsp;
+<i>312</i>&nbsp;    /**
+<i>313</i>&nbsp;     * This toggles the mode of the selected Tile between Note Mode and Value Mode. If it is one, it will switch to
+<i>314</i>&nbsp;     * the other.
+<i>315</i>&nbsp;     *
+<i>316</i>&nbsp;     * @param position The index (0 - 80) of the Tile to toggle the mode of.
+<i>317</i>&nbsp;     * @return True if Tile exists (index is valid) and note mode toggled, false otherwise
+<i>318</i>&nbsp;     */
+<i>319</i>&nbsp;    protected boolean toggleNoteMode(int position) {
+<b class="fc"><i>320</i>&nbsp;        if (position &gt; -1 &amp;&amp; position &lt; boardSize) {</b>
+<b class="fc"><i>321</i>&nbsp;            getTile(position).toggleMode();</b>
+<b class="fc"><i>322</i>&nbsp;            return true;</b>
+<i>323</i>&nbsp;        }
+<b class="fc"><i>324</i>&nbsp;        return false;</b>
+<i>325</i>&nbsp;    }
+<i>326</i>&nbsp;
+<i>327</i>&nbsp;    /**
+<i>328</i>&nbsp;     * This will randomly select one Tile which does not currently have the correct value and it will assign it the
+<i>329</i>&nbsp;     * value it should have according to the solution array. It will make that Tile an &quot;original&quot; Tile so that it
+<i>330</i>&nbsp;     * cannot be changed later.
+<i>331</i>&nbsp;     *
+<i>332</i>&nbsp;     * @return The index (0 - 80) of the Tile that was set. -1 if no Tile was set.
+<i>333</i>&nbsp;     */
+<i>334</i>&nbsp;    protected int useHint() {
+<b class="fc"><i>335</i>&nbsp;        LinkedList&lt;Tile&gt; wrongTiles = getWrongTiles();</b>
+<b class="fc"><i>336</i>&nbsp;        if (wrongTiles.size() &gt; 0) {</b>
+<b class="fc"><i>337</i>&nbsp;            Tile tile = wrongTiles.get(randGen.nextInt(wrongTiles.size()));</b>
+<b class="fc"><i>338</i>&nbsp;            int index = tile.getIndex();</b>
+<b class="fc"><i>339</i>&nbsp;            if (tile.isNoteMode()) {</b>
+<b class="nc"><i>340</i>&nbsp;                tile.toggleMode();</b>
+<i>341</i>&nbsp;            }
+<b class="fc"><i>342</i>&nbsp;            tile.update(getSolutionTile(index));</b>
+<b class="fc"><i>343</i>&nbsp;            tile.setOrig(true);</b>
+<b class="fc"><i>344</i>&nbsp;            return index;</b>
+<i>345</i>&nbsp;        }
+<b class="fc"><i>346</i>&nbsp;        return -1;</b>
+<i>347</i>&nbsp;    }
+<i>348</i>&nbsp;
+<i>349</i>&nbsp;    /**
+<i>350</i>&nbsp;     * This function will solve the game according to the saved solution.
+<i>351</i>&nbsp;     *
+<i>352</i>&nbsp;     * @return True if the game was not already solved and now has been solve, False otherwise.
+<i>353</i>&nbsp;     */
+<i>354</i>&nbsp;    protected boolean solve() {
+<b class="fc"><i>355</i>&nbsp;        boolean nowSolved = false;</b>
+<b class="fc"><i>356</i>&nbsp;        for (int i = 0; i &lt; tiles.length; ++i) {</b>
+<b class="fc"><i>357</i>&nbsp;            Tile tile = getTile(i);</b>
+<b class="fc"><i>358</i>&nbsp;            if (tile.isNoteMode()) {</b>
+<b class="fc"><i>359</i>&nbsp;                tile.toggleMode();</b>
+<i>360</i>&nbsp;            }
+<b class="fc"><i>361</i>&nbsp;            if (tile.getValue() != getSolutionTile(i)) {</b>
+<b class="fc"><i>362</i>&nbsp;                tile.update(getSolutionTile(i));</b>
+<b class="fc"><i>363</i>&nbsp;                nowSolved = true;</b>
+<i>364</i>&nbsp;            }
+<i>365</i>&nbsp;        }
+<b class="fc"><i>366</i>&nbsp;        return nowSolved;</b>
+<i>367</i>&nbsp;    }
+<i>368</i>&nbsp;    //endregion
+<i>369</i>&nbsp;
+<i>370</i>&nbsp;    //region Save Game Methods
+<i>371</i>&nbsp;
+<i>372</i>&nbsp;    /**
+<i>373</i>&nbsp;     * This function will serialize the current time, difficulty, solution board, and Tile states
+<i>374</i>&nbsp;     * as a single JSONObject.
+<i>375</i>&nbsp;     *
+<i>376</i>&nbsp;     * @param currentTime The current time spent on the game in the format of &quot;(m)m:ss&quot;
+<i>377</i>&nbsp;     * @return A JSON Object representing the current state of the game.
+<i>378</i>&nbsp;     */
+<i>379</i>&nbsp;    protected JSONObject save(String currentTime) {
+<b class="fc"><i>380</i>&nbsp;        JSONObject jsonObject = new JSONObject();</b>
+<i>381</i>&nbsp;        try {
+<b class="fc"><i>382</i>&nbsp;            jsonObject.put(jsonTimeId, currentTime);</b>
+<b class="fc"><i>383</i>&nbsp;            jsonObject.put(jsonDifficultyId, difficulty);</b>
+<i>384</i>&nbsp;
+<b class="fc"><i>385</i>&nbsp;            JSONArray solutionArray = new JSONArray();</b>
+<b class="fc"><i>386</i>&nbsp;            for (int solution_value : solution) {</b>
+<b class="fc"><i>387</i>&nbsp;                solutionArray.put(solution_value);</b>
+<i>388</i>&nbsp;            }
+<b class="fc"><i>389</i>&nbsp;            jsonObject.put(jsonSolutionId, solutionArray);</b>
 <i>390</i>&nbsp;
-<i>391</i>&nbsp;    /**
-<i>392</i>&nbsp;     * To load an old game, call this function after initializing the Board.
-<i>393</i>&nbsp;     *
-<i>394</i>&nbsp;     * @param jsonObject JSON representation of the entire Board.
-<i>395</i>&nbsp;     * @return the difficulty level of the game as determined by the provided JSON Object.
-<i>396</i>&nbsp;     */
-<i>397</i>&nbsp;    protected int loadGame(JSONObject jsonObject) {
-<i>398</i>&nbsp;        try {
-<i>399</i>&nbsp;            // Try to load values from JSON
-<b class="fc"><i>400</i>&nbsp;            int tempDifficulty = jsonObject.getInt(jsonDifficultyId);</b>
-<b class="fc"><i>401</i>&nbsp;            String tempTimeElapsed = jsonObject.getString(jsonTimeId);</b>
-<b class="fc"><i>402</i>&nbsp;            int[] tempSolution = new int[boardSize];</b>
-<b class="fc"><i>403</i>&nbsp;            Tile[] tempTiles = new Tile[boardSize];</b>
-<b class="fc"><i>404</i>&nbsp;            JSONArray jsonSolutionArray = jsonObject.getJSONArray(jsonSolutionId);</b>
-<b class="fc"><i>405</i>&nbsp;            JSONArray jsonTileArray = jsonObject.getJSONArray(jsonTilesId);</b>
-<b class="fc"><i>406</i>&nbsp;            for (int i = 0; i &lt; boardSize; ++i) {</b>
-<b class="fc"><i>407</i>&nbsp;                tempSolution[i] = jsonSolutionArray.getInt(i);</b>
-<b class="fc"><i>408</i>&nbsp;                tempTiles[i] = loadTile(jsonTileArray.getJSONObject(i));</b>
-<i>409</i>&nbsp;            }
-<i>410</i>&nbsp;
-<i>411</i>&nbsp;            // JSON loading succeeded, so now load values
-<b class="fc"><i>412</i>&nbsp;            difficulty = tempDifficulty;</b>
-<b class="fc"><i>413</i>&nbsp;            timeElapsed = tempTimeElapsed;</b>
-<b class="fc"><i>414</i>&nbsp;            System.arraycopy(tempSolution, 0, solution, 0, boardSize);</b>
-<b class="fc"><i>415</i>&nbsp;            System.arraycopy(tempTiles, 0, tiles, 0, boardSize);</b>
-<b class="fc"><i>416</i>&nbsp;            for (Tile t : tiles) {</b>
-<b class="fc"><i>417</i>&nbsp;                t.setHouses(getRow(t.getRowNumber()), getColumn(t.getColumnNumber()), getZone(t.getZoneNumber()));</b>
-<i>418</i>&nbsp;            }
-<b class="fc"><i>419</i>&nbsp;            return difficulty;</b>
-<b class="fc"><i>420</i>&nbsp;        } catch (JSONException ignored) {</b>
-<b class="fc"><i>421</i>&nbsp;            return -1;</b>
-<i>422</i>&nbsp;        }
-<i>423</i>&nbsp;    }
+<b class="fc"><i>391</i>&nbsp;            JSONArray tilesArray = new JSONArray();</b>
+<b class="fc"><i>392</i>&nbsp;            for (Tile tile : tiles) {</b>
+<b class="fc"><i>393</i>&nbsp;                tilesArray.put(tile.getJSON());</b>
+<i>394</i>&nbsp;            }
+<b class="fc"><i>395</i>&nbsp;            jsonObject.put(jsonTilesId, tilesArray);</b>
+<b class="nc"><i>396</i>&nbsp;        } catch (JSONException e) {</b>
+<b class="nc"><i>397</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>398</i>&nbsp;        }</b>
+<b class="fc"><i>399</i>&nbsp;        return jsonObject;</b>
+<i>400</i>&nbsp;    }
+<i>401</i>&nbsp;    //endregion
+<i>402</i>&nbsp;
+<i>403</i>&nbsp;    //region Load Game Methods
+<i>404</i>&nbsp;
+<i>405</i>&nbsp;    /**
+<i>406</i>&nbsp;     * To load an old game, call this function after initializing the Board.
+<i>407</i>&nbsp;     *
+<i>408</i>&nbsp;     * @param jsonObject JSON representation of the entire Board.
+<i>409</i>&nbsp;     * @return the difficulty level of the game as determined by the provided JSON Object.
+<i>410</i>&nbsp;     */
+<i>411</i>&nbsp;    protected int loadGame(JSONObject jsonObject) {
+<i>412</i>&nbsp;        try {
+<i>413</i>&nbsp;            // Try to load values from JSON
+<b class="fc"><i>414</i>&nbsp;            int tempDifficulty = jsonObject.getInt(jsonDifficultyId);</b>
+<b class="fc"><i>415</i>&nbsp;            String tempTimeElapsed = jsonObject.getString(jsonTimeId);</b>
+<b class="fc"><i>416</i>&nbsp;            int[] tempSolution = new int[boardSize];</b>
+<b class="fc"><i>417</i>&nbsp;            Tile[] tempTiles = new Tile[boardSize];</b>
+<b class="fc"><i>418</i>&nbsp;            JSONArray jsonSolutionArray = jsonObject.getJSONArray(jsonSolutionId);</b>
+<b class="fc"><i>419</i>&nbsp;            JSONArray jsonTileArray = jsonObject.getJSONArray(jsonTilesId);</b>
+<b class="fc"><i>420</i>&nbsp;            for (int i = 0; i &lt; boardSize; ++i) {</b>
+<b class="fc"><i>421</i>&nbsp;                tempSolution[i] = jsonSolutionArray.getInt(i);</b>
+<b class="fc"><i>422</i>&nbsp;                tempTiles[i] = loadTile(jsonTileArray.getJSONObject(i));</b>
+<i>423</i>&nbsp;            }
 <i>424</i>&nbsp;
-<i>425</i>&nbsp;    /**
-<i>426</i>&nbsp;     * This function will load a single Tile from a saved JSON state.
-<i>427</i>&nbsp;     *
-<i>428</i>&nbsp;     * @param tileState The saved state in JSON format.
-<i>429</i>&nbsp;     * @return The loaded Tile.
-<i>430</i>&nbsp;     * @throws JSONException if JSON format is incorrect.
-<i>431</i>&nbsp;     */
-<i>432</i>&nbsp;    protected Tile loadTile(JSONObject tileState) throws JSONException {
-<b class="nc"><i>433</i>&nbsp;        return new Tile(houseSize, tileState);</b>
-<i>434</i>&nbsp;    }
-<i>435</i>&nbsp;
-<i>436</i>&nbsp;    //endregion
-<i>437</i>&nbsp;
-<i>438</i>&nbsp;    //region Game Start Methods
-<i>439</i>&nbsp;
-<i>440</i>&nbsp;    /**
-<i>441</i>&nbsp;     * To create a new game, but not to load an old game, call this function before anything else.
-<i>442</i>&nbsp;     * Returns the actual difficulty level (useful if &#39;Random&#39;). 1 = Easy, 2 = Medium, 3 = Hard.
-<i>443</i>&nbsp;     *
-<i>444</i>&nbsp;     * @param _difficulty difficulty level for the game
-<i>445</i>&nbsp;     * @return difficulty level for the game
-<i>446</i>&nbsp;     */
-<i>447</i>&nbsp;    protected int newGame(int _difficulty) {
-<b class="fc"><i>448</i>&nbsp;        logger.logDebugMessage(&quot;Inside newGame().&quot;);</b>
-<b class="fc"><i>449</i>&nbsp;        difficulty = _difficulty;</b>
-<b class="fc"><i>450</i>&nbsp;        timeElapsed = &quot;00:00&quot;;</b>
+<i>425</i>&nbsp;            // JSON loading succeeded, so now load values
+<b class="fc"><i>426</i>&nbsp;            difficulty = tempDifficulty;</b>
+<b class="fc"><i>427</i>&nbsp;            timeElapsed = tempTimeElapsed;</b>
+<b class="fc"><i>428</i>&nbsp;            System.arraycopy(tempSolution, 0, solution, 0, boardSize);</b>
+<b class="fc"><i>429</i>&nbsp;            System.arraycopy(tempTiles, 0, tiles, 0, boardSize);</b>
+<b class="fc"><i>430</i>&nbsp;            for (Tile t : tiles) {</b>
+<b class="fc"><i>431</i>&nbsp;                t.setHouses(getRow(t.getRowNumber()), getColumn(t.getColumnNumber()), getZone(t.getZoneNumber()));</b>
+<i>432</i>&nbsp;            }
+<b class="fc"><i>433</i>&nbsp;            return difficulty;</b>
+<b class="fc"><i>434</i>&nbsp;        } catch (JSONException ignored) {</b>
+<b class="fc"><i>435</i>&nbsp;            return -1;</b>
+<i>436</i>&nbsp;        }
+<i>437</i>&nbsp;    }
+<i>438</i>&nbsp;
+<i>439</i>&nbsp;    /**
+<i>440</i>&nbsp;     * This function will load a single Tile from a saved JSON state.
+<i>441</i>&nbsp;     *
+<i>442</i>&nbsp;     * @param tileState The saved state in JSON format.
+<i>443</i>&nbsp;     * @return The loaded Tile.
+<i>444</i>&nbsp;     * @throws JSONException if JSON format is incorrect.
+<i>445</i>&nbsp;     */
+<i>446</i>&nbsp;    protected Tile loadTile(JSONObject tileState) throws JSONException {
+<b class="nc"><i>447</i>&nbsp;        return new Tile(houseSize, tileState);</b>
+<i>448</i>&nbsp;    }
+<i>449</i>&nbsp;
+<i>450</i>&nbsp;    //endregion
 <i>451</i>&nbsp;
-<i>452</i>&nbsp;        // if &#39;Random&#39;, select between easy, medium, and hard
-<b class="fc"><i>453</i>&nbsp;        if (difficulty &lt; 1 || difficulty &gt; 3) {</b>
-<b class="fc"><i>454</i>&nbsp;            difficulty = randGen.nextInt(3) + 1;</b>
-<i>455</i>&nbsp;        }
-<i>456</i>&nbsp;
-<b class="fc"><i>457</i>&nbsp;        buildCompleteBoard();</b>
-<b class="fc"><i>458</i>&nbsp;        digHoles(getNumberOfGivens(difficulty));</b>
-<b class="fc"><i>459</i>&nbsp;        checkBounds(getBound(difficulty));</b>
-<b class="fc"><i>460</i>&nbsp;        markOriginals();</b>
-<i>461</i>&nbsp;        //runSolver();
-<i>462</i>&nbsp;
-<b class="fc"><i>463</i>&nbsp;        return difficulty;</b>
-<i>464</i>&nbsp;    }
+<i>452</i>&nbsp;    //region Game Start Methods
+<i>453</i>&nbsp;
+<i>454</i>&nbsp;    /**
+<i>455</i>&nbsp;     * To create a new game, but not to load an old game, call this function before anything else.
+<i>456</i>&nbsp;     * Returns the actual difficulty level (useful if &#39;Random&#39;). 1 = Easy, 2 = Medium, 3 = Hard.
+<i>457</i>&nbsp;     *
+<i>458</i>&nbsp;     * @param _difficulty difficulty level for the game
+<i>459</i>&nbsp;     * @return difficulty level for the game
+<i>460</i>&nbsp;     */
+<i>461</i>&nbsp;    protected int newGame(int _difficulty) {
+<b class="fc"><i>462</i>&nbsp;        logger.logDebugMessage(&quot;Inside newGame().&quot;);</b>
+<b class="fc"><i>463</i>&nbsp;        difficulty = _difficulty;</b>
+<b class="fc"><i>464</i>&nbsp;        timeElapsed = &quot;00:00&quot;;</b>
 <i>465</i>&nbsp;
-<i>466</i>&nbsp;    /**
-<i>467</i>&nbsp;     * This function will generate a new, complete, valid board using a DFS algorithm to backtrack
-<i>468</i>&nbsp;     * when an invalid path is encountered. When finished, it will save the resultant values in the
-<i>469</i>&nbsp;     * solution array.
-<i>470</i>&nbsp;     *
-<i>471</i>&nbsp;     * @return True if initialization succeeds, false otherwise (i.e. stack becomes empty)
-<i>472</i>&nbsp;     */
-<i>473</i>&nbsp;    protected boolean buildCompleteBoard() {
-<i>474</i>&nbsp;        try {
-<b class="fc"><i>475</i>&nbsp;            logger.logDebugMessage(&quot;Inside buildCompleteBoard().&quot;);</b>
-<b class="fc"><i>476</i>&nbsp;            Stack&lt;Tile&gt; tileStack = new Stack&lt;&gt;();</b>
-<b class="fc"><i>477</i>&nbsp;            seedFirstTiles(tileStack);</b>
-<b class="fc"><i>478</i>&nbsp;            fillBoard_DFS(tileStack);</b>
-<b class="fc"><i>479</i>&nbsp;            saveBoardToSolution();</b>
-<b class="fc"><i>480</i>&nbsp;            return true;</b>
-<b class="fc"><i>481</i>&nbsp;        } catch (EmptyStackException e) {</b>
-<b class="fc"><i>482</i>&nbsp;            return false;</b>
-<i>483</i>&nbsp;        }
-<i>484</i>&nbsp;    }
-<i>485</i>&nbsp;
-<i>486</i>&nbsp;    /**
-<i>487</i>&nbsp;     * This function will pick a random Tile from each column and seed it with an initial value. This function should
-<i>488</i>&nbsp;     * only be used during setup on an empty Board.
-<i>489</i>&nbsp;     * // TODO: Does not currently check if Board is truly empty.
-<i>490</i>&nbsp;     *
-<i>491</i>&nbsp;     * @param tileStack The Stack of Tiles to be used during the DFS portion of initialization. Each Tile seeded in
-<i>492</i>&nbsp;     *                  this function will be added to the provided Stack.
-<i>493</i>&nbsp;     */
-<i>494</i>&nbsp;    protected void seedFirstTiles(Stack&lt;Tile&gt; tileStack) {
-<i>495</i>&nbsp;        Tile tempTile;
-<b class="fc"><i>496</i>&nbsp;        for (int i = 0; i &lt; houseSize; ++i) {</b>
-<b class="fc"><i>497</i>&nbsp;            tempTile = getColumn(i).getMember(randGen.nextInt(houseSize));</b>
-<b class="fc"><i>498</i>&nbsp;            tempTile.tryInitValue(i + 1); // TODO: rename tryInitValue to seedInitValue (differentiate from other init)</b>
-<b class="fc"><i>499</i>&nbsp;            tileStack.add(tempTile);</b>
-<i>500</i>&nbsp;        }
-<b class="fc"><i>501</i>&nbsp;    }</b>
-<i>502</i>&nbsp;
-<i>503</i>&nbsp;    /**
-<i>504</i>&nbsp;     * This function will actually execute the DFS. It finds the starting point (based on the last seeded Tile), then
-<i>505</i>&nbsp;     * try to initialize the next Tile based on Board index. If the next Tile has already been visited, then it will be
-<i>506</i>&nbsp;     * skipped over and the search will continue with the next Tile based on Board index again. If the Tile cannot be
-<i>507</i>&nbsp;     * initialized, then the function will try a different value for the most recently visited Tile before this
-<i>508</i>&nbsp;     * (uninitializable) one. If there are no more Tiles to visit (i.e. all Tiles have been visited already) then the
-<i>509</i>&nbsp;     * DFS is finished.
-<i>510</i>&nbsp;     *
-<i>511</i>&nbsp;     * @param tileStack The Stack used to keep track of how many Tile have been visited and which was the most
-<i>512</i>&nbsp;     *                  recently visited Tile.
-<i>513</i>&nbsp;     */
-<i>514</i>&nbsp;    protected void fillBoard_DFS(Stack&lt;Tile&gt; tileStack) {
-<b class="fc"><i>515</i>&nbsp;        int currentIndex = incrementIndex_DFS(tileStack.peek().getIndex());</b>
-<b class="fc"><i>516</i>&nbsp;        while (keepSearching_DFS(tileStack)) {</b>
-<b class="fc"><i>517</i>&nbsp;            currentIndex = executeOneStep_DFS(currentIndex, tileStack);</b>
-<i>518</i>&nbsp;        }
-<b class="fc"><i>519</i>&nbsp;    }</b>
-<i>520</i>&nbsp;
-<i>521</i>&nbsp;    /**
-<i>522</i>&nbsp;     * This function examines the tileStack to determine whether or not the DFS should keep searching for Tiles to
-<i>523</i>&nbsp;     * initialize.
+<i>466</i>&nbsp;        // if &#39;Random&#39;, select between easy, medium, and hard
+<b class="fc"><i>467</i>&nbsp;        if (difficulty &lt; 1 || difficulty &gt; 3) {</b>
+<b class="fc"><i>468</i>&nbsp;            difficulty = randGen.nextInt(3) + 1;</b>
+<i>469</i>&nbsp;        }
+<i>470</i>&nbsp;
+<b class="fc"><i>471</i>&nbsp;        buildCompleteBoard();</b>
+<b class="fc"><i>472</i>&nbsp;        digHoles(getNumberOfGivens(difficulty));</b>
+<b class="fc"><i>473</i>&nbsp;        checkBounds(getBound(difficulty));</b>
+<b class="fc"><i>474</i>&nbsp;        markOriginals();</b>
+<i>475</i>&nbsp;        //runSolver();
+<i>476</i>&nbsp;
+<b class="fc"><i>477</i>&nbsp;        return difficulty;</b>
+<i>478</i>&nbsp;    }
+<i>479</i>&nbsp;
+<i>480</i>&nbsp;    /**
+<i>481</i>&nbsp;     * This function will generate a new, complete, valid board using a DFS algorithm to backtrack
+<i>482</i>&nbsp;     * when an invalid path is encountered. When finished, it will save the resultant values in the
+<i>483</i>&nbsp;     * solution array.
+<i>484</i>&nbsp;     *
+<i>485</i>&nbsp;     * @return True if initialization succeeds, false otherwise (i.e. stack becomes empty)
+<i>486</i>&nbsp;     */
+<i>487</i>&nbsp;    protected boolean buildCompleteBoard() {
+<i>488</i>&nbsp;        try {
+<b class="fc"><i>489</i>&nbsp;            logger.logDebugMessage(&quot;Inside buildCompleteBoard().&quot;);</b>
+<b class="fc"><i>490</i>&nbsp;            Stack&lt;Tile&gt; tileStack = new Stack&lt;&gt;();</b>
+<b class="fc"><i>491</i>&nbsp;            seedFirstTiles(tileStack);</b>
+<b class="fc"><i>492</i>&nbsp;            fillBoard_DFS(tileStack);</b>
+<b class="fc"><i>493</i>&nbsp;            saveBoardToSolution();</b>
+<b class="fc"><i>494</i>&nbsp;            return true;</b>
+<b class="fc"><i>495</i>&nbsp;        } catch (EmptyStackException e) {</b>
+<b class="fc"><i>496</i>&nbsp;            return false;</b>
+<i>497</i>&nbsp;        }
+<i>498</i>&nbsp;    }
+<i>499</i>&nbsp;
+<i>500</i>&nbsp;    /**
+<i>501</i>&nbsp;     * This function will pick a random Tile from each column and seed it with an initial value. This function should
+<i>502</i>&nbsp;     * only be used during setup on an empty Board.
+<i>503</i>&nbsp;     * // TODO: Does not currently check if Board is truly empty.
+<i>504</i>&nbsp;     *
+<i>505</i>&nbsp;     * @param tileStack The Stack of Tiles to be used during the DFS portion of initialization. Each Tile seeded in
+<i>506</i>&nbsp;     *                  this function will be added to the provided Stack.
+<i>507</i>&nbsp;     */
+<i>508</i>&nbsp;    protected void seedFirstTiles(Stack&lt;Tile&gt; tileStack) {
+<i>509</i>&nbsp;        Tile tempTile;
+<b class="fc"><i>510</i>&nbsp;        for (int i = 0; i &lt; houseSize; ++i) {</b>
+<b class="fc"><i>511</i>&nbsp;            tempTile = getColumn(i).getMember(randGen.nextInt(houseSize));</b>
+<b class="fc"><i>512</i>&nbsp;            tempTile.tryInitValue(i + 1); // TODO: rename tryInitValue to seedInitValue (differentiate from other init)</b>
+<b class="fc"><i>513</i>&nbsp;            tileStack.add(tempTile);</b>
+<i>514</i>&nbsp;        }
+<b class="fc"><i>515</i>&nbsp;    }</b>
+<i>516</i>&nbsp;
+<i>517</i>&nbsp;    /**
+<i>518</i>&nbsp;     * This function will actually execute the DFS. It finds the starting point (based on the last seeded Tile), then
+<i>519</i>&nbsp;     * try to initialize the next Tile based on Board index. If the next Tile has already been visited, then it will be
+<i>520</i>&nbsp;     * skipped over and the search will continue with the next Tile based on Board index again. If the Tile cannot be
+<i>521</i>&nbsp;     * initialized, then the function will try a different value for the most recently visited Tile before this
+<i>522</i>&nbsp;     * (uninitializable) one. If there are no more Tiles to visit (i.e. all Tiles have been visited already) then the
+<i>523</i>&nbsp;     * DFS is finished.
 <i>524</i>&nbsp;     *
-<i>525</i>&nbsp;     * @param tileStack The Stack of Tiles to examine.
-<i>526</i>&nbsp;     * @return True if there are no more Tiles to initialize, False otherwise.
+<i>525</i>&nbsp;     * @param tileStack The Stack used to keep track of how many Tile have been visited and which was the most
+<i>526</i>&nbsp;     *                  recently visited Tile.
 <i>527</i>&nbsp;     */
-<i>528</i>&nbsp;    protected boolean keepSearching_DFS(Stack&lt;Tile&gt; tileStack) {
-<b class="fc"><i>529</i>&nbsp;        return tileStack.size() &lt;= tiles.length; //TODO: Should this really be &lt;=? Or just &lt;?</b>
-<i>530</i>&nbsp;    }
-<i>531</i>&nbsp;
-<i>532</i>&nbsp;    /**
-<i>533</i>&nbsp;     * This function attempts to execute a single step in the DFS that builds the Board. It first retrieves the next
-<i>534</i>&nbsp;     * Tile to initialize, then tries to initialize it. If the initialization succeeds, then the newly initialized
-<i>535</i>&nbsp;     * Tile will be added to the Tile Stack. If the initialization fails, then that means the Board is in an invalid
-<i>536</i>&nbsp;     * state and must try to re-initialize the most recently visited Tile with a new value. Right now, however, in
-<i>537</i>&nbsp;     * the case of failure, the most recently visited Tile will simply be prepared to be re-initialized.
+<i>528</i>&nbsp;    protected void fillBoard_DFS(Stack&lt;Tile&gt; tileStack) {
+<b class="fc"><i>529</i>&nbsp;        int currentIndex = incrementIndex_DFS(tileStack.peek().getIndex());</b>
+<b class="fc"><i>530</i>&nbsp;        while (keepSearching_DFS(tileStack)) {</b>
+<b class="fc"><i>531</i>&nbsp;            currentIndex = executeOneStep_DFS(currentIndex, tileStack);</b>
+<i>532</i>&nbsp;        }
+<b class="fc"><i>533</i>&nbsp;    }</b>
+<i>534</i>&nbsp;
+<i>535</i>&nbsp;    /**
+<i>536</i>&nbsp;     * This function examines the tileStack to determine whether or not the DFS should keep searching for Tiles to
+<i>537</i>&nbsp;     * initialize.
 <i>538</i>&nbsp;     *
-<i>539</i>&nbsp;     * @param index     The index of the most recently visited Tile, which may be either the top of the Stack or, if
-<i>540</i>&nbsp;     *                  a Tile has been prepped for re-initialization, a Tile recently popped off of the stack.
-<i>541</i>&nbsp;     * @param tileStack The Tile Stack used throughout the DFS.
-<i>542</i>&nbsp;     * @return The index of the most recently visited Tile.
-<i>543</i>&nbsp;     */
-<i>544</i>&nbsp;    protected int executeOneStep_DFS(int index, Stack&lt;Tile&gt; tileStack) {
-<b class="fc"><i>545</i>&nbsp;        Tile currentTile = getNextTile_DFS(index);</b>
-<b class="fc"><i>546</i>&nbsp;        if (currentTile.tryInitialize()) {</b>
-<b class="fc"><i>547</i>&nbsp;            tileStack.add(currentTile);</b>
-<b class="fc"><i>548</i>&nbsp;            return currentTile.getIndex();</b>
-<i>549</i>&nbsp;        } else {
-<b class="fc"><i>550</i>&nbsp;            currentTile.resetInitializationState(); // Reset state of Tile that failed to initialize</b>
-<b class="fc"><i>551</i>&nbsp;            Tile previousTile = tileStack.pop(); // Get last visited Tile and prep it to try next value</b>
-<b class="fc"><i>552</i>&nbsp;            previousTile.unVisit();</b>
-<b class="fc"><i>553</i>&nbsp;            return previousTile.getIndex();</b>
-<i>554</i>&nbsp;        }
-<i>555</i>&nbsp;    }
-<i>556</i>&nbsp;
-<i>557</i>&nbsp;    /**
-<i>558</i>&nbsp;     * This function returns the &quot;next&quot; index in the Board. If the current index corresponds to the last tile in the
-<i>559</i>&nbsp;     * Board, then the next index will be 0.
-<i>560</i>&nbsp;     *
-<i>561</i>&nbsp;     * @param index The current index to find the next from.
-<i>562</i>&nbsp;     * @return The next index in the Board.
-<i>563</i>&nbsp;     */
-<i>564</i>&nbsp;    protected int incrementIndex_DFS(int index) {
-<b class="fc"><i>565</i>&nbsp;        return (index == (tiles.length - 1)) ? 0 : index + 1;</b>
-<i>566</i>&nbsp;    }
-<i>567</i>&nbsp;
-<i>568</i>&nbsp;    /**
-<i>569</i>&nbsp;     * This function will return the next uninitialized Tile in the Board.
-<i>570</i>&nbsp;     *
-<i>571</i>&nbsp;     * @param index The index of the Tile to begin looking from (includes the Tile belonging to this index).
-<i>572</i>&nbsp;     * @return The next uninitialized Tile in the Board.
-<i>573</i>&nbsp;     */
-<i>574</i>&nbsp;    protected Tile getNextTile_DFS(int index) {
-<b class="fc"><i>575</i>&nbsp;        while (getTile(index).hasBeenVisited()) {</b>
-<b class="fc"><i>576</i>&nbsp;            index = incrementIndex_DFS(index);</b>
-<i>577</i>&nbsp;        }
-<b class="fc"><i>578</i>&nbsp;        return getTile(index);</b>
-<i>579</i>&nbsp;    }
-<i>580</i>&nbsp;
-<i>581</i>&nbsp;    /**
-<i>582</i>&nbsp;     * This function will save the current values of all Tiles as the correct solution for the Board. However, if any
-<i>583</i>&nbsp;     * Tiles are null or their values are empty, then this function will abort and no values will be saved.
-<i>584</i>&nbsp;     */
-<i>585</i>&nbsp;    protected void saveBoardToSolution() {
-<i>586</i>&nbsp;        // Make sure board is complete before saving it to solution
-<b class="fc"><i>587</i>&nbsp;        boolean boardComplete = true;</b>
-<b class="fc"><i>588</i>&nbsp;        for (int i = 0; i &lt; boardSize; ++i) {</b>
-<b class="fc"><i>589</i>&nbsp;            Tile tile = getTile(i);</b>
-<b class="fc"><i>590</i>&nbsp;            if (tile == null || tile.getValue() == 0) {</b>
-<b class="fc"><i>591</i>&nbsp;                boardComplete = false;</b>
-<b class="fc"><i>592</i>&nbsp;                break;</b>
-<i>593</i>&nbsp;            }
-<i>594</i>&nbsp;        }
-<i>595</i>&nbsp;        // If board IS complete, then go ahead and save it
-<b class="fc"><i>596</i>&nbsp;        if (boardComplete) {</b>
-<b class="fc"><i>597</i>&nbsp;            for (int i = 0; i &lt; boardSize; ++i) {</b>
-<b class="fc"><i>598</i>&nbsp;                solution[i] = getTile(i).getValue();</b>
-<i>599</i>&nbsp;            }
-<i>600</i>&nbsp;        }
-<b class="fc"><i>601</i>&nbsp;    }</b>
-<i>602</i>&nbsp;
-<i>603</i>&nbsp;    /**
-<i>604</i>&nbsp;     * Get the number of givens that the game should start with. (A &quot;given&quot; is an unchangeable Tile whose solution is
-<i>605</i>&nbsp;     * visible from the beginning of the game.)
-<i>606</i>&nbsp;     *
-<i>607</i>&nbsp;     * @param difficulty 1 = Easy, 2 = Medium, otherwise Hard.
-<i>608</i>&nbsp;     * @return 40 - 49 for Easy, 32 - 39 for Medium, 27 - 31 for Hard
-<i>609</i>&nbsp;     */
-<i>610</i>&nbsp;    protected int getNumberOfGivens(int difficulty) {
-<b class="fc"><i>611</i>&nbsp;        switch (difficulty) {</b>
-<i>612</i>&nbsp;            case 1: // easy
-<b class="fc"><i>613</i>&nbsp;                return Math.abs(randGen.nextInt(10)) + 40;</b>
-<i>614</i>&nbsp;            case 2: // medium
-<b class="fc"><i>615</i>&nbsp;                return Math.abs(randGen.nextInt(8)) + 32;</b>
-<i>616</i>&nbsp;            default:
-<b class="fc"><i>617</i>&nbsp;                return Math.abs(randGen.nextInt(5)) + 27;</b>
-<i>618</i>&nbsp;        }
-<i>619</i>&nbsp;    }
-<i>620</i>&nbsp;
-<i>621</i>&nbsp;    /**
-<i>622</i>&nbsp;     * Pick Holes in Board by randomly selecting a set of Tiles as the starting tiles, where the number of Tiles in
-<i>623</i>&nbsp;     * the set is determined by the difficulty level.
-<i>624</i>&nbsp;     *
-<i>625</i>&nbsp;     * @param numGivens The number of givens to begin the game with.
-<i>626</i>&nbsp;     */
-<i>627</i>&nbsp;    protected void digHoles(int numGivens) {
-<b class="fc"><i>628</i>&nbsp;        for (int i = numGivens; i &lt; boardSize; ++i) {</b>
-<b class="fc"><i>629</i>&nbsp;            int indexToDig = Math.abs(randGen.nextInt(boardSize));</b>
-<b class="fc"><i>630</i>&nbsp;            if (getTile(indexToDig).getValue() &gt; 0) {</b>
-<b class="fc"><i>631</i>&nbsp;                getTile(indexToDig).clear();</b>
-<i>632</i>&nbsp;            } else {
-<b class="fc"><i>633</i>&nbsp;                --i;</b>
-<i>634</i>&nbsp;            }
-<i>635</i>&nbsp;        }
-<b class="fc"><i>636</i>&nbsp;    }</b>
-<i>637</i>&nbsp;
-<i>638</i>&nbsp;    /**
-<i>639</i>&nbsp;     * This function returns the lower bound on the number of Tiles allowed in a row or column.
-<i>640</i>&nbsp;     *
-<i>641</i>&nbsp;     * @param difficulty 3 = Hard, 2 = Medium, otherwise Easy
-<i>642</i>&nbsp;     * @return 2 for Hard, 3 for Medium, 4 for Easy
-<i>643</i>&nbsp;     */
-<i>644</i>&nbsp;    protected int getBound(int difficulty) {
-<b class="fc"><i>645</i>&nbsp;        return (difficulty == 3) ? 2 : ((difficulty == 2) ? 3 : 4);</b>
-<i>646</i>&nbsp;    }
-<i>647</i>&nbsp;
-<i>648</i>&nbsp;    /**
-<i>649</i>&nbsp;     * This function makes sure that no Row or Column contains fewer Tiles than the boundary for the corresponding
-<i>650</i>&nbsp;     * difficulty level. Easy: boundary = 4. Medium: boundary = 3. Hard: boundary = 2.
-<i>651</i>&nbsp;     *
-<i>652</i>&nbsp;     * @param bound 3 = Hard, 2 = Medium, otherwise Easy
-<i>653</i>&nbsp;     */
-<i>654</i>&nbsp;    protected void checkBounds(int bound) {
-<b class="fc"><i>655</i>&nbsp;        Stack&lt;House&gt; highHouses = new Stack&lt;&gt;();</b>
-<b class="fc"><i>656</i>&nbsp;        Stack&lt;House&gt; lowHouses = new Stack&lt;&gt;();</b>
-<i>657</i>&nbsp;        // Check Rows
-<b class="fc"><i>658</i>&nbsp;        fillHighAndLowHouses(rows, highHouses, lowHouses, bound);</b>
-<b class="fc"><i>659</i>&nbsp;        adjustHousesToBounds(highHouses, lowHouses, bound, true);</b>
-<i>660</i>&nbsp;        // Check Columns
-<b class="fc"><i>661</i>&nbsp;        fillHighAndLowHouses(columns, highHouses, lowHouses, bound);</b>
-<b class="fc"><i>662</i>&nbsp;        adjustHousesToBounds(highHouses, lowHouses, bound, false);</b>
-<b class="fc"><i>663</i>&nbsp;    }</b>
-<i>664</i>&nbsp;
-<i>665</i>&nbsp;    /**
-<i>666</i>&nbsp;     * This function will fill the provided &quot;highHouse&quot; Stack with houses (from the provided array) that contain more
-<i>667</i>&nbsp;     * initialized Tiles than the provided minimum bound, and the &quot;lowHouse&quot; Stack with houses that contain fewer
-<i>668</i>&nbsp;     * initialized Tiles than the provided minimum bound.
-<i>669</i>&nbsp;     *
-<i>670</i>&nbsp;     * @param houses     The houses to divvy up into highHouse and lowHouse Stacks.
-<i>671</i>&nbsp;     * @param highHouses The Stack to contain Houses with more Tiles than the minimum bound.
-<i>672</i>&nbsp;     * @param lowHouses  The Stack to contain Houses with fewer Tiles than the minimum bound.
-<i>673</i>&nbsp;     * @param bound      The minimum bound.
-<i>674</i>&nbsp;     */
-<i>675</i>&nbsp;    protected void fillHighAndLowHouses(House[] houses, Stack&lt;House&gt; highHouses, Stack&lt;House&gt; lowHouses, int bound) {
-<b class="fc"><i>676</i>&nbsp;        if (highHouses != null &amp;&amp; lowHouses != null) {</b>
-<b class="fc"><i>677</i>&nbsp;            highHouses.clear();</b>
-<b class="fc"><i>678</i>&nbsp;            lowHouses.clear();</b>
-<b class="fc"><i>679</i>&nbsp;            for (House house : houses) {</b>
-<b class="fc"><i>680</i>&nbsp;                if (house.getValueCount() &gt; bound) {</b>
-<b class="fc"><i>681</i>&nbsp;                    highHouses.push(house);</b>
-<b class="fc"><i>682</i>&nbsp;                } else if (house.getValueCount() &lt; bound) {</b>
-<b class="fc"><i>683</i>&nbsp;                    lowHouses.push(house);</b>
-<i>684</i>&nbsp;                }
-<i>685</i>&nbsp;            }
-<i>686</i>&nbsp;        }
-<b class="fc"><i>687</i>&nbsp;    }</b>
-<i>688</i>&nbsp;
-<i>689</i>&nbsp;    /**
-<i>690</i>&nbsp;     * This function will raise the number of Tiles in all the Houses in the lowHouses Stack to the minimum bound. It
-<i>691</i>&nbsp;     * will do this by removing a Tile in one of the Houses in the highHouse Stack and adding a Tile to a House in
-<i>692</i>&nbsp;     * the lowHouse Stack along the complementary House (e.g. Row 1 is a high House and Row 2 is a low House. A Tile
-<i>693</i>&nbsp;     * in Column 3 of Row 1 is removed, and a Tile in Column 3 of Row 2 is added.)
-<i>694</i>&nbsp;     *
-<i>695</i>&nbsp;     * @param highHouses The Stack that contains Houses with more Tiles than the minimum bound.
-<i>696</i>&nbsp;     * @param lowHouses  The Stack that contains Houses with fewer Tiles than the minimum bound.
-<i>697</i>&nbsp;     * @param bound      The minimum bound.
-<i>698</i>&nbsp;     * @param isRow      Whether the Houses being adjusted are Rows or not.
-<i>699</i>&nbsp;     */
-<i>700</i>&nbsp;    protected void adjustHousesToBounds(Stack&lt;House&gt; highHouses, Stack&lt;House&gt; lowHouses, int bound, boolean isRow) {
-<b class="fc"><i>701</i>&nbsp;        House highHouse = highHouses.pop();</b>
-<b class="fc"><i>702</i>&nbsp;        LinkedList&lt;Tile&gt; highHouseTiles = highHouse.getValueTiles();</b>
-<i>703</i>&nbsp;        // Adjust houses as long as there are any houses with too few starting Tiles
-<b class="fc"><i>704</i>&nbsp;        while (lowHouses.size() &gt; 0) {</b>
-<b class="fc"><i>705</i>&nbsp;            House lowHouse = lowHouses.pop();</b>
-<i>706</i>&nbsp;            // Add however many starting Tiles the house needs to reach the bound
-<b class="fc"><i>707</i>&nbsp;            while (lowHouse.getValueCount() &lt; bound) {</b>
-<i>708</i>&nbsp;                // If the House we&#39;re taking Tiles from no longer has excess Tiles, use the next House with excess Tiles
-<b class="fc"><i>709</i>&nbsp;                if (highHouse.getValueCount() == bound) {</b>
-<b class="fc"><i>710</i>&nbsp;                    highHouse = highHouses.pop();</b>
-<b class="fc"><i>711</i>&nbsp;                    highHouseTiles = highHouse.getValueTiles();</b>
-<i>712</i>&nbsp;                }
-<b class="fc"><i>713</i>&nbsp;                swapHighHouseToLowHouseTile(highHouseTiles, lowHouse, isRow);</b>
-<i>714</i>&nbsp;            }
-<b class="fc"><i>715</i>&nbsp;        }</b>
-<b class="fc"><i>716</i>&nbsp;    }</b>
-<i>717</i>&nbsp;
-<i>718</i>&nbsp;    /**
-<i>719</i>&nbsp;     * Search for an empty Tile in the lowHouse that corresponds to a filled Tile in the highHouse.
-<i>720</i>&nbsp;     *
-<i>721</i>&nbsp;     * @param highHouseTiles The Tiles to select a swap from
-<i>722</i>&nbsp;     * @param lowHouse       The House that is lacking Tiles
-<i>723</i>&nbsp;     * @param isRow          Whether or not the Houses we&#39;re looking at are rows
-<i>724</i>&nbsp;     */
-<i>725</i>&nbsp;    protected void swapHighHouseToLowHouseTile(List&lt;Tile&gt; highHouseTiles, House lowHouse, boolean isRow) {
-<b class="fc"><i>726</i>&nbsp;        if(highHouseTiles != null &amp;&amp; lowHouse != null) {</b>
-<b class="fc"><i>727</i>&nbsp;            for (Tile t : highHouseTiles) {</b>
-<b class="fc"><i>728</i>&nbsp;                Tile tile = lowHouse.getMember((isRow) ? t.getColumnNumber() : t.getRowNumber());</b>
-<b class="fc"><i>729</i>&nbsp;                if (tile.getValue() == 0) {</b>
-<b class="fc"><i>730</i>&nbsp;                    int tileSolution = getSolutionTile(tile.getIndex());</b>
-<b class="fc"><i>731</i>&nbsp;                    tile.update(tileSolution);</b>
-<b class="fc"><i>732</i>&nbsp;                    t.clear();</b>
-<b class="fc"><i>733</i>&nbsp;                    break;</b>
-<i>734</i>&nbsp;                }
-<b class="nc"><i>735</i>&nbsp;            }</b>
-<i>736</i>&nbsp;        }
-<b class="fc"><i>737</i>&nbsp;    }</b>
-<i>738</i>&nbsp;
-<i>739</i>&nbsp;    /**
-<i>740</i>&nbsp;     * For all tiles with a value, mark them as originals. Use only in initialization process and only after
-<i>741</i>&nbsp;     * boundaries have been checked, but before attempting to solve with the Solver.
-<i>742</i>&nbsp;     */
-<i>743</i>&nbsp;    protected void markOriginals() {
-<b class="fc"><i>744</i>&nbsp;        for (Tile t : getTiles()) {</b>
-<b class="fc"><i>745</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
-<b class="fc"><i>746</i>&nbsp;                t.setOrig(true);</b>
-<i>747</i>&nbsp;            }
-<i>748</i>&nbsp;        }
-<b class="fc"><i>749</i>&nbsp;    }</b>
-<i>750</i>&nbsp;
-<i>751</i>&nbsp;    /**
-<i>752</i>&nbsp;     * Run Solver and clean up the board when finished. This step makes sure the board is solvable at the desired
-<i>753</i>&nbsp;     * difficulty level.
-<i>754</i>&nbsp;     */
-<i>755</i>&nbsp;    protected void runSolver(Solver solver) {
-<b class="fc"><i>756</i>&nbsp;        if(solver != null) {</b>
-<b class="fc"><i>757</i>&nbsp;            solver.solve(difficulty);</b>
-<b class="fc"><i>758</i>&nbsp;            clearBoard();</b>
-<i>759</i>&nbsp;        }
-<b class="fc"><i>760</i>&nbsp;    }</b>
-<i>761</i>&nbsp;
-<i>762</i>&nbsp;    /**
-<i>763</i>&nbsp;     * Clear every tile that is not an original tile. This essentially resets the board.
-<i>764</i>&nbsp;     */
-<i>765</i>&nbsp;    protected void clearBoard() {
-<b class="fc"><i>766</i>&nbsp;        for (Tile t : getTiles()) {</b>
-<b class="fc"><i>767</i>&nbsp;            t.clear();</b>
-<i>768</i>&nbsp;        }
-<b class="fc"><i>769</i>&nbsp;    }</b>
-<i>770</i>&nbsp;
-<i>771</i>&nbsp;    //endregion
-<i>772</i>&nbsp;
-<i>773</i>&nbsp;}
+<i>539</i>&nbsp;     * @param tileStack The Stack of Tiles to examine.
+<i>540</i>&nbsp;     * @return True if there are no more Tiles to initialize, False otherwise.
+<i>541</i>&nbsp;     */
+<i>542</i>&nbsp;    protected boolean keepSearching_DFS(Stack&lt;Tile&gt; tileStack) {
+<b class="fc"><i>543</i>&nbsp;        return tileStack.size() &lt;= tiles.length; //TODO: Should this really be &lt;=? Or just &lt;?</b>
+<i>544</i>&nbsp;    }
+<i>545</i>&nbsp;
+<i>546</i>&nbsp;    /**
+<i>547</i>&nbsp;     * This function attempts to execute a single step in the DFS that builds the Board. It first retrieves the next
+<i>548</i>&nbsp;     * Tile to initialize, then tries to initialize it. If the initialization succeeds, then the newly initialized
+<i>549</i>&nbsp;     * Tile will be added to the Tile Stack. If the initialization fails, then that means the Board is in an invalid
+<i>550</i>&nbsp;     * state and must try to re-initialize the most recently visited Tile with a new value. Right now, however, in
+<i>551</i>&nbsp;     * the case of failure, the most recently visited Tile will simply be prepared to be re-initialized.
+<i>552</i>&nbsp;     *
+<i>553</i>&nbsp;     * @param index     The index of the most recently visited Tile, which may be either the top of the Stack or, if
+<i>554</i>&nbsp;     *                  a Tile has been prepped for re-initialization, a Tile recently popped off of the stack.
+<i>555</i>&nbsp;     * @param tileStack The Tile Stack used throughout the DFS.
+<i>556</i>&nbsp;     * @return The index of the most recently visited Tile.
+<i>557</i>&nbsp;     */
+<i>558</i>&nbsp;    protected int executeOneStep_DFS(int index, Stack&lt;Tile&gt; tileStack) {
+<b class="fc"><i>559</i>&nbsp;        Tile currentTile = getNextTile_DFS(index);</b>
+<b class="fc"><i>560</i>&nbsp;        if (currentTile.tryInitialize()) {</b>
+<b class="fc"><i>561</i>&nbsp;            tileStack.add(currentTile);</b>
+<b class="fc"><i>562</i>&nbsp;            return currentTile.getIndex();</b>
+<i>563</i>&nbsp;        } else {
+<b class="fc"><i>564</i>&nbsp;            currentTile.resetInitializationState(); // Reset state of Tile that failed to initialize</b>
+<b class="fc"><i>565</i>&nbsp;            Tile previousTile = tileStack.pop(); // Get last visited Tile and prep it to try next value</b>
+<b class="fc"><i>566</i>&nbsp;            previousTile.unVisit();</b>
+<b class="fc"><i>567</i>&nbsp;            return previousTile.getIndex();</b>
+<i>568</i>&nbsp;        }
+<i>569</i>&nbsp;    }
+<i>570</i>&nbsp;
+<i>571</i>&nbsp;    /**
+<i>572</i>&nbsp;     * This function returns the &quot;next&quot; index in the Board. If the current index corresponds to the last tile in the
+<i>573</i>&nbsp;     * Board, then the next index will be 0.
+<i>574</i>&nbsp;     *
+<i>575</i>&nbsp;     * @param index The current index to find the next from.
+<i>576</i>&nbsp;     * @return The next index in the Board.
+<i>577</i>&nbsp;     */
+<i>578</i>&nbsp;    protected int incrementIndex_DFS(int index) {
+<b class="fc"><i>579</i>&nbsp;        return (index == (tiles.length - 1)) ? 0 : index + 1;</b>
+<i>580</i>&nbsp;    }
+<i>581</i>&nbsp;
+<i>582</i>&nbsp;    /**
+<i>583</i>&nbsp;     * This function will return the next uninitialized Tile in the Board.
+<i>584</i>&nbsp;     *
+<i>585</i>&nbsp;     * @param index The index of the Tile to begin looking from (includes the Tile belonging to this index).
+<i>586</i>&nbsp;     * @return The next uninitialized Tile in the Board.
+<i>587</i>&nbsp;     */
+<i>588</i>&nbsp;    protected Tile getNextTile_DFS(int index) {
+<b class="fc"><i>589</i>&nbsp;        while (getTile(index).hasBeenVisited()) {</b>
+<b class="fc"><i>590</i>&nbsp;            index = incrementIndex_DFS(index);</b>
+<i>591</i>&nbsp;        }
+<b class="fc"><i>592</i>&nbsp;        return getTile(index);</b>
+<i>593</i>&nbsp;    }
+<i>594</i>&nbsp;
+<i>595</i>&nbsp;    /**
+<i>596</i>&nbsp;     * This function will save the current values of all Tiles as the correct solution for the Board. However, if any
+<i>597</i>&nbsp;     * Tiles are null or their values are empty, then this function will abort and no values will be saved.
+<i>598</i>&nbsp;     */
+<i>599</i>&nbsp;    protected void saveBoardToSolution() {
+<i>600</i>&nbsp;        // Make sure board is complete before saving it to solution
+<b class="fc"><i>601</i>&nbsp;        boolean boardComplete = true;</b>
+<b class="fc"><i>602</i>&nbsp;        for (int i = 0; i &lt; boardSize; ++i) {</b>
+<b class="fc"><i>603</i>&nbsp;            Tile tile = getTile(i);</b>
+<b class="fc"><i>604</i>&nbsp;            if (tile == null || tile.getValue() == 0) {</b>
+<b class="fc"><i>605</i>&nbsp;                boardComplete = false;</b>
+<b class="fc"><i>606</i>&nbsp;                break;</b>
+<i>607</i>&nbsp;            }
+<i>608</i>&nbsp;        }
+<i>609</i>&nbsp;        // If board IS complete, then go ahead and save it
+<b class="fc"><i>610</i>&nbsp;        if (boardComplete) {</b>
+<b class="fc"><i>611</i>&nbsp;            for (int i = 0; i &lt; boardSize; ++i) {</b>
+<b class="fc"><i>612</i>&nbsp;                solution[i] = getTile(i).getValue();</b>
+<i>613</i>&nbsp;            }
+<i>614</i>&nbsp;        }
+<b class="fc"><i>615</i>&nbsp;    }</b>
+<i>616</i>&nbsp;
+<i>617</i>&nbsp;    /**
+<i>618</i>&nbsp;     * Get the number of givens that the game should start with. (A &quot;given&quot; is an unchangeable Tile whose solution is
+<i>619</i>&nbsp;     * visible from the beginning of the game.)
+<i>620</i>&nbsp;     *
+<i>621</i>&nbsp;     * @param difficulty 1 = Easy, 2 = Medium, otherwise Hard.
+<i>622</i>&nbsp;     * @return 40 - 49 for Easy, 32 - 39 for Medium, 27 - 31 for Hard
+<i>623</i>&nbsp;     */
+<i>624</i>&nbsp;    protected int getNumberOfGivens(int difficulty) {
+<b class="fc"><i>625</i>&nbsp;        switch (difficulty) {</b>
+<i>626</i>&nbsp;            case 1: // easy
+<b class="fc"><i>627</i>&nbsp;                return Math.abs(randGen.nextInt(10)) + 40;</b>
+<i>628</i>&nbsp;            case 2: // medium
+<b class="fc"><i>629</i>&nbsp;                return Math.abs(randGen.nextInt(8)) + 32;</b>
+<i>630</i>&nbsp;            default:
+<b class="fc"><i>631</i>&nbsp;                return Math.abs(randGen.nextInt(5)) + 27;</b>
+<i>632</i>&nbsp;        }
+<i>633</i>&nbsp;    }
+<i>634</i>&nbsp;
+<i>635</i>&nbsp;    /**
+<i>636</i>&nbsp;     * Pick Holes in Board by randomly selecting a set of Tiles as the starting tiles, where the number of Tiles in
+<i>637</i>&nbsp;     * the set is determined by the difficulty level.
+<i>638</i>&nbsp;     *
+<i>639</i>&nbsp;     * @param numGivens The number of givens to begin the game with.
+<i>640</i>&nbsp;     */
+<i>641</i>&nbsp;    protected void digHoles(int numGivens) {
+<b class="fc"><i>642</i>&nbsp;        for (int i = numGivens; i &lt; boardSize; ++i) {</b>
+<b class="fc"><i>643</i>&nbsp;            int indexToDig = Math.abs(randGen.nextInt(boardSize));</b>
+<b class="fc"><i>644</i>&nbsp;            if (getTile(indexToDig).getValue() &gt; 0) {</b>
+<b class="fc"><i>645</i>&nbsp;                getTile(indexToDig).clear();</b>
+<i>646</i>&nbsp;            } else {
+<b class="fc"><i>647</i>&nbsp;                --i;</b>
+<i>648</i>&nbsp;            }
+<i>649</i>&nbsp;        }
+<b class="fc"><i>650</i>&nbsp;    }</b>
+<i>651</i>&nbsp;
+<i>652</i>&nbsp;    /**
+<i>653</i>&nbsp;     * This function returns the lower bound on the number of Tiles allowed in a row or column.
+<i>654</i>&nbsp;     *
+<i>655</i>&nbsp;     * @param difficulty 3 = Hard, 2 = Medium, otherwise Easy
+<i>656</i>&nbsp;     * @return 2 for Hard, 3 for Medium, 4 for Easy
+<i>657</i>&nbsp;     */
+<i>658</i>&nbsp;    protected int getBound(int difficulty) {
+<b class="fc"><i>659</i>&nbsp;        return (difficulty == 3) ? 2 : ((difficulty == 2) ? 3 : 4);</b>
+<i>660</i>&nbsp;    }
+<i>661</i>&nbsp;
+<i>662</i>&nbsp;    /**
+<i>663</i>&nbsp;     * This function makes sure that no Row or Column contains fewer Tiles than the boundary for the corresponding
+<i>664</i>&nbsp;     * difficulty level. Easy: boundary = 4. Medium: boundary = 3. Hard: boundary = 2.
+<i>665</i>&nbsp;     *
+<i>666</i>&nbsp;     * @param bound 3 = Hard, 2 = Medium, otherwise Easy
+<i>667</i>&nbsp;     */
+<i>668</i>&nbsp;    protected void checkBounds(int bound) {
+<b class="fc"><i>669</i>&nbsp;        Stack&lt;House&gt; highHouses = new Stack&lt;&gt;();</b>
+<b class="fc"><i>670</i>&nbsp;        Stack&lt;House&gt; lowHouses = new Stack&lt;&gt;();</b>
+<i>671</i>&nbsp;        // Check Rows
+<b class="fc"><i>672</i>&nbsp;        fillHighAndLowHouses(rows, highHouses, lowHouses, bound);</b>
+<b class="fc"><i>673</i>&nbsp;        adjustHousesToBounds(highHouses, lowHouses, bound, true);</b>
+<i>674</i>&nbsp;        // Check Columns
+<b class="fc"><i>675</i>&nbsp;        fillHighAndLowHouses(columns, highHouses, lowHouses, bound);</b>
+<b class="fc"><i>676</i>&nbsp;        adjustHousesToBounds(highHouses, lowHouses, bound, false);</b>
+<b class="fc"><i>677</i>&nbsp;    }</b>
+<i>678</i>&nbsp;
+<i>679</i>&nbsp;    /**
+<i>680</i>&nbsp;     * This function will fill the provided &quot;highHouse&quot; Stack with houses (from the provided array) that contain more
+<i>681</i>&nbsp;     * initialized Tiles than the provided minimum bound, and the &quot;lowHouse&quot; Stack with houses that contain fewer
+<i>682</i>&nbsp;     * initialized Tiles than the provided minimum bound.
+<i>683</i>&nbsp;     *
+<i>684</i>&nbsp;     * @param houses     The houses to divvy up into highHouse and lowHouse Stacks.
+<i>685</i>&nbsp;     * @param highHouses The Stack to contain Houses with more Tiles than the minimum bound.
+<i>686</i>&nbsp;     * @param lowHouses  The Stack to contain Houses with fewer Tiles than the minimum bound.
+<i>687</i>&nbsp;     * @param bound      The minimum bound.
+<i>688</i>&nbsp;     */
+<i>689</i>&nbsp;    protected void fillHighAndLowHouses(House[] houses, Stack&lt;House&gt; highHouses, Stack&lt;House&gt; lowHouses, int bound) {
+<b class="fc"><i>690</i>&nbsp;        if (highHouses != null &amp;&amp; lowHouses != null) {</b>
+<b class="fc"><i>691</i>&nbsp;            highHouses.clear();</b>
+<b class="fc"><i>692</i>&nbsp;            lowHouses.clear();</b>
+<b class="fc"><i>693</i>&nbsp;            for (House house : houses) {</b>
+<b class="fc"><i>694</i>&nbsp;                if (house.getValueCount() &gt; bound) {</b>
+<b class="fc"><i>695</i>&nbsp;                    highHouses.push(house);</b>
+<b class="fc"><i>696</i>&nbsp;                } else if (house.getValueCount() &lt; bound) {</b>
+<b class="fc"><i>697</i>&nbsp;                    lowHouses.push(house);</b>
+<i>698</i>&nbsp;                }
+<i>699</i>&nbsp;            }
+<i>700</i>&nbsp;        }
+<b class="fc"><i>701</i>&nbsp;    }</b>
+<i>702</i>&nbsp;
+<i>703</i>&nbsp;    /**
+<i>704</i>&nbsp;     * This function will raise the number of Tiles in all the Houses in the lowHouses Stack to the minimum bound. It
+<i>705</i>&nbsp;     * will do this by removing a Tile in one of the Houses in the highHouse Stack and adding a Tile to a House in
+<i>706</i>&nbsp;     * the lowHouse Stack along the complementary House (e.g. Row 1 is a high House and Row 2 is a low House. A Tile
+<i>707</i>&nbsp;     * in Column 3 of Row 1 is removed, and a Tile in Column 3 of Row 2 is added.)
+<i>708</i>&nbsp;     *
+<i>709</i>&nbsp;     * @param highHouses The Stack that contains Houses with more Tiles than the minimum bound.
+<i>710</i>&nbsp;     * @param lowHouses  The Stack that contains Houses with fewer Tiles than the minimum bound.
+<i>711</i>&nbsp;     * @param bound      The minimum bound.
+<i>712</i>&nbsp;     * @param isRow      Whether the Houses being adjusted are Rows or not.
+<i>713</i>&nbsp;     */
+<i>714</i>&nbsp;    protected void adjustHousesToBounds(Stack&lt;House&gt; highHouses, Stack&lt;House&gt; lowHouses, int bound, boolean isRow) {
+<b class="fc"><i>715</i>&nbsp;        House highHouse = highHouses.pop();</b>
+<b class="fc"><i>716</i>&nbsp;        LinkedList&lt;Tile&gt; highHouseTiles = highHouse.getValueTiles();</b>
+<i>717</i>&nbsp;        // Adjust houses as long as there are any houses with too few starting Tiles
+<b class="fc"><i>718</i>&nbsp;        while (lowHouses.size() &gt; 0) {</b>
+<b class="fc"><i>719</i>&nbsp;            House lowHouse = lowHouses.pop();</b>
+<i>720</i>&nbsp;            // Add however many starting Tiles the house needs to reach the bound
+<b class="fc"><i>721</i>&nbsp;            while (lowHouse.getValueCount() &lt; bound) {</b>
+<i>722</i>&nbsp;                // If the House we&#39;re taking Tiles from no longer has excess Tiles, use the next House with excess Tiles
+<b class="fc"><i>723</i>&nbsp;                if (highHouse.getValueCount() == bound) {</b>
+<b class="fc"><i>724</i>&nbsp;                    highHouse = highHouses.pop();</b>
+<b class="fc"><i>725</i>&nbsp;                    highHouseTiles = highHouse.getValueTiles();</b>
+<i>726</i>&nbsp;                }
+<b class="fc"><i>727</i>&nbsp;                swapHighHouseToLowHouseTile(highHouseTiles, lowHouse, isRow);</b>
+<i>728</i>&nbsp;            }
+<b class="fc"><i>729</i>&nbsp;        }</b>
+<b class="fc"><i>730</i>&nbsp;    }</b>
+<i>731</i>&nbsp;
+<i>732</i>&nbsp;    /**
+<i>733</i>&nbsp;     * Search for an empty Tile in the lowHouse that corresponds to a filled Tile in the highHouse.
+<i>734</i>&nbsp;     *
+<i>735</i>&nbsp;     * @param highHouseTiles The Tiles to select a swap from
+<i>736</i>&nbsp;     * @param lowHouse       The House that is lacking Tiles
+<i>737</i>&nbsp;     * @param isRow          Whether or not the Houses we&#39;re looking at are rows
+<i>738</i>&nbsp;     */
+<i>739</i>&nbsp;    protected void swapHighHouseToLowHouseTile(List&lt;Tile&gt; highHouseTiles, House lowHouse, boolean isRow) {
+<b class="fc"><i>740</i>&nbsp;        if(highHouseTiles != null &amp;&amp; lowHouse != null) {</b>
+<b class="fc"><i>741</i>&nbsp;            for (Tile t : highHouseTiles) {</b>
+<b class="fc"><i>742</i>&nbsp;                Tile tile = lowHouse.getMember((isRow) ? t.getColumnNumber() : t.getRowNumber());</b>
+<b class="fc"><i>743</i>&nbsp;                if (tile.getValue() == 0) {</b>
+<b class="fc"><i>744</i>&nbsp;                    int tileSolution = getSolutionTile(tile.getIndex());</b>
+<b class="fc"><i>745</i>&nbsp;                    tile.update(tileSolution);</b>
+<b class="fc"><i>746</i>&nbsp;                    t.clear();</b>
+<b class="fc"><i>747</i>&nbsp;                    break;</b>
+<i>748</i>&nbsp;                }
+<b class="nc"><i>749</i>&nbsp;            }</b>
+<i>750</i>&nbsp;        }
+<b class="fc"><i>751</i>&nbsp;    }</b>
+<i>752</i>&nbsp;
+<i>753</i>&nbsp;    /**
+<i>754</i>&nbsp;     * For all tiles with a value, mark them as originals. Use only in initialization process and only after
+<i>755</i>&nbsp;     * boundaries have been checked, but before attempting to solve with the Solver.
+<i>756</i>&nbsp;     */
+<i>757</i>&nbsp;    protected void markOriginals() {
+<b class="fc"><i>758</i>&nbsp;        for (Tile t : getTiles()) {</b>
+<b class="fc"><i>759</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
+<b class="fc"><i>760</i>&nbsp;                t.setOrig(true);</b>
+<i>761</i>&nbsp;            }
+<i>762</i>&nbsp;        }
+<b class="fc"><i>763</i>&nbsp;    }</b>
+<i>764</i>&nbsp;
+<i>765</i>&nbsp;    /**
+<i>766</i>&nbsp;     * Run Solver and clean up the board when finished. This step makes sure the board is solvable at the desired
+<i>767</i>&nbsp;     * difficulty level.
+<i>768</i>&nbsp;     */
+<i>769</i>&nbsp;    protected void runSolver(Solver solver) {
+<b class="fc"><i>770</i>&nbsp;        if(solver != null) {</b>
+<b class="fc"><i>771</i>&nbsp;            solver.solve(difficulty);</b>
+<b class="fc"><i>772</i>&nbsp;            clearBoard();</b>
+<i>773</i>&nbsp;        }
+<b class="fc"><i>774</i>&nbsp;    }</b>
+<i>775</i>&nbsp;
+<i>776</i>&nbsp;    /**
+<i>777</i>&nbsp;     * Clear every tile that is not an original tile. This essentially resets the board.
+<i>778</i>&nbsp;     */
+<i>779</i>&nbsp;    protected void clearBoard() {
+<b class="fc"><i>780</i>&nbsp;        for (Tile t : getTiles()) {</b>
+<b class="fc"><i>781</i>&nbsp;            t.clear();</b>
+<i>782</i>&nbsp;        }
+<b class="fc"><i>783</i>&nbsp;    }</b>
+<i>784</i>&nbsp;
+<i>785</i>&nbsp;    //endregion
+<i>786</i>&nbsp;
+<i>787</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-04-14 15:06</div>
+    <div style="float:right;">generated on 2016-04-15 10:48</div>
 </div>
 </body>
 </html>

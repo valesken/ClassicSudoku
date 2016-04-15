@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Matchers;
 
 import java.util.EmptyStackException;
 import java.util.LinkedList;
@@ -19,7 +18,6 @@ import me.valesken.jeff.util.Logger;
 
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.either;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertArrayEquals;
@@ -31,10 +29,8 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.AdditionalMatchers.*;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.booleanThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.intThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -49,7 +45,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 2/8/2016.
- * Last Updated on 2/10/2016.
+ * Last Updated on 4/14/2016.
  */
 public class BoardTest {
 
@@ -713,113 +709,151 @@ public class BoardTest {
     //region updateTile() tests
     @Test
     public void testUpdateTileMinIndexPass() {
+        // Set up
         int index = 0;
         int value = 4;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.updateTile(index, value);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
+        // Execute & Verify
+        assertNotNull(spy.updateTile(index, value));
         verify(mockedTile).update(value);
+        verify(mockedTile).getNotesOrValue();
     }
 
     @Test
     public void testUpdateTileMaxIndexPass() {
+        // Set up
         int index = boardSize - 1;
         int value = 4;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.updateTile(index, value);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
+        // Execute & Verify
+        assertNotNull(spy.updateTile(index, value));
         verify(mockedTile).update(value);
+        verify(mockedTile).getNotesOrValue();
     }
 
     @Test
     public void testUpdateTileNegativeIndexIgnore() {
+        // Set up
         int index = -1;
         int value = 4;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.updateTile(index, value);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
+        // Execute & Verify
+        assertNull(spy.updateTile(index, value));
         verify(mockedTile, never()).update(anyInt());
+        verify(mockedTile, never()).getNotesOrValue();
     }
 
     @Test
     public void testUpdateTileLargeIndexIgnore() {
+        // Set up
         int index = boardSize;
         int value = 4;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.updateTile(index, value);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
+        // Execute & Verify
+        assertNull(spy.updateTile(index, value));
         verify(mockedTile, never()).update(anyInt());
+        verify(mockedTile, never()).getNotesOrValue();
     }
     //endregion
 
     //region clearTile() tests
     @Test
     public void testClearTileMinIndexPass() {
+        // Set up
         int index = 0;
         Board spy = spy(board);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.clearTile(index);
+        // Execute & Verify
+        assertNotNull(spy.clearTile(index));
         verify(mockedTile).clear();
+        verify(mockedTile).getNotesOrValue();
     }
 
     @Test
     public void testClearTileMaxIndexPass() {
+        // Set up
         int index = boardSize - 1;
         Board spy = spy(board);
+        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.clearTile(index);
+        // Execute & Verify
+        assertNotNull(spy.clearTile(index));
         verify(mockedTile).clear();
+        verify(mockedTile).getNotesOrValue();
     }
 
     @Test
     public void testClearTileNegativeIndexIgnore() {
+        // Set up
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.clearTile(-1);
+        // Execute & Verify
+        assertNull(spy.clearTile(-1));
         verify(mockedTile, never()).clear();
+        verify(mockedTile, never()).getNotesOrValue();
     }
 
     @Test
     public void testClearTileLargeIndexIgnore() {
+        // Set up
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.clearTile(boardSize);
+        // Execute & Verify
+        assertNull(spy.clearTile(boardSize));
         verify(mockedTile, never()).clear();
+        verify(mockedTile, never()).getNotesOrValue();
     }
     //endregion
 
-    //region toggleMode() tests
+    //region toggleNoteMode() tests
     @Test
     public void testToggleModeMinIndexPass() {
+        // Set up
         int index = 0;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.toggleMode(index);
+        // Execute & Verify
+        assertTrue(spy.toggleNoteMode(index));
         verify(mockedTile).toggleMode();
     }
 
     @Test
     public void testToggleModeMaxIndexPass() {
+        // Set up
         int index = boardSize - 1;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(index);
-        spy.toggleMode(index);
+        // Execute & Verify
+        assertTrue(spy.toggleNoteMode(index));
         verify(mockedTile).toggleMode();
     }
 
     @Test
     public void testToggleModeNegativeIndexIgnore() {
+        // Set up
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.toggleMode(-1);
+        // Execute & Verify
+        assertFalse(spy.toggleNoteMode(-1));
         verify(mockedTile, never()).toggleMode();
     }
 
     @Test
     public void testToggleModeLargeIndexIgnore() {
+        // Set up
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        spy.toggleMode(boardSize);
+        // Execute & Verify
+        assertFalse(spy.toggleNoteMode(boardSize));
         verify(mockedTile, never()).toggleMode();
     }
     //endregion
@@ -889,9 +923,8 @@ public class BoardTest {
         doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0);
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
@@ -912,9 +945,8 @@ public class BoardTest {
         when(mockedTile.getValue()).thenReturn(0);
         when(mockedTile2.isNoteMode()).thenReturn(true);
         when(mockedTile2.getValue()).thenReturn(0);
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
@@ -934,9 +966,8 @@ public class BoardTest {
         doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(true);
         when(mockedTile.getValue()).thenReturn(0);
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
@@ -957,9 +988,8 @@ public class BoardTest {
         when(mockedTile.getValue()).thenReturn(0); // mockedTile IS NOT solved
         when(mockedTile2.isNoteMode()).thenReturn(false);
         when(mockedTile2.getValue()).thenReturn(solutionValue); // mockedTile2 IS solved
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(2 * boardSize - 2)).getSolutionTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
@@ -983,9 +1013,8 @@ public class BoardTest {
         when(mockedTile.getValue()).thenReturn(0); // mockedTile has no value, is in Value Mode
         when(mockedTile2.isNoteMode()).thenReturn(true);
         when(mockedTile2.getValue()).thenReturn(solutionValue); // mockedTile2 has value, is in Note Mode
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(2 * boardSize - 2)).getSolutionTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
@@ -1005,9 +1034,8 @@ public class BoardTest {
         doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(solutionValue);
-        // Execute
-        spy.solve();
-        // Verify
+        // Execute & Verify
+        assertFalse(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(boardSize)).getSolutionTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
@@ -1029,8 +1057,8 @@ public class BoardTest {
         when(mockedTile.getValue()).thenReturn(solutionValue);
         when(mockedTile2.isNoteMode()).thenReturn(false);
         when(mockedTile2.getValue()).thenReturn(badValue);
-        // Execute
-        spy.solve();
+        // Execute & Verify
+        assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
         verify(spy, times(boardSize + 2)).getSolutionTile(anyInt());
         verify(mockedTile, times(boardSize - 2)).isNoteMode();

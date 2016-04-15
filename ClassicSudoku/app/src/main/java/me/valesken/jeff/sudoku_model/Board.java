@@ -1,7 +1,5 @@
 package me.valesken.jeff.sudoku_model;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,7 +14,7 @@ import me.valesken.jeff.util.Logger;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 2/10/2016
+ * Last updated on 4/14/2016
  */
 class Board {
     static protected String jsonTimeId = "time";
@@ -285,22 +283,30 @@ class Board {
      *
      * @param position The index (0 - 80) of the Tile to update
      * @param value    The new value/note for the Tile
+     * @return The new values of the Tile, or null if the index is < 0 or > 80
      */
-    protected void updateTile(int position, int value) {
+    protected LinkedList<Integer> updateTile(int position, int value) {
         if (position > -1 && position < boardSize) {
-            getTile(position).update(value);
+            Tile tile = getTile(position);
+            tile.update(value);
+            return tile.getNotesOrValue();
         }
+        return null;
     }
 
     /**
      * This removes all values and hints from the selected Tile.
      *
      * @param position The index (0 - 80) of the Tile to clear
+     * @return The new values of the Tile, or null if the index is < 0 or > 80
      */
-    protected void clearTile(int position) {
+    protected LinkedList<Integer> clearTile(int position) {
         if (position > -1 && position < boardSize) {
+            Tile tile = getTile(position);
             getTile(position).clear();
+            return tile.getNotesOrValue();
         }
+        return null;
     }
 
     /**
@@ -308,11 +314,14 @@ class Board {
      * the other.
      *
      * @param position The index (0 - 80) of the Tile to toggle the mode of.
+     * @return True if Tile exists (index is valid) and note mode toggled, false otherwise
      */
-    protected void toggleMode(int position) {
+    protected boolean toggleNoteMode(int position) {
         if (position > -1 && position < boardSize) {
             getTile(position).toggleMode();
+            return true;
         }
+        return false;
     }
 
     /**
@@ -339,8 +348,11 @@ class Board {
 
     /**
      * This function will solve the game according to the saved solution.
+     *
+     * @return True if the game was not already solved and now has been solve, False otherwise.
      */
-    protected void solve() {
+    protected boolean solve() {
+        boolean nowSolved = false;
         for (int i = 0; i < tiles.length; ++i) {
             Tile tile = getTile(i);
             if (tile.isNoteMode()) {
@@ -348,8 +360,10 @@ class Board {
             }
             if (tile.getValue() != getSolutionTile(i)) {
                 tile.update(getSolutionTile(i));
+                nowSolved = true;
             }
         }
+        return nowSolved;
     }
     //endregion
 
