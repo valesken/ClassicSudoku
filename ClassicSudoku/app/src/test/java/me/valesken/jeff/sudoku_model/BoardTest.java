@@ -1276,13 +1276,11 @@ public class BoardTest {
         doNothing().when(spy).checkBounds(anyInt());
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
-        spy.logger = mock(Logger.class);
         // Execute
         assertEquals(difficulty, spy.newGame(difficulty));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
-        verify(spy.logger).logDebugMessage("Inside newGame().");
         verify(spy).buildCompleteBoard();
         verify(spy).getNumberOfGivens(difficulty);
         verify(spy).digHoles(numGivens);
@@ -1305,13 +1303,11 @@ public class BoardTest {
         doNothing().when(spy).checkBounds(anyInt());
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
-        spy.logger = mock(Logger.class);
         // Execute
         assertEquals(difficulty, spy.newGame(difficulty));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
-        verify(spy.logger).logDebugMessage("Inside newGame().");
         verify(spy).buildCompleteBoard();
         verify(spy).getNumberOfGivens(difficulty);
         verify(spy).digHoles(numGivens);
@@ -1334,13 +1330,11 @@ public class BoardTest {
         doNothing().when(spy).checkBounds(anyInt());
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
-        spy.logger = mock(Logger.class);
         // Execute
         assertEquals(difficulty, spy.newGame(difficulty));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
-        verify(spy.logger).logDebugMessage("Inside newGame().");
         verify(spy).buildCompleteBoard();
         verify(spy).getNumberOfGivens(difficulty);
         verify(spy).digHoles(numGivens);
@@ -1365,13 +1359,11 @@ public class BoardTest {
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
         when(spy.randGen.nextInt(3)).thenReturn(resultantDifficulty - 1);
-        spy.logger = mock(Logger.class);
         // Execute
         assertEquals(resultantDifficulty, spy.newGame(difficulty));
         // Verify
         assertEquals(resultantDifficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
-        verify(spy.logger).logDebugMessage("Inside newGame().");
         verify(spy).buildCompleteBoard();
         verify(spy).getNumberOfGivens(resultantDifficulty);
         verify(spy).digHoles(numGivens);
@@ -1387,14 +1379,11 @@ public class BoardTest {
     public void testBuildCompleteBoardPass() {
         // Setup
         Board spy = spy(board);
-        spy.logger = mock(Logger.class);
         doNothing().when(spy).seedFirstTiles(argThat(is(any(Stack.class))));
         doNothing().when(spy).fillBoard_DFS(argThat(is(any(Stack.class))));
         doNothing().when(spy).saveBoardToSolution();
-        // Execute
+        // Execute & Verify
         assertTrue(spy.buildCompleteBoard());
-        // Verify
-        verify(spy.logger).logDebugMessage("Inside buildCompleteBoard().");
     }
 
     @Test
@@ -1402,14 +1391,11 @@ public class BoardTest {
     public void testBuildCompleteBoardException() {
         // Setup
         Board spy = spy(board);
-        spy.logger = mock(Logger.class);
         doNothing().when(spy).seedFirstTiles(argThat(is(any(Stack.class))));
         doThrow(new EmptyStackException()).when(spy).fillBoard_DFS(argThat(is(any(Stack.class))));
         doNothing().when(spy).saveBoardToSolution();
-        // Execute
+        // Execute & Verify
         assertFalse(spy.buildCompleteBoard());
-        // Verify
-        verify(spy.logger).logDebugMessage("Inside buildCompleteBoard().");
     }
     //endregion
 
@@ -1491,7 +1477,7 @@ public class BoardTest {
     @SuppressWarnings("unchecked")
     public void testKeepSearchingDFS_MaxSize_Pass() {
         // Setup
-        int size = boardSize;
+        int size = boardSize-1;
         Stack<Tile> mockStack = (Stack<Tile>) mock(Stack.class);
         when(mockStack.size()).thenReturn(size);
         // Execute & Verify
@@ -1502,7 +1488,7 @@ public class BoardTest {
     @SuppressWarnings("unchecked")
     public void testKeepSearchingDFS_TooLargeSize_Pass() {
         // Setup
-        int size = boardSize + 1;
+        int size = boardSize;
         Stack<Tile> mockStack = (Stack<Tile>) mock(Stack.class);
         when(mockStack.size()).thenReturn(size);
         // Execute & Verify

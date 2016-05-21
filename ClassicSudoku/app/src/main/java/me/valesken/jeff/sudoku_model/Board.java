@@ -459,7 +459,6 @@ class Board {
      * @return difficulty level for the game
      */
     protected int newGame(int _difficulty) {
-        logger.logDebugMessage("Inside newGame().");
         difficulty = _difficulty;
         timeElapsed = "00:00";
 
@@ -486,7 +485,6 @@ class Board {
      */
     protected boolean buildCompleteBoard() {
         try {
-            logger.logDebugMessage("Inside buildCompleteBoard().");
             Stack<Tile> tileStack = new Stack<>();
             seedFirstTiles(tileStack);
             fillBoard_DFS(tileStack);
@@ -540,7 +538,7 @@ class Board {
      * @return True if there are no more Tiles to initialize, False otherwise.
      */
     protected boolean keepSearching_DFS(Stack<Tile> tileStack) {
-        return tileStack.size() <= tiles.length; //TODO: Should this really be <=? Or just <?
+        return tileStack.size() < tiles.length;
     }
 
     /**
