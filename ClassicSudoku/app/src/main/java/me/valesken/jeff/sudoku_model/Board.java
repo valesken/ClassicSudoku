@@ -5,9 +5,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.EmptyStackException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Stack;
 
 import me.valesken.jeff.util.Logger;
@@ -17,10 +19,10 @@ import me.valesken.jeff.util.Logger;
  * Last updated on 4/14/2016
  */
 class Board {
-    static protected String jsonTimeId = "time";
-    static protected String jsonDifficultyId = "difficulty";
-    static protected String jsonSolutionId = "solution";
-    static protected String jsonTilesId = "tiles";
+    static final protected String JSON_TIME_ID = "time";
+    static final protected String JSON_DIFFICULTY_ID = "difficulty";
+    static final protected String JSON_SOLUTION_ID = "solution";
+    static final protected String JSON_TILES_ID = "tiles";
 
     protected Logger logger;
     protected int houseSize;
@@ -28,6 +30,7 @@ class Board {
     protected int difficulty;
     protected Tile[] tiles;
     protected House[] rows, columns, zones;
+    protected Set<Tile> solvedTiles;
     protected int[] solution;
     protected Random randGen;
     protected String timeElapsed;
@@ -46,6 +49,7 @@ class Board {
         rows = new House[houseSize];
         columns = new House[houseSize];
         zones = new House[houseSize];
+        solvedTiles = new HashSet<>();
         tiles = new Tile[boardSize];
         logger = new Logger();
         randGen = new Random();
@@ -162,7 +166,7 @@ class Board {
      * @param index The 0-80 index of the solution tile you want.
      * @return The desired solution value. -1 if index is out of bounds.
      */
-    protected int getSolutionTile(int index) {
+    protected int getSolutionForTile(int index) {
         return (index > -1 && index < boardSize) ? solution[index] : -1;
     }
 
@@ -248,7 +252,7 @@ class Board {
         LinkedList<Tile> wrongTiles = new LinkedList<>();
         for (int i = 0; i < tiles.length; ++i) {
             Tile tile = getTile(i);
-            int solvedValue = getSolutionTile(i);
+            int solvedValue = getSolutionForTile(i);
             if (tile.getValue() == 0 || tile.getValue() != solvedValue) {
                 wrongTiles.add(tile);
             }
@@ -260,12 +264,7 @@ class Board {
      * @return True if every Tile on the board has the correct value, otherwise False.
      */
     protected boolean isGameOver() {
-        for (int i = 0; i < tiles.length; ++i) {
-            if (getTile(i).getValue() != getSolutionTile(i)) {
-                return false;
-            }
-        }
-        return true;
+        return solvedTiles.size() == boardSize;
     }
 
     /**
@@ -289,6 +288,11 @@ class Board {
         if (position > -1 && position < boardSize) {
             Tile tile = getTile(position);
             tile.update(value);
+            if (tile.getValue() == getSolutionForTile(position)) {
+                solvedTiles.add(tile);
+            } else {
+                solvedTiles.remove(tile);
+            }
             return tile.getNotesOrValue();
         }
         return null;
@@ -339,7 +343,7 @@ class Board {
             if (tile.isNoteMode()) {
                 tile.toggleMode();
             }
-            tile.update(getSolutionTile(index));
+            tile.update(getSolutionForTile(index));
             tile.setOrig(true);
             return index;
         }
@@ -358,8 +362,8 @@ class Board {
             if (tile.isNoteMode()) {
                 tile.toggleMode();
             }
-            if (tile.getValue() != getSolutionTile(i)) {
-                tile.update(getSolutionTile(i));
+            if (tile.getValue() != getSolutionForTile(i)) {
+                tile.update(getSolutionForTile(i));
                 nowSolved = true;
             }
         }
@@ -379,20 +383,20 @@ class Board {
     protected JSONObject save(String currentTime) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(jsonTimeId, currentTime);
-            jsonObject.put(jsonDifficultyId, difficulty);
+            jsonObject.put(JSON_TIME_ID, currentTime);
+            jsonObject.put(JSON_DIFFICULTY_ID, difficulty);
 
             JSONArray solutionArray = new JSONArray();
             for (int solution_value : solution) {
                 solutionArray.put(solution_value);
             }
-            jsonObject.put(jsonSolutionId, solutionArray);
+            jsonObject.put(JSON_SOLUTION_ID, solutionArray);
 
             JSONArray tilesArray = new JSONArray();
             for (Tile tile : tiles) {
                 tilesArray.put(tile.getJSON());
             }
-            jsonObject.put(jsonTilesId, tilesArray);
+            jsonObject.put(JSON_TILES_ID, tilesArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -411,12 +415,12 @@ class Board {
     protected int loadGame(JSONObject jsonObject) {
         try {
             // Try to load values from JSON
-            int tempDifficulty = jsonObject.getInt(jsonDifficultyId);
-            String tempTimeElapsed = jsonObject.getString(jsonTimeId);
+            int tempDifficulty = jsonObject.getInt(JSON_DIFFICULTY_ID);
+            String tempTimeElapsed = jsonObject.getString(JSON_TIME_ID);
             int[] tempSolution = new int[boardSize];
             Tile[] tempTiles = new Tile[boardSize];
-            JSONArray jsonSolutionArray = jsonObject.getJSONArray(jsonSolutionId);
-            JSONArray jsonTileArray = jsonObject.getJSONArray(jsonTilesId);
+            JSONArray jsonSolutionArray = jsonObject.getJSONArray(JSON_SOLUTION_ID);
+            JSONArray jsonTileArray = jsonObject.getJSONArray(JSON_TILES_ID);
             for (int i = 0; i < boardSize; ++i) {
                 tempSolution[i] = jsonSolutionArray.getInt(i);
                 tempTiles[i] = loadTile(jsonTileArray.getJSONObject(i));
@@ -739,7 +743,7 @@ class Board {
             for (Tile t : highHouseTiles) {
                 Tile tile = lowHouse.getMember((isRow) ? t.getColumnNumber() : t.getRowNumber());
                 if (tile.getValue() == 0) {
-                    int tileSolution = getSolutionTile(tile.getIndex());
+                    int tileSolution = getSolutionForTile(tile.getIndex());
                     tile.update(tileSolution);
                     t.clear();
                     break;

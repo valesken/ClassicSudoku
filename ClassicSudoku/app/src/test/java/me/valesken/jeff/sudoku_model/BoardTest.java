@@ -9,12 +9,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.EmptyStackException;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
-
-import me.valesken.jeff.util.Logger;
 
 import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.either;
@@ -39,6 +38,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -309,29 +309,29 @@ public class BoardTest {
     }
     //endregion
 
-    //region getSolutionTile() tests
+    //region getSolutionForTile() tests
     @Test
     public void testGetSolutionTileMinIndexPass() {
         int index = 0;
         board.solution[index] = 5;
-        assertEquals(5, board.getSolutionTile(index));
+        assertEquals(5, board.getSolutionForTile(index));
     }
 
     @Test
     public void testGetSolutionTileMaxIndexPass() {
         int index = boardSize - 1;
         board.solution[index] = 5;
-        assertEquals(5, board.getSolutionTile(index));
+        assertEquals(5, board.getSolutionForTile(index));
     }
 
     @Test
     public void testGetSolutionTileNegativeIndexFail() {
-        assertEquals(-1, board.getSolutionTile(-1));
+        assertEquals(-1, board.getSolutionForTile(-1));
     }
 
     @Test
     public void testGetSolutionTileLargeIndexFail() {
-        assertEquals(-1, board.getSolutionTile(boardSize));
+        assertEquals(-1, board.getSolutionForTile(boardSize));
     }
     //endregion
 
@@ -626,8 +626,8 @@ public class BoardTest {
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
         when(mockedTile.getValue()).thenReturn(tileValue);
-        doReturn(badSolution).when(spy).getSolutionTile(index);
-        doReturn(tileValue).when(spy).getSolutionTile(intThat(is(not(index))));
+        doReturn(badSolution).when(spy).getSolutionForTile(index);
+        doReturn(tileValue).when(spy).getSolutionForTile(intThat(is(not(index))));
         // Execute
         LinkedList<Tile> wrongTiles = spy.getWrongTiles();
         // Verify
@@ -646,8 +646,8 @@ public class BoardTest {
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
         when(mockedTile.getValue()).thenReturn(tileValue);
-        doReturn(badSolution).when(spy).getSolutionTile(intThat(either(is(index0)).or(is(index1))));
-        doReturn(tileValue).when(spy).getSolutionTile(intThat(is(not(either(is(index0)).or(is(index1))))));
+        doReturn(badSolution).when(spy).getSolutionForTile(intThat(either(is(index0)).or(is(index1))));
+        doReturn(tileValue).when(spy).getSolutionForTile(intThat(is(not(either(is(index0)).or(is(index1))))));
         // Execute
         LinkedList<Tile> wrongTiles = spy.getWrongTiles();
         // Verify
@@ -664,7 +664,7 @@ public class BoardTest {
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
         when(mockedTile.getValue()).thenReturn(tileValue);
-        doReturn(tileValue).when(spy).getSolutionTile(anyInt());
+        doReturn(tileValue).when(spy).getSolutionForTile(anyInt());
         // Execute
         LinkedList<Tile> wrongTiles = spy.getWrongTiles();
         // Verify
@@ -675,24 +675,19 @@ public class BoardTest {
 
     //region isGameOver() tests
     @Test
+    @SuppressWarnings("unchecked")
     public void testIsGameOverTruePass() {
-        int value = 1;
-        Board spy = spy(board);
-        doReturn(value).when(spy).getSolutionTile(anyInt());
-        doReturn(mockedTile).when(spy).getTile(anyInt());
-        when(mockedTile.getValue()).thenReturn(value);
-        assertTrue(spy.isGameOver());
+        board.solvedTiles = mock(HashSet.class);
+        doReturn(boardSize).when(board.solvedTiles).size();
+        assertTrue(board.isGameOver());
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testIsGameOverFalsePass() {
-        int solutionValue = 1;
-        int tileValue = 5;
-        Board spy = spy(board);
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
-        doReturn(mockedTile).when(spy).getTile(anyInt());
-        when(mockedTile.getValue()).thenReturn(tileValue);
-        assertFalse(spy.isGameOver());
+        board.solvedTiles = mock(HashSet.class);
+        doReturn(boardSize-1).when(board.solvedTiles).size();
+        assertFalse(board.isGameOver());
     }
     //endregion
 
@@ -708,59 +703,113 @@ public class BoardTest {
 
     //region updateTile() tests
     @Test
+    @SuppressWarnings("unchecked")
     public void testUpdateTileMinIndexPass() {
         // Set up
         int index = 0;
         int value = 4;
+        LinkedList<Integer> values = new LinkedList<>();
+        values.add(value);
         Board spy = spy(board);
+        spy.solvedTiles = mock(HashSet.class);
         doReturn(mockedTile).when(spy).getTile(index);
-        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
-        // Execute & Verify
-        assertNotNull(spy.updateTile(index, value));
+        doReturn(value).when(spy).getSolutionForTile(index);
+        doReturn(value).when(mockedTile).getValue();
+        doReturn(values).when(mockedTile).getNotesOrValue();
+        // Execute
+        LinkedList result = spy.updateTile(index, value);
+        // Verify
+        assertNotNull(result);
+        assertTrue(result.contains(value));
         verify(mockedTile).update(value);
-        verify(mockedTile).getNotesOrValue();
+        verify(spy.solvedTiles).add(mockedTile);
+        verify(spy.solvedTiles, never()).remove(mockedTile);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testUpdateTileMaxIndexPass() {
         // Set up
         int index = boardSize - 1;
         int value = 4;
+        LinkedList<Integer> values = new LinkedList<>();
+        values.add(value);
         Board spy = spy(board);
+        spy.solvedTiles = mock(HashSet.class);
         doReturn(mockedTile).when(spy).getTile(index);
-        doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
-        // Execute & Verify
-        assertNotNull(spy.updateTile(index, value));
+        doReturn(value).when(spy).getSolutionForTile(index);
+        doReturn(value).when(mockedTile).getValue();
+        doReturn(values).when(mockedTile).getNotesOrValue();
+        // Execute
+        LinkedList result = spy.updateTile(index, value);
+        // Verify
+        assertNotNull(result);
+        assertTrue(result.contains(value));
         verify(mockedTile).update(value);
-        verify(mockedTile).getNotesOrValue();
+        verify(spy.solvedTiles).add(mockedTile);
+        verify(spy.solvedTiles, never()).remove(mockedTile);
+
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void testUpdateTileRemoveFromSolvedTilesPass() {
+        // Set up
+        int index = boardSize - 1;
+        int tileValue = 4;
+        int correctValue = 6;
+        LinkedList<Integer> values = new LinkedList<>();
+        values.add(tileValue);
+        Board spy = spy(board);
+        spy.solvedTiles = mock(HashSet.class);
+        doReturn(mockedTile).when(spy).getTile(index);
+        doReturn(correctValue).when(spy).getSolutionForTile(index);
+        doReturn(tileValue).when(mockedTile).getValue();
+        doReturn(values).when(mockedTile).getNotesOrValue();
+        // Execute
+        LinkedList result = spy.updateTile(index, tileValue);
+        // Verify
+        assertNotNull(result);
+        assertTrue(result.contains(tileValue));
+        verify(mockedTile).update(tileValue);
+        verify(spy.solvedTiles, never()).add(mockedTile);
+        verify(spy.solvedTiles).remove(mockedTile);
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
     public void testUpdateTileNegativeIndexIgnore() {
         // Set up
         int index = -1;
         int value = 4;
         Board spy = spy(board);
+        spy.solvedTiles = mock(HashSet.class);
         doReturn(mockedTile).when(spy).getTile(anyInt());
         doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
         // Execute & Verify
         assertNull(spy.updateTile(index, value));
         verify(mockedTile, never()).update(anyInt());
         verify(mockedTile, never()).getNotesOrValue();
+        verify(spy.solvedTiles, never()).add(mockedTile);
+        verify(spy.solvedTiles, never()).remove(mockedTile);
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testUpdateTileLargeIndexIgnore() {
         // Set up
         int index = boardSize;
         int value = 4;
         Board spy = spy(board);
+        spy.solvedTiles = mock(HashSet.class);
         doReturn(mockedTile).when(spy).getTile(anyInt());
         doReturn(new LinkedList<>()).when(mockedTile).getNotesOrValue();
         // Execute & Verify
         assertNull(spy.updateTile(index, value));
         verify(mockedTile, never()).update(anyInt());
         verify(mockedTile, never()).getNotesOrValue();
+        verify(spy.solvedTiles, never()).add(mockedTile);
+        verify(spy.solvedTiles, never()).remove(mockedTile);
     }
     //endregion
 
@@ -869,7 +918,7 @@ public class BoardTest {
         LinkedList<Tile> list = new LinkedList<>();
         list.add(mockedTile);
         doReturn(list).when(spy).getWrongTiles();
-        doReturn(solutionValue).when(spy).getSolutionTile(index);
+        doReturn(solutionValue).when(spy).getSolutionForTile(index);
         when(spy.randGen.nextInt(anyInt())).thenReturn(0);
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getIndex()).thenReturn(index);
@@ -892,7 +941,7 @@ public class BoardTest {
         list.add(mock(Tile.class));
         list.add(mockedTile);
         doReturn(list).when(spy).getWrongTiles();
-        doReturn(solutionValue).when(spy).getSolutionTile(index);
+        doReturn(solutionValue).when(spy).getSolutionForTile(index);
         when(spy.randGen.nextInt(anyInt())).thenReturn(1);
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getIndex()).thenReturn(index);
@@ -920,13 +969,13 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0);
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
+        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, times(boardSize)).update(solutionValue);
@@ -940,7 +989,7 @@ public class BoardTest {
         Tile mockedTile2 = mock(Tile.class);
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0);
         when(mockedTile2.isNoteMode()).thenReturn(true);
@@ -948,7 +997,7 @@ public class BoardTest {
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
+        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
@@ -963,13 +1012,13 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(true);
         when(mockedTile.getValue()).thenReturn(0);
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionTile(anyInt());
+        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
         verify(mockedTile, times(boardSize)).toggleMode();
         verify(mockedTile, times(boardSize)).update(solutionValue);
@@ -983,7 +1032,7 @@ public class BoardTest {
         Tile mockedTile2 = mock(Tile.class);
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0); // mockedTile IS NOT solved
         when(mockedTile2.isNoteMode()).thenReturn(false);
@@ -991,7 +1040,7 @@ public class BoardTest {
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize - 2)).getSolutionTile(anyInt()); // Check every Tile, update only mockedTile
+        verify(spy, times(2 * boardSize - 2)).getSolutionForTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
@@ -1008,7 +1057,7 @@ public class BoardTest {
         Tile mockedTile2 = mock(Tile.class);
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0); // mockedTile has no value, is in Value Mode
         when(mockedTile2.isNoteMode()).thenReturn(true);
@@ -1016,7 +1065,7 @@ public class BoardTest {
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize - 2)).getSolutionTile(anyInt()); // Check every Tile, update only mockedTile
+        verify(spy, times(2 * boardSize - 2)).getSolutionForTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
@@ -1031,13 +1080,13 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(solutionValue);
         // Execute & Verify
         assertFalse(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(boardSize)).getSolutionTile(anyInt());
+        verify(spy, times(boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, never()).update(anyInt());
@@ -1052,7 +1101,7 @@ public class BoardTest {
         Tile mockedTile2 = mock(Tile.class);
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
-        doReturn(solutionValue).when(spy).getSolutionTile(anyInt());
+        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(solutionValue);
         when(mockedTile2.isNoteMode()).thenReturn(false);
@@ -1060,7 +1109,7 @@ public class BoardTest {
         // Execute & Verify
         assertTrue(spy.solve());
         verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(boardSize + 2)).getSolutionTile(anyInt());
+        verify(spy, times(boardSize + 2)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
         verify(mockedTile, never()).update(anyInt());
@@ -1086,12 +1135,12 @@ public class BoardTest {
         JSONObject savedGame = board.save(currentTime);
         // Verify
         assertNotNull(savedGame);
-        assertEquals(board.difficulty, savedGame.getInt(Board.jsonDifficultyId));
-        assertEquals(currentTime, savedGame.getString(Board.jsonTimeId));
-        JSONArray solution = savedGame.getJSONArray(Board.jsonSolutionId);
+        assertEquals(board.difficulty, savedGame.getInt(Board.JSON_DIFFICULTY_ID));
+        assertEquals(currentTime, savedGame.getString(Board.JSON_TIME_ID));
+        JSONArray solution = savedGame.getJSONArray(Board.JSON_SOLUTION_ID);
         assertNotNull(solution);
         assertEquals(boardSize, solution.length());
-        JSONArray tiles = savedGame.getJSONArray(Board.jsonTilesId);
+        JSONArray tiles = savedGame.getJSONArray(Board.JSON_TILES_ID);
         assertNotNull(tiles);
         assertEquals(boardSize, tiles.length());
         for (int i = 0; i < boardSize; ++i) {
@@ -1113,10 +1162,10 @@ public class BoardTest {
         JSONObject mockTileObject = mock(JSONObject.class);
         JSONArray mockSolutionArray = mock(JSONArray.class);
         JSONArray mockTileArray = mock(JSONArray.class);
-        when(mockLoadGame.getInt(Board.jsonDifficultyId)).thenReturn(difficulty);
-        when(mockLoadGame.getString(Board.jsonTimeId)).thenReturn(savedTime);
-        when(mockLoadGame.getJSONArray(Board.jsonSolutionId)).thenReturn(mockSolutionArray);
-        when(mockLoadGame.getJSONArray(Board.jsonTilesId)).thenReturn(mockTileArray);
+        when(mockLoadGame.getInt(Board.JSON_DIFFICULTY_ID)).thenReturn(difficulty);
+        when(mockLoadGame.getString(Board.JSON_TIME_ID)).thenReturn(savedTime);
+        when(mockLoadGame.getJSONArray(Board.JSON_SOLUTION_ID)).thenReturn(mockSolutionArray);
+        when(mockLoadGame.getJSONArray(Board.JSON_TILES_ID)).thenReturn(mockTileArray);
         when(mockSolutionArray.getInt(anyInt())).thenReturn(solutionValue);
         when(mockTileArray.getJSONObject(anyInt())).thenReturn(mockTileObject);
         doReturn(mockedTile).when(spy).loadTile(argThat(is(any(JSONObject.class))));
@@ -1157,7 +1206,7 @@ public class BoardTest {
     public void testLoadGameTimeRaisesFlag() throws JSONException {
         // Setup
         JSONObject savedGame = new JSONObject();
-        savedGame.put(Board.jsonDifficultyId, 2);
+        savedGame.put(Board.JSON_DIFFICULTY_ID, 2);
         board.difficulty = 1;
         // Execute
         assertEquals(-1, board.loadGame(savedGame));
@@ -1174,8 +1223,8 @@ public class BoardTest {
     public void testLoadGameSolutionArrayRaisesFlag() throws JSONException {
         // Setup
         JSONObject savedGame = new JSONObject();
-        savedGame.put(Board.jsonDifficultyId, 2);
-        savedGame.put(Board.jsonTimeId, "11:11");
+        savedGame.put(Board.JSON_DIFFICULTY_ID, 2);
+        savedGame.put(Board.JSON_TIME_ID, "11:11");
         board.difficulty = 1;
         // Execute
         assertEquals(-1, board.loadGame(savedGame));
@@ -1192,11 +1241,11 @@ public class BoardTest {
     public void testLoadGameSolutionValueRaisesFlag() throws JSONException {
         // Setup
         JSONObject savedGame = new JSONObject();
-        savedGame.put(Board.jsonDifficultyId, 2);
-        savedGame.put(Board.jsonTimeId, "11:11");
+        savedGame.put(Board.JSON_DIFFICULTY_ID, 2);
+        savedGame.put(Board.JSON_TIME_ID, "11:11");
         JSONArray solutionArray = new JSONArray();
         solutionArray.put(5); // Only 1 value in array!
-        savedGame.put(Board.jsonSolutionId, solutionArray);
+        savedGame.put(Board.JSON_SOLUTION_ID, solutionArray);
         board.difficulty = 1;
         // Execute
         assertEquals(-1, board.loadGame(savedGame));
@@ -1213,13 +1262,13 @@ public class BoardTest {
     public void testLoadGameTileArrayRaisesFlag() throws JSONException {
         // Setup
         JSONObject savedGame = new JSONObject();
-        savedGame.put(Board.jsonDifficultyId, 2);
-        savedGame.put(Board.jsonTimeId, "11:11");
+        savedGame.put(Board.JSON_DIFFICULTY_ID, 2);
+        savedGame.put(Board.JSON_TIME_ID, "11:11");
         JSONArray solutionArray = new JSONArray();
         for (int i = 0; i < boardSize; ++i) {
             solutionArray.put(5);
         }
-        savedGame.put(Board.jsonSolutionId, solutionArray);
+        savedGame.put(Board.JSON_SOLUTION_ID, solutionArray);
         board.difficulty = 1;
         // Execute
         assertEquals(-1, board.loadGame(savedGame));
@@ -1237,16 +1286,16 @@ public class BoardTest {
         // Setup
         Board spy = spy(board);
         JSONObject savedGame = new JSONObject();
-        savedGame.put(Board.jsonDifficultyId, 2);
-        savedGame.put(Board.jsonTimeId, "11:11");
+        savedGame.put(Board.JSON_DIFFICULTY_ID, 2);
+        savedGame.put(Board.JSON_TIME_ID, "11:11");
         JSONArray solutionArray = new JSONArray();
         JSONArray tilesArray = new JSONArray();
         for (int i = 0; i < boardSize; ++i) {
             solutionArray.put(5);
             tilesArray.put(mock(JSONObject.class));
         }
-        savedGame.put(Board.jsonSolutionId, solutionArray);
-        savedGame.put(Board.jsonTilesId, tilesArray);
+        savedGame.put(Board.JSON_SOLUTION_ID, solutionArray);
+        savedGame.put(Board.JSON_TILES_ID, tilesArray);
         spy.difficulty = 1;
         doThrow(new JSONException("Test")).when(spy).loadTile(argThat(is(any(JSONObject.class))));
         // Execute
@@ -1821,6 +1870,7 @@ public class BoardTest {
 
     //region adjustHousesToBounds() tests
     @Test
+    @SuppressWarnings("unchecked")
     public void testAdjustHousesToBounds_row_Pass() {
         // Set up
         int bound = 3;
@@ -1855,6 +1905,7 @@ public class BoardTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAdjustHousesToBounds_column_Pass() {
         // Set up
         int bound = 3;
@@ -1889,6 +1940,7 @@ public class BoardTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAdjustHousesToBounds_multipleLowHouses_Pass() {
         // Set up
         int bound = 3;
@@ -1926,6 +1978,7 @@ public class BoardTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testAdjustHousesToBounds_multipleLowAndHighHouses_Pass() {
         // Set up
         int bound = 3;
@@ -1976,7 +2029,7 @@ public class BoardTest {
         int tileSolution = 9;
         // Setup board spy
         Board spy = spy(board);
-        doReturn(tileSolution).when(spy).getSolutionTile(lowTileIndex);
+        doReturn(tileSolution).when(spy).getSolutionForTile(lowTileIndex);
         // Setup high house
         List<Tile> highHouseTiles = spy(new LinkedList<Tile>());
         Tile highTile = mock(Tile.class);
@@ -2006,7 +2059,7 @@ public class BoardTest {
         int tileSolution = 9;
         // Setup board spy
         Board spy = spy(board);
-        doReturn(tileSolution).when(spy).getSolutionTile(lowTileIndex);
+        doReturn(tileSolution).when(spy).getSolutionForTile(lowTileIndex);
         // Setup high house
         List<Tile> highHouseTiles = spy(new LinkedList<Tile>());
         Tile highTile = mock(Tile.class);
@@ -2036,7 +2089,7 @@ public class BoardTest {
         int tileSolution = 9;
         // Setup board spy
         Board spy = spy(board);
-        doReturn(tileSolution).when(spy).getSolutionTile(lowTileIndex);
+        doReturn(tileSolution).when(spy).getSolutionForTile(lowTileIndex);
         // Setup low house
         House lowHouse = mock(House.class);
         Tile lowTile = mock(Tile.class);
@@ -2058,7 +2111,7 @@ public class BoardTest {
         int tileSolution = 9;
         // Setup board spy
         Board spy = spy(board);
-        doReturn(tileSolution).when(spy).getSolutionTile(lowTileIndex);
+        doReturn(tileSolution).when(spy).getSolutionForTile(lowTileIndex);
         // Setup low house
         House lowHouse = mock(House.class);
         Tile lowTile = mock(Tile.class);
@@ -2080,7 +2133,7 @@ public class BoardTest {
         int tileSolution = 9;
         // Setup board spy
         Board spy = spy(board);
-        doReturn(tileSolution).when(spy).getSolutionTile(lowTileIndex);
+        doReturn(tileSolution).when(spy).getSolutionForTile(lowTileIndex);
         // Setup high house
         List<Tile> highHouseTiles = spy(new LinkedList<Tile>());
         Tile highTile = mock(Tile.class);
