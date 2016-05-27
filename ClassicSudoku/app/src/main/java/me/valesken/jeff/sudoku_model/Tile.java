@@ -12,13 +12,13 @@ import java.util.LinkedList;
  */
 
 class Tile {
-    static protected String jsonIndexId = "index";
-    static protected String jsonRowId = "row";
-    static protected String jsonColumnId = "column";
-    static protected String jsonZoneId = "zone";
-    static protected String jsonNoteModeId = "noteMode";
-    static protected String jsonOrigId = "orig";
-    static protected String jsonValuesId = "notesOrValue";
+    static final protected String JSON_INDEX_ID = "index";
+    static final protected String JSON_ROW_ID = "row";
+    static final protected String JSON_COLUMN_ID = "column";
+    static final protected String JSON_ZONE_ID = "zone";
+    static final protected String JSON_NOTE_MODE_ID = "noteMode";
+    static final protected String JSON_ORIG_ID = "orig";
+    static final protected String JSON_VALUES_ID = "notesOrValue";
 
     protected int houseSize;
     protected int index;
@@ -87,11 +87,11 @@ class Tile {
     /**
      * To be used internally by Tile only! (Or in tests)
      *
-     * @param value   The value you want to assign to or remove from this tile in this tile's houses
+     * @param value   The 1 - 9 value you want to assign to or remove from this tile in this tile's houses
      * @param inHouse True - assign to the desired value; False - remove from the desired value
      */
     protected void setValueInHouses(int value, boolean inHouse) {
-        if (!orig && value > 0 && value < houseSize) {
+        if (!orig && value > 0 && value <= houseSize) {
             row.setValueInHouse(value, inHouse, index);
             column.setValueInHouse(value, inHouse, index);
             zone.setValueInHouse(value, inHouse, index);
@@ -103,7 +103,7 @@ class Tile {
      * the note has already been added). If it is not in note mode, it will set the value v as the tile's current
      * value (or, if this tile's current value is already v, then it will clear the tile).
      *
-     * @param v The value you want to update this tile with.
+     * @param v The 1 - 9 value you want to update this tile with.
      */
     protected void update(int v) {
         if ((v > 0 && v <= houseSize) && !orig) {
@@ -278,14 +278,14 @@ class Tile {
     protected JSONObject getJSON() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put(jsonIndexId, this.getIndex());
-            jsonObject.put(jsonRowId, this.getRowNumber());
-            jsonObject.put(jsonColumnId, this.getColumnNumber());
-            jsonObject.put(jsonZoneId, this.getZoneNumber());
-            jsonObject.put(jsonNoteModeId, this.isNoteMode());
-            jsonObject.put(jsonOrigId, this.isOrig());
+            jsonObject.put(JSON_INDEX_ID, this.getIndex());
+            jsonObject.put(JSON_ROW_ID, this.getRowNumber());
+            jsonObject.put(JSON_COLUMN_ID, this.getColumnNumber());
+            jsonObject.put(JSON_ZONE_ID, this.getZoneNumber());
+            jsonObject.put(JSON_NOTE_MODE_ID, this.isNoteMode());
+            jsonObject.put(JSON_ORIG_ID, this.isOrig());
             JSONArray notesOrValueArray = new JSONArray(this.getNotesOrValue());
-            jsonObject.put(jsonValuesId, notesOrValueArray);
+            jsonObject.put(JSON_VALUES_ID, notesOrValueArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -315,14 +315,16 @@ class Tile {
     }
 
     /**
-     * This function is a slightly faster way of trying initial values than calling tryInitValue() with the values 1
-     * to 9.
+     * This function is a slightly faster way of trying initial values than calling seedInitialValue() with the values 1
+     * to 9. It keeps track of the last tried value and simply goes to the next one in the series rather than trying
+     * every value from 1 through 9. If the last value was 9, it simply aborts with a return value of false (meaning it
+     * failed to find any possible initial value).
      *
      * @return True if this Tile successfully picked a possible initial value, otherwise False
      */
     protected boolean tryInitialize() {
         for (int initValue = lastTried + 1; initValue <= houseSize; ++initValue) {
-            lastTried = initValue;
+            lastTried = initValue; // Save most recently tried value
             if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {
                 update(initValue);
                 visited = true;
@@ -336,15 +338,15 @@ class Tile {
      * @param initValue The value to try as an initial value for this Tile (1 - 9)
      * @return true if the value doesn't contradict anything in any of the houses, false otherwise
      */
-    protected boolean tryInitValue(int initValue) {
+    protected boolean seedInitialValue(int initValue) {
         if (initValue < 1 || initValue > houseSize) {
             return false;
         }
         if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {
             return false;
         }
-        visited = true;
         update(initValue);
+        visited = true;
         return true;
     }
 
@@ -377,13 +379,13 @@ class Tile {
      */
     protected void loadTileState(JSONObject jsonObject) throws JSONException {
         // Get JSON Data
-        int loadedIndex = jsonObject.getInt(jsonIndexId);
-        int loadedRowNumber = jsonObject.getInt(jsonRowId);
-        int loadedColumnNumber = jsonObject.getInt(jsonColumnId);
-        int loadedZoneId = jsonObject.getInt(jsonZoneId);
-        boolean loadedNoteMode = jsonObject.getBoolean(jsonNoteModeId);
-        boolean loadedOrig = jsonObject.getBoolean(jsonOrigId);
-        JSONArray jsonArray = jsonObject.getJSONArray(jsonValuesId);
+        int loadedIndex = jsonObject.getInt(JSON_INDEX_ID);
+        int loadedRowNumber = jsonObject.getInt(JSON_ROW_ID);
+        int loadedColumnNumber = jsonObject.getInt(JSON_COLUMN_ID);
+        int loadedZoneId = jsonObject.getInt(JSON_ZONE_ID);
+        boolean loadedNoteMode = jsonObject.getBoolean(JSON_NOTE_MODE_ID);
+        boolean loadedOrig = jsonObject.getBoolean(JSON_ORIG_ID);
+        JSONArray jsonArray = jsonObject.getJSONArray(JSON_VALUES_ID);
         // If no problems, load the data into this Tile
         this.index = loadedIndex;
         this.rowNumber = loadedRowNumber;

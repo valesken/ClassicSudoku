@@ -511,7 +511,7 @@ class Board {
         Tile tempTile;
         for (int i = 0; i < houseSize; ++i) {
             tempTile = getColumn(i).getMember(randGen.nextInt(houseSize));
-            tempTile.tryInitValue(i + 1); // TODO: rename tryInitValue to seedInitValue (differentiate from other init)
+            tempTile.seedInitialValue(i + 1);
             tileStack.add(tempTile);
         }
     }
@@ -542,7 +542,7 @@ class Board {
      * @return True if there are no more Tiles to initialize, False otherwise.
      */
     protected boolean keepSearching_DFS(Stack<Tile> tileStack) {
-        return tileStack.size() < tiles.length;
+        return tileStack.size() < getTiles().length;
     }
 
     /**

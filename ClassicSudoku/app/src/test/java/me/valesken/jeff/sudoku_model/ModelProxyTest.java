@@ -56,7 +56,6 @@ public class ModelProxyTest {
         doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)));
         // Execute & Verify
         assertEquals(difficulty, ModelProxy.newGame(difficulty));
-        verify(mockBoard).initializeTiles();
         verify(mockBoard).newGame(difficulty);
     }
 
@@ -69,7 +68,6 @@ public class ModelProxyTest {
         doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)));
         // Execute & Verify
         assertEquals(randomDifficulty, ModelProxy.newGame(difficulty));
-        verify(mockBoard).initializeTiles();
         verify(mockBoard).newGame(difficulty);
     }
 

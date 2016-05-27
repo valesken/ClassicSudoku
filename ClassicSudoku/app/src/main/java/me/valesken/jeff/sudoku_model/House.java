@@ -17,20 +17,21 @@ import java.util.LinkedList;
  */
 class House implements Iterable<Tile> {
 
-    @SuppressWarnings("unchecked")
-    protected HashSet<Integer>[] valueOwners = new HashSet[9];
+    protected HashSet<Integer>[] valueToOwnersMap;
     protected ArrayList<Tile> members;
     protected int houseIndex;
     protected int houseSize;
     protected int boardSize;
 
+    @SuppressWarnings("unchecked")
     protected House(int _houseSize, int _houseIndex) {
         houseIndex = _houseIndex;
         houseSize = _houseSize;
         boardSize = houseSize * houseSize;
         members = new ArrayList<>(houseSize);
+        valueToOwnersMap = new HashSet[9];
         for (int i = 0; i < 9; ++i) {
-            valueOwners[i] = new HashSet<>();
+            valueToOwnersMap[i] = new HashSet<>();
         }
     }
 
@@ -61,9 +62,9 @@ class House implements Iterable<Tile> {
     protected boolean setValueInHouse(int value, boolean assign, int tileIndex) {
         if (value > 0 && value <= houseSize && tileIndex > -1 && tileIndex < boardSize) {
             if (assign) {
-                return valueOwners[value - 1].add(tileIndex);
+                return valueToOwnersMap[value - 1].add(tileIndex);
             } else {
-                return valueOwners[value - 1].remove(tileIndex);
+                return valueToOwnersMap[value - 1].remove(tileIndex);
             }
         }
         return false;
@@ -78,7 +79,7 @@ class House implements Iterable<Tile> {
      */
     protected boolean clearValueInHouse(int value) {
         if (value > 0 && value <= houseSize) {
-            valueOwners[value - 1].clear();
+            valueToOwnersMap[value - 1].clear();
             return true;
         }
         return false;
@@ -105,7 +106,7 @@ class House implements Iterable<Tile> {
      * @return True if this House contains a Tile to which the value is assigned, otherwise False.
      */
     protected boolean hasValue(int value) {
-        return (value > 0 && value <= houseSize && valueOwners[value - 1].size() > 0);
+        return (value > 0 && value <= houseSize && valueToOwnersMap[value - 1].size() > 0);
     }
 
     /**

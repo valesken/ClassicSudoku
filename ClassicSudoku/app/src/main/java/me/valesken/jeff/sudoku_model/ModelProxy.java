@@ -1,7 +1,5 @@
 package me.valesken.jeff.sudoku_model;
 
-import android.util.Log;
-
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -20,11 +18,9 @@ public class ModelProxy {
      * @param houseSize The size of each House (row, column, zone) in the board.
      */
     public static void initializeNewBoard(int houseSize) {
-        Log.e("Error trace", "Inside initializeNewBoard()");
         board = new Board(houseSize);
-        Log.e("Error trace", "Board created");
         board.initializeHouses();
-        Log.e("Error trace", "Finished initializeNewBoard()");
+        board.initializeTiles();
     }
 
     /**
@@ -35,16 +31,10 @@ public class ModelProxy {
      * the selected difficulty level). -1 if the board has not yet been initialized.
      */
     public static int newGame(int difficulty) {
-        Log.e("Error trace", "Inside newGame() with difficulty " + difficulty);
         if (board == null) {
-            Log.e("Error trace", "Board is null!");
             return -1;
         }
-        board.initializeTiles();
-        Log.e("Error trace", "Initialized tiles");
-        int result = board.newGame(difficulty);
-        Log.e("Error trace", "New game created with resultant difficulty " + difficulty);
-        return result;
+        return board.newGame(difficulty);
     }
 
     /**
