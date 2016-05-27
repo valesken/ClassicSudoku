@@ -54,10 +54,10 @@ public class TileTest {
 
     private JSONObject setUpTileState() throws JSONException {
         JSONObject tileState = new JSONObject();
-        tileState.put(Tile.jsonIndexId, loadedIndex);
-        tileState.put(Tile.jsonRowId, loadedRowIndex);
-        tileState.put(Tile.jsonColumnId, loadedColumnIndex);
-        tileState.put(Tile.jsonZoneId, loadedZoneIndex);
+        tileState.put(Tile.JSON_INDEX_ID, loadedIndex);
+        tileState.put(Tile.JSON_ROW_ID, loadedRowIndex);
+        tileState.put(Tile.JSON_COLUMN_ID, loadedColumnIndex);
+        tileState.put(Tile.JSON_ZONE_ID, loadedZoneIndex);
         return tileState;
     }
     //endregion
@@ -194,8 +194,23 @@ public class TileTest {
     //region setValueInHouses() tests
     @Test
     public void testSetValueInHousesPass() {
-        tile.setValueInHouses(1, true);
-        verify(mockedHouse, times(3)).setValueInHouse(1, true, tileIndex);
+        int value = 4;
+        tile.setValueInHouses(value, true);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
+    }
+
+    @Test
+    public void testSetValueInHousesMinValuePass() {
+        int value = 1;
+        tile.setValueInHouses(value, true);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
+    }
+
+    @Test
+    public void testSetValueInHousesMaxValuePass() {
+        int value = houseSize;
+        tile.setValueInHouses(value, true);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
     }
 
     @Test
@@ -626,21 +641,21 @@ public class TileTest {
         verify(spy).isOrig();
         verify(spy).getNotesOrValue();
         // Verify All Necessary Tags Used
-        assertTrue(tileObject.has(Tile.jsonIndexId));
-        assertTrue(tileObject.has(Tile.jsonRowId));
-        assertTrue(tileObject.has(Tile.jsonColumnId));
-        assertTrue(tileObject.has(Tile.jsonZoneId));
-        assertTrue(tileObject.has(Tile.jsonNoteModeId));
-        assertTrue(tileObject.has(Tile.jsonOrigId));
-        assertTrue(tileObject.has(Tile.jsonValuesId));
+        assertTrue(tileObject.has(Tile.JSON_INDEX_ID));
+        assertTrue(tileObject.has(Tile.JSON_ROW_ID));
+        assertTrue(tileObject.has(Tile.JSON_COLUMN_ID));
+        assertTrue(tileObject.has(Tile.JSON_ZONE_ID));
+        assertTrue(tileObject.has(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.has(Tile.JSON_ORIG_ID));
+        assertTrue(tileObject.has(Tile.JSON_VALUES_ID));
         // Verify Correct Values
-        assertEquals(tileObject.getInt(Tile.jsonIndexId), spy.index);
-        assertEquals(tileObject.getInt(Tile.jsonRowId), spy.rowNumber);
-        assertEquals(tileObject.getInt(Tile.jsonColumnId), spy.columnNumber);
-        assertEquals(tileObject.getInt(Tile.jsonZoneId), spy.zoneNumber);
-        assertFalse(tileObject.getBoolean(Tile.jsonNoteModeId));
-        assertFalse(tileObject.getBoolean(Tile.jsonOrigId));
-        JSONArray jsonValues = tileObject.getJSONArray(Tile.jsonValuesId);
+        assertEquals(tileObject.getInt(Tile.JSON_INDEX_ID), spy.index);
+        assertEquals(tileObject.getInt(Tile.JSON_ROW_ID), spy.rowNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_COLUMN_ID), spy.columnNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_ZONE_ID), spy.zoneNumber);
+        assertFalse(tileObject.getBoolean(Tile.JSON_NOTE_MODE_ID));
+        assertFalse(tileObject.getBoolean(Tile.JSON_ORIG_ID));
+        JSONArray jsonValues = tileObject.getJSONArray(Tile.JSON_VALUES_ID);
         assertEquals(1, jsonValues.length());
         assertEquals(0, jsonValues.getInt(0));
     }
@@ -659,21 +674,21 @@ public class TileTest {
         verify(spy).isOrig();
         verify(spy).getNotesOrValue();
         // Verify All Necessary Tags Used
-        assertTrue(tileObject.has(Tile.jsonIndexId));
-        assertTrue(tileObject.has(Tile.jsonRowId));
-        assertTrue(tileObject.has(Tile.jsonColumnId));
-        assertTrue(tileObject.has(Tile.jsonZoneId));
-        assertTrue(tileObject.has(Tile.jsonNoteModeId));
-        assertTrue(tileObject.has(Tile.jsonOrigId));
-        assertTrue(tileObject.has(Tile.jsonValuesId));
+        assertTrue(tileObject.has(Tile.JSON_INDEX_ID));
+        assertTrue(tileObject.has(Tile.JSON_ROW_ID));
+        assertTrue(tileObject.has(Tile.JSON_COLUMN_ID));
+        assertTrue(tileObject.has(Tile.JSON_ZONE_ID));
+        assertTrue(tileObject.has(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.has(Tile.JSON_ORIG_ID));
+        assertTrue(tileObject.has(Tile.JSON_VALUES_ID));
         // Verify Correct Values
-        assertEquals(tileObject.getInt(Tile.jsonIndexId), spy.index);
-        assertEquals(tileObject.getInt(Tile.jsonRowId), spy.rowNumber);
-        assertEquals(tileObject.getInt(Tile.jsonColumnId), spy.columnNumber);
-        assertEquals(tileObject.getInt(Tile.jsonZoneId), spy.zoneNumber);
-        assertFalse(tileObject.getBoolean(Tile.jsonNoteModeId));
-        assertFalse(tileObject.getBoolean(Tile.jsonOrigId));
-        JSONArray jsonValues = tileObject.getJSONArray(Tile.jsonValuesId);
+        assertEquals(tileObject.getInt(Tile.JSON_INDEX_ID), spy.index);
+        assertEquals(tileObject.getInt(Tile.JSON_ROW_ID), spy.rowNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_COLUMN_ID), spy.columnNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_ZONE_ID), spy.zoneNumber);
+        assertFalse(tileObject.getBoolean(Tile.JSON_NOTE_MODE_ID));
+        assertFalse(tileObject.getBoolean(Tile.JSON_ORIG_ID));
+        JSONArray jsonValues = tileObject.getJSONArray(Tile.JSON_VALUES_ID);
         assertEquals(1, jsonValues.length());
         assertEquals(1, jsonValues.getInt(0));
     }
@@ -692,21 +707,21 @@ public class TileTest {
         verify(spy).isOrig();
         verify(spy).getNotesOrValue();
         // Verify All Necessary Tags Used
-        assertTrue(tileObject.has(Tile.jsonIndexId));
-        assertTrue(tileObject.has(Tile.jsonRowId));
-        assertTrue(tileObject.has(Tile.jsonColumnId));
-        assertTrue(tileObject.has(Tile.jsonZoneId));
-        assertTrue(tileObject.has(Tile.jsonNoteModeId));
-        assertTrue(tileObject.has(Tile.jsonOrigId));
-        assertTrue(tileObject.has(Tile.jsonValuesId));
+        assertTrue(tileObject.has(Tile.JSON_INDEX_ID));
+        assertTrue(tileObject.has(Tile.JSON_ROW_ID));
+        assertTrue(tileObject.has(Tile.JSON_COLUMN_ID));
+        assertTrue(tileObject.has(Tile.JSON_ZONE_ID));
+        assertTrue(tileObject.has(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.has(Tile.JSON_ORIG_ID));
+        assertTrue(tileObject.has(Tile.JSON_VALUES_ID));
         // Verify Correct Values
-        assertEquals(tileObject.getInt(Tile.jsonIndexId), spy.index);
-        assertEquals(tileObject.getInt(Tile.jsonRowId), spy.rowNumber);
-        assertEquals(tileObject.getInt(Tile.jsonColumnId), spy.columnNumber);
-        assertEquals(tileObject.getInt(Tile.jsonZoneId), spy.zoneNumber);
-        assertTrue(tileObject.getBoolean(Tile.jsonNoteModeId));
-        assertFalse(tileObject.getBoolean(Tile.jsonOrigId));
-        JSONArray jsonNotes = tileObject.getJSONArray(Tile.jsonValuesId);
+        assertEquals(tileObject.getInt(Tile.JSON_INDEX_ID), spy.index);
+        assertEquals(tileObject.getInt(Tile.JSON_ROW_ID), spy.rowNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_COLUMN_ID), spy.columnNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_ZONE_ID), spy.zoneNumber);
+        assertTrue(tileObject.getBoolean(Tile.JSON_NOTE_MODE_ID));
+        assertFalse(tileObject.getBoolean(Tile.JSON_ORIG_ID));
+        JSONArray jsonNotes = tileObject.getJSONArray(Tile.JSON_VALUES_ID);
         assertEquals(0, jsonNotes.length());
     }
 
@@ -726,21 +741,21 @@ public class TileTest {
         verify(spy).isOrig();
         verify(spy).getNotesOrValue();
         // Verify All Necessary Tags Used
-        assertTrue(tileObject.has(Tile.jsonIndexId));
-        assertTrue(tileObject.has(Tile.jsonRowId));
-        assertTrue(tileObject.has(Tile.jsonColumnId));
-        assertTrue(tileObject.has(Tile.jsonZoneId));
-        assertTrue(tileObject.has(Tile.jsonNoteModeId));
-        assertTrue(tileObject.has(Tile.jsonOrigId));
-        assertTrue(tileObject.has(Tile.jsonValuesId));
+        assertTrue(tileObject.has(Tile.JSON_INDEX_ID));
+        assertTrue(tileObject.has(Tile.JSON_ROW_ID));
+        assertTrue(tileObject.has(Tile.JSON_COLUMN_ID));
+        assertTrue(tileObject.has(Tile.JSON_ZONE_ID));
+        assertTrue(tileObject.has(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.has(Tile.JSON_ORIG_ID));
+        assertTrue(tileObject.has(Tile.JSON_VALUES_ID));
         // Verify Correct Values
-        assertEquals(tileObject.getInt(Tile.jsonIndexId), spy.index);
-        assertEquals(tileObject.getInt(Tile.jsonRowId), spy.rowNumber);
-        assertEquals(tileObject.getInt(Tile.jsonColumnId), spy.columnNumber);
-        assertEquals(tileObject.getInt(Tile.jsonZoneId), spy.zoneNumber);
-        assertTrue(tileObject.getBoolean(Tile.jsonNoteModeId));
-        assertFalse(tileObject.getBoolean(Tile.jsonOrigId));
-        JSONArray jsonNotes = tileObject.getJSONArray(Tile.jsonValuesId);
+        assertEquals(tileObject.getInt(Tile.JSON_INDEX_ID), spy.index);
+        assertEquals(tileObject.getInt(Tile.JSON_ROW_ID), spy.rowNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_COLUMN_ID), spy.columnNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_ZONE_ID), spy.zoneNumber);
+        assertTrue(tileObject.getBoolean(Tile.JSON_NOTE_MODE_ID));
+        assertFalse(tileObject.getBoolean(Tile.JSON_ORIG_ID));
+        JSONArray jsonNotes = tileObject.getJSONArray(Tile.JSON_VALUES_ID);
         assertEquals(2, jsonNotes.length());
         HashSet<Integer> notes = new HashSet<>();
         for (int i = 0; i < jsonNotes.length(); ++i) {
@@ -765,21 +780,21 @@ public class TileTest {
         verify(spy).isOrig();
         verify(spy).getNotesOrValue();
         // Verify All Necessary Tags Used
-        assertTrue(tileObject.has(Tile.jsonIndexId));
-        assertTrue(tileObject.has(Tile.jsonRowId));
-        assertTrue(tileObject.has(Tile.jsonColumnId));
-        assertTrue(tileObject.has(Tile.jsonZoneId));
-        assertTrue(tileObject.has(Tile.jsonNoteModeId));
-        assertTrue(tileObject.has(Tile.jsonOrigId));
-        assertTrue(tileObject.has(Tile.jsonValuesId));
+        assertTrue(tileObject.has(Tile.JSON_INDEX_ID));
+        assertTrue(tileObject.has(Tile.JSON_ROW_ID));
+        assertTrue(tileObject.has(Tile.JSON_COLUMN_ID));
+        assertTrue(tileObject.has(Tile.JSON_ZONE_ID));
+        assertTrue(tileObject.has(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.has(Tile.JSON_ORIG_ID));
+        assertTrue(tileObject.has(Tile.JSON_VALUES_ID));
         // Verify Correct Values
-        assertEquals(tileObject.getInt(Tile.jsonIndexId), spy.index);
-        assertEquals(tileObject.getInt(Tile.jsonRowId), spy.rowNumber);
-        assertEquals(tileObject.getInt(Tile.jsonColumnId), spy.columnNumber);
-        assertEquals(tileObject.getInt(Tile.jsonZoneId), spy.zoneNumber);
-        assertFalse(tileObject.getBoolean(Tile.jsonNoteModeId));
-        assertTrue(tileObject.getBoolean(Tile.jsonOrigId));
-        JSONArray jsonValues = tileObject.getJSONArray(Tile.jsonValuesId);
+        assertEquals(tileObject.getInt(Tile.JSON_INDEX_ID), spy.index);
+        assertEquals(tileObject.getInt(Tile.JSON_ROW_ID), spy.rowNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_COLUMN_ID), spy.columnNumber);
+        assertEquals(tileObject.getInt(Tile.JSON_ZONE_ID), spy.zoneNumber);
+        assertFalse(tileObject.getBoolean(Tile.JSON_NOTE_MODE_ID));
+        assertTrue(tileObject.getBoolean(Tile.JSON_ORIG_ID));
+        JSONArray jsonValues = tileObject.getJSONArray(Tile.JSON_VALUES_ID);
         assertEquals(1, jsonValues.length());
         assertEquals(1, jsonValues.getInt(0));
     }
@@ -947,12 +962,12 @@ public class TileTest {
     }
     //endregion
 
-    //region tryInitValue() tests
+    //region seedInitialValue() tests
     @Test
-    public void testTryInitValuePass() {
+    public void testSeedInitialValuePass() {
         Tile spy = spy(tile);
         when(mockedHouse.hasValue(1)).thenReturn(false);
-        assertTrue(spy.tryInitValue(1));
+        assertTrue(spy.seedInitialValue(1));
         verify(mockedHouse, times(3)).hasValue(1);
         verify(spy).update(1);
         assertEquals(1, spy.value);
@@ -960,9 +975,9 @@ public class TileTest {
     }
 
     @Test
-    public void testTryInitValueSmallFail() {
+    public void testSeedInitialValueSmallFail() {
         Tile spy = spy(tile);
-        assertFalse(spy.tryInitValue(-1));
+        assertFalse(spy.seedInitialValue(-1));
         verify(mockedHouse, never()).hasValue(-1);
         verify(spy, never()).update(-1);
         assertNotEquals(-1, spy.value);
@@ -970,9 +985,9 @@ public class TileTest {
     }
 
     @Test
-    public void testTryInitValueBigFail() {
+    public void testSeedInitialValueBigFail() {
         Tile spy = spy(tile);
-        assertFalse(spy.tryInitValue(1000));
+        assertFalse(spy.seedInitialValue(1000));
         verify(mockedHouse, never()).hasValue(1000);
         verify(spy, never()).update(1000);
         assertNotEquals(1000, spy.value);
@@ -980,12 +995,12 @@ public class TileTest {
     }
 
     @Test
-    public void testTryInitValueRowConflictFail() {
+    public void testSeedInitialValueRowConflictFail() {
         House mockedRow = mock(House.class);
         Tile spy = spy(tile);
         spy.row = mockedRow;
         when(mockedRow.hasValue(1)).thenReturn(true);
-        assertFalse(spy.tryInitValue(1));
+        assertFalse(spy.seedInitialValue(1));
         verify(mockedRow).hasValue(1);
         verify(mockedHouse, never()).hasValue(1);
         verify(spy, never()).update(1);
@@ -994,13 +1009,13 @@ public class TileTest {
     }
 
     @Test
-    public void testTryInitValueColumnConflictFail() {
+    public void testSeedInitialValueColumnConflictFail() {
         House mockedColumn = mock(House.class);
         Tile spy = spy(tile);
         spy.column = mockedColumn;
         when(mockedHouse.hasValue(1)).thenReturn(false);
         when(mockedColumn.hasValue(1)).thenReturn(true);
-        assertFalse(spy.tryInitValue(1));
+        assertFalse(spy.seedInitialValue(1));
         verify(mockedHouse).hasValue(1);
         verify(mockedColumn).hasValue(1);
         verify(spy, never()).update(1);
@@ -1009,13 +1024,13 @@ public class TileTest {
     }
 
     @Test
-    public void testTryInitValueZoneConflictFail() {
+    public void testSeedInitialValueZoneConflictFail() {
         House mockedZone = mock(House.class);
         Tile spy = spy(tile);
         spy.zone = mockedZone;
         when(mockedHouse.hasValue(1)).thenReturn(false);
         when(mockedZone.hasValue(1)).thenReturn(true);
-        assertFalse(spy.tryInitValue(1));
+        assertFalse(spy.seedInitialValue(1));
         verify(mockedHouse, times(2)).hasValue(1);
         verify(mockedZone).hasValue(1);
         verify(spy, never()).update(1);
@@ -1069,11 +1084,11 @@ public class TileTest {
         // Setup
         tile.value = 3;
         JSONObject tileState = setUpTileState();
-        tileState.put(Tile.jsonOrigId, true);
-        tileState.put(Tile.jsonNoteModeId, false);
+        tileState.put(Tile.JSON_ORIG_ID, true);
+        tileState.put(Tile.JSON_NOTE_MODE_ID, false);
         JSONArray values = new JSONArray();
         values.put(5);
-        tileState.put(Tile.jsonValuesId, values);
+        tileState.put(Tile.JSON_VALUES_ID, values);
         tile.loadTileState(tileState);
         // Verify results
         assertEquals(5, tile.value);
@@ -1090,11 +1105,11 @@ public class TileTest {
         // Setup
         tile.value = 3;
         JSONObject tileState = setUpTileState();
-        tileState.put(Tile.jsonOrigId, false);
-        tileState.put(Tile.jsonNoteModeId, false);
+        tileState.put(Tile.JSON_ORIG_ID, false);
+        tileState.put(Tile.JSON_NOTE_MODE_ID, false);
         JSONArray values = new JSONArray();
         values.put(5);
-        tileState.put(Tile.jsonValuesId, values);
+        tileState.put(Tile.JSON_VALUES_ID, values);
         tile.loadTileState(tileState);
         // Verify results
         assertEquals(5, tile.value);
@@ -1111,12 +1126,12 @@ public class TileTest {
         // Setup
         tile.value = 3;
         JSONObject tileState = setUpTileState();
-        tileState.put(Tile.jsonOrigId, false);
-        tileState.put(Tile.jsonNoteModeId, true);
+        tileState.put(Tile.JSON_ORIG_ID, false);
+        tileState.put(Tile.JSON_NOTE_MODE_ID, true);
         JSONArray values = new JSONArray();
         values.put(5);
         values.put(6);
-        tileState.put(Tile.jsonValuesId, values);
+        tileState.put(Tile.JSON_VALUES_ID, values);
         tile.loadTileState(tileState);
         // Verify results
         assertEquals(0, tile.value);

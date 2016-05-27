@@ -5,7 +5,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html id="htmlId">
 <head>
-  <title>Coverage Report :: SudokuModelAPI</title>
+  <title>Coverage Report :: ModelAPI</title>
   <style type="text/css">
     @import "../../.css/coverage.css";
   </style>
@@ -17,10 +17,10 @@
 <div class="content">
 <div class="breadCrumbs">
     [ <a href="../../index.html">all classes</a> ]
-    [ <a href="../index.html">me.valesken.jeff.sudoku_model_api</a> ]
+    [ <a href="../index.html">me.valesken.jeff.sudoku_model</a> ]
 </div>
 
-<h1>Coverage Summary for Class: SudokuModelAPI (me.valesken.jeff.sudoku_model_api)</h1>
+<h1>Coverage Summary for Class: ModelAPI (me.valesken.jeff.sudoku_model)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,7 +39,7 @@
 </th>
 </tr>
 <tr>
-  <td class="name">SudokuModelAPI</td>
+  <td class="name">ModelAPI</td>
 <td class="coverageStat">
   <span class="percent">
     0%
@@ -72,7 +72,7 @@
 <br/>
 
 
-<div class="sourceCode"><i>1</i>&nbsp;package me.valesken.jeff.sudoku_model_api;
+<div class="sourceCode"><i>1</i>&nbsp;package me.valesken.jeff.sudoku_model;
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import org.json.JSONObject;
 <i>4</i>&nbsp;
@@ -84,20 +84,20 @@
 <i>10</i>&nbsp; * Created by jeff on 2/8/2016.
 <i>11</i>&nbsp; * Last updated on 2/8/2016.
 <i>12</i>&nbsp; */
-<b class="nc"><i>13</i>&nbsp;public class SudokuModelAPI {</b>
+<b class="nc"><i>13</i>&nbsp;public class ModelAPI {</b>
 <i>14</i>&nbsp;
 <i>15</i>&nbsp;    public static Board board;
 <i>16</i>&nbsp;
 <i>17</i>&nbsp;    public static void initializeNewBoard(int houseSize) {
 <b class="nc"><i>18</i>&nbsp;        board = new Board(houseSize);</b>
 <b class="nc"><i>19</i>&nbsp;        board.initializeHouses();</b>
-<b class="nc"><i>20</i>&nbsp;        board.initializeTiles();</b>
-<i>21</i>&nbsp;    }
-<i>22</i>&nbsp;
-<i>23</i>&nbsp;    public static int newGame(int difficulty) {
-<b class="nc"><i>24</i>&nbsp;        if(board == null) {</b>
-<b class="nc"><i>25</i>&nbsp;            return -1;</b>
-<i>26</i>&nbsp;        }
+<i>20</i>&nbsp;    }
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    public static int newGame(int difficulty) {
+<b class="nc"><i>23</i>&nbsp;        if(board == null) {</b>
+<b class="nc"><i>24</i>&nbsp;            return -1;</b>
+<i>25</i>&nbsp;        }
+<b class="nc"><i>26</i>&nbsp;        board.initializeTiles();</b>
 <b class="nc"><i>27</i>&nbsp;        return board.newGame(difficulty);</b>
 <i>28</i>&nbsp;    }
 <i>29</i>&nbsp;
@@ -184,7 +184,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-02-11 09:11</div>
+    <div style="float:right;">generated on 2016-04-14 15:06</div>
 </div>
 </body>
 </html>

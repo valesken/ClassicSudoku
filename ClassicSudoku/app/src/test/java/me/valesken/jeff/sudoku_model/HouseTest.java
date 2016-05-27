@@ -36,9 +36,9 @@ public class HouseTest {
         assertEquals(houseIndex, house.houseIndex);
         assertNotNull(house.members);
         assertEquals(0, house.members.size());
-        assertNotNull(house.valueOwners);
-        assertEquals(9, house.valueOwners.length);
-        for (HashSet set : house.valueOwners) {
+        assertNotNull(house.valueToOwnersMap);
+        assertEquals(9, house.valueToOwnersMap.length);
+        for (HashSet set : house.valueToOwnersMap) {
             assertNotNull(set);
             assertEquals(0, set.size());
         }
@@ -93,40 +93,40 @@ public class HouseTest {
     @Test
     public void testSetValueNoClaimPass() {
         assertTrue(house.setValueInHouse(1, true, 0));
-        assertEquals(1, house.valueOwners[0].size());
-        assertTrue(house.valueOwners[0].contains(0));
+        assertEquals(1, house.valueToOwnersMap[0].size());
+        assertTrue(house.valueToOwnersMap[0].contains(0));
     }
 
     @Test
     public void testSetValueOneClaimPass() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertTrue(house.setValueInHouse(1, true, 1));
-        assertEquals(2, house.valueOwners[0].size());
-        assertTrue(house.valueOwners[0].contains(0));
-        assertTrue(house.valueOwners[0].contains(1));
+        assertEquals(2, house.valueToOwnersMap[0].size());
+        assertTrue(house.valueToOwnersMap[0].contains(0));
+        assertTrue(house.valueToOwnersMap[0].contains(1));
     }
 
     @Test
     public void testRemoveValueOneClaimPass() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertTrue(house.setValueInHouse(1, false, 0));
-        assertEquals(0, house.valueOwners[0].size());
-        assertFalse(house.valueOwners[0].contains(0));
+        assertEquals(0, house.valueToOwnersMap[0].size());
+        assertFalse(house.valueToOwnersMap[0].contains(0));
     }
 
     @Test
     public void testRemoveValueTwoClaimsPass() {
-        house.valueOwners[0].add(0);
-        house.valueOwners[0].add(1);
+        house.valueToOwnersMap[0].add(0);
+        house.valueToOwnersMap[0].add(1);
         assertTrue(house.setValueInHouse(1, false, 0));
-        assertEquals(1, house.valueOwners[0].size());
-        assertFalse(house.valueOwners[0].contains(0));
-        assertTrue(house.valueOwners[0].contains(1));
+        assertEquals(1, house.valueToOwnersMap[0].size());
+        assertFalse(house.valueToOwnersMap[0].contains(0));
+        assertTrue(house.valueToOwnersMap[0].contains(1));
     }
 
     @Test
     public void testAddSameTileTwiceFail() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertFalse(house.setValueInHouse(1, true, 0));
     }
 
@@ -162,42 +162,42 @@ public class HouseTest {
 
     @Test
     public void testRemoveMissingValueOneClaimFail() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertFalse(house.setValueInHouse(1, false, 1));
-        assertEquals(1, house.valueOwners[0].size());
-        assertTrue(house.valueOwners[0].contains(0));
+        assertEquals(1, house.valueToOwnersMap[0].size());
+        assertTrue(house.valueToOwnersMap[0].contains(0));
     }
     //endregion
 
     //region clearValueInHouse() tests
     @Test
     public void testClearOneValueInHousePass() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertTrue(house.clearValueInHouse(1));
-        assertEquals(0, house.valueOwners[0].size());
+        assertEquals(0, house.valueToOwnersMap[0].size());
     }
 
     @Test
     public void testClearMultipleValuesInHousePass() {
-        house.valueOwners[0].add(0);
-        house.valueOwners[0].add(1);
+        house.valueToOwnersMap[0].add(0);
+        house.valueToOwnersMap[0].add(1);
         assertTrue(house.clearValueInHouse(1));
-        assertEquals(0, house.valueOwners[0].size());
+        assertEquals(0, house.valueToOwnersMap[0].size());
     }
 
     @Test
     public void testClearNoValuesInHousePass() {
         assertTrue(house.clearValueInHouse(1));
-        assertEquals(0, house.valueOwners[0].size());
+        assertEquals(0, house.valueToOwnersMap[0].size());
     }
 
     @Test
     public void testClearDoesNotAffectOtherValuesPass() {
-        house.valueOwners[0].add(0);
-        house.valueOwners[1].add(1);
+        house.valueToOwnersMap[0].add(0);
+        house.valueToOwnersMap[1].add(1);
         assertTrue(house.clearValueInHouse(1));
-        assertEquals(1, house.valueOwners[1].size());
-        assertTrue(house.valueOwners[1].contains(1));
+        assertEquals(1, house.valueToOwnersMap[1].size());
+        assertTrue(house.valueToOwnersMap[1].contains(1));
     }
 
     @Test
@@ -249,14 +249,14 @@ public class HouseTest {
     //region hasValue() tests
     @Test
     public void testOneTileHasValuePass() {
-        house.valueOwners[0].add(0);
+        house.valueToOwnersMap[0].add(0);
         assertTrue(house.hasValue(1));
     }
 
     @Test
     public void testMultipleTilesHaveValuePass() {
-        house.valueOwners[0].add(0);
-        house.valueOwners[0].add(1);
+        house.valueToOwnersMap[0].add(0);
+        house.valueToOwnersMap[0].add(1);
         assertTrue(house.hasValue(1));
     }
 
