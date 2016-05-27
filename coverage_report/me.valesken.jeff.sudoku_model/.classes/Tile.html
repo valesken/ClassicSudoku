@@ -39,26 +39,26 @@
   <td class="name">Tile</td>
 <td class="coverageStat">
   <span class="percent">
-    96.4%
+    96.3%
   </span>
   <span class="absValue">
-    (27/ 28)
+    (26/ 27)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    96.2%
+    96%
   </span>
   <span class="absValue">
-    (150/ 156)
+    (143/ 149)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$6c759395</td>
+    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$30788999</td>
   </tr>
   <tr>
-    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$6c759395$$FastClassByMockitoWithCGLIB$$53ef86f8</td>
+    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$30788999$$FastClassByMockitoWithCGLIB$$92981b16</td>
   </tr>
   <tr>
     <td class="name">Tile$$FastClassByMockitoWithCGLIB$$4bc8c67b</td>
@@ -67,18 +67,18 @@
   <td class="name"><strong>total</strong></td>
 <td class="coverageStat">
   <span class="percent">
-    96.4%
+    96.3%
   </span>
   <span class="absValue">
-    (27/ 28)
+    (26/ 27)
   </span>
 </td>
 <td class="coverageStat">
   <span class="percent">
-    96.2%
+    96%
   </span>
   <span class="absValue">
-    (150/ 156)
+    (143/ 149)
   </span>
 </td>
 </tr>
@@ -102,13 +102,13 @@
 <i>12</i>&nbsp; */
 <i>13</i>&nbsp;
 <i>14</i>&nbsp;class Tile {
-<b class="fc"><i>15</i>&nbsp;    static protected String jsonIndexId = &quot;index&quot;;</b>
-<b class="fc"><i>16</i>&nbsp;    static protected String jsonRowId = &quot;row&quot;;</b>
-<b class="fc"><i>17</i>&nbsp;    static protected String jsonColumnId = &quot;column&quot;;</b>
-<b class="fc"><i>18</i>&nbsp;    static protected String jsonZoneId = &quot;zone&quot;;</b>
-<b class="fc"><i>19</i>&nbsp;    static protected String jsonNoteModeId = &quot;noteMode&quot;;</b>
-<b class="fc"><i>20</i>&nbsp;    static protected String jsonOrigId = &quot;orig&quot;;</b>
-<b class="fc"><i>21</i>&nbsp;    static protected String jsonValuesId = &quot;notesOrValue&quot;;</b>
+<i>15</i>&nbsp;    static final protected String JSON_INDEX_ID = &quot;index&quot;;
+<i>16</i>&nbsp;    static final protected String JSON_ROW_ID = &quot;row&quot;;
+<i>17</i>&nbsp;    static final protected String JSON_COLUMN_ID = &quot;column&quot;;
+<i>18</i>&nbsp;    static final protected String JSON_ZONE_ID = &quot;zone&quot;;
+<i>19</i>&nbsp;    static final protected String JSON_NOTE_MODE_ID = &quot;noteMode&quot;;
+<i>20</i>&nbsp;    static final protected String JSON_ORIG_ID = &quot;orig&quot;;
+<i>21</i>&nbsp;    static final protected String JSON_VALUES_ID = &quot;notesOrValue&quot;;
 <i>22</i>&nbsp;
 <i>23</i>&nbsp;    protected int houseSize;
 <i>24</i>&nbsp;    protected int index;
@@ -177,11 +177,11 @@
 <i>87</i>&nbsp;    /**
 <i>88</i>&nbsp;     * To be used internally by Tile only! (Or in tests)
 <i>89</i>&nbsp;     *
-<i>90</i>&nbsp;     * @param value   The value you want to assign to or remove from this tile in this tile&#39;s houses
+<i>90</i>&nbsp;     * @param value   The 1 - 9 value you want to assign to or remove from this tile in this tile&#39;s houses
 <i>91</i>&nbsp;     * @param inHouse True - assign to the desired value; False - remove from the desired value
 <i>92</i>&nbsp;     */
 <i>93</i>&nbsp;    protected void setValueInHouses(int value, boolean inHouse) {
-<b class="fc"><i>94</i>&nbsp;        if (!orig &amp;&amp; value &gt; 0 &amp;&amp; value &lt; houseSize) {</b>
+<b class="fc"><i>94</i>&nbsp;        if (!orig &amp;&amp; value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
 <b class="fc"><i>95</i>&nbsp;            row.setValueInHouse(value, inHouse, index);</b>
 <b class="fc"><i>96</i>&nbsp;            column.setValueInHouse(value, inHouse, index);</b>
 <b class="fc"><i>97</i>&nbsp;            zone.setValueInHouse(value, inHouse, index);</b>
@@ -193,7 +193,7 @@
 <i>103</i>&nbsp;     * the note has already been added). If it is not in note mode, it will set the value v as the tile&#39;s current
 <i>104</i>&nbsp;     * value (or, if this tile&#39;s current value is already v, then it will clear the tile).
 <i>105</i>&nbsp;     *
-<i>106</i>&nbsp;     * @param v The value you want to update this tile with.
+<i>106</i>&nbsp;     * @param v The 1 - 9 value you want to update this tile with.
 <i>107</i>&nbsp;     */
 <i>108</i>&nbsp;    protected void update(int v) {
 <b class="fc"><i>109</i>&nbsp;        if ((v &gt; 0 &amp;&amp; v &lt;= houseSize) &amp;&amp; !orig) {</b>
@@ -368,14 +368,14 @@
 <i>278</i>&nbsp;    protected JSONObject getJSON() {
 <b class="fc"><i>279</i>&nbsp;        JSONObject jsonObject = new JSONObject();</b>
 <i>280</i>&nbsp;        try {
-<b class="fc"><i>281</i>&nbsp;            jsonObject.put(jsonIndexId, this.getIndex());</b>
-<b class="fc"><i>282</i>&nbsp;            jsonObject.put(jsonRowId, this.getRowNumber());</b>
-<b class="fc"><i>283</i>&nbsp;            jsonObject.put(jsonColumnId, this.getColumnNumber());</b>
-<b class="fc"><i>284</i>&nbsp;            jsonObject.put(jsonZoneId, this.getZoneNumber());</b>
-<b class="fc"><i>285</i>&nbsp;            jsonObject.put(jsonNoteModeId, this.isNoteMode());</b>
-<b class="fc"><i>286</i>&nbsp;            jsonObject.put(jsonOrigId, this.isOrig());</b>
+<b class="fc"><i>281</i>&nbsp;            jsonObject.put(JSON_INDEX_ID, this.getIndex());</b>
+<b class="fc"><i>282</i>&nbsp;            jsonObject.put(JSON_ROW_ID, this.getRowNumber());</b>
+<b class="fc"><i>283</i>&nbsp;            jsonObject.put(JSON_COLUMN_ID, this.getColumnNumber());</b>
+<b class="fc"><i>284</i>&nbsp;            jsonObject.put(JSON_ZONE_ID, this.getZoneNumber());</b>
+<b class="fc"><i>285</i>&nbsp;            jsonObject.put(JSON_NOTE_MODE_ID, this.isNoteMode());</b>
+<b class="fc"><i>286</i>&nbsp;            jsonObject.put(JSON_ORIG_ID, this.isOrig());</b>
 <b class="fc"><i>287</i>&nbsp;            JSONArray notesOrValueArray = new JSONArray(this.getNotesOrValue());</b>
-<b class="fc"><i>288</i>&nbsp;            jsonObject.put(jsonValuesId, notesOrValueArray);</b>
+<b class="fc"><i>288</i>&nbsp;            jsonObject.put(JSON_VALUES_ID, notesOrValueArray);</b>
 <b class="nc"><i>289</i>&nbsp;        } catch (JSONException e) {</b>
 <b class="nc"><i>290</i>&nbsp;            e.printStackTrace();</b>
 <b class="fc"><i>291</i>&nbsp;        }</b>
@@ -405,99 +405,101 @@
 <i>315</i>&nbsp;    }
 <i>316</i>&nbsp;
 <i>317</i>&nbsp;    /**
-<i>318</i>&nbsp;     * This function is a slightly faster way of trying initial values than calling tryInitValue() with the values 1
-<i>319</i>&nbsp;     * to 9.
-<i>320</i>&nbsp;     *
-<i>321</i>&nbsp;     * @return True if this Tile successfully picked a possible initial value, otherwise False
-<i>322</i>&nbsp;     */
-<i>323</i>&nbsp;    protected boolean tryInitialize() {
-<b class="fc"><i>324</i>&nbsp;        for (int initValue = lastTried + 1; initValue &lt;= houseSize; ++initValue) {</b>
-<b class="fc"><i>325</i>&nbsp;            lastTried = initValue;</b>
-<b class="fc"><i>326</i>&nbsp;            if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {</b>
-<b class="fc"><i>327</i>&nbsp;                update(initValue);</b>
-<b class="fc"><i>328</i>&nbsp;                visited = true;</b>
-<b class="fc"><i>329</i>&nbsp;                return true;</b>
-<i>330</i>&nbsp;            }
-<i>331</i>&nbsp;        }
-<b class="fc"><i>332</i>&nbsp;        return false;</b>
-<i>333</i>&nbsp;    }
-<i>334</i>&nbsp;
-<i>335</i>&nbsp;    /**
-<i>336</i>&nbsp;     * @param initValue The value to try as an initial value for this Tile (1 - 9)
-<i>337</i>&nbsp;     * @return true if the value doesn&#39;t contradict anything in any of the houses, false otherwise
-<i>338</i>&nbsp;     */
-<i>339</i>&nbsp;    protected boolean tryInitValue(int initValue) {
-<b class="fc"><i>340</i>&nbsp;        if (initValue &lt; 1 || initValue &gt; houseSize) {</b>
-<b class="fc"><i>341</i>&nbsp;            return false;</b>
-<i>342</i>&nbsp;        }
-<b class="fc"><i>343</i>&nbsp;        if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {</b>
-<b class="fc"><i>344</i>&nbsp;            return false;</b>
-<i>345</i>&nbsp;        }
-<b class="fc"><i>346</i>&nbsp;        visited = true;</b>
-<b class="fc"><i>347</i>&nbsp;        update(initValue);</b>
-<b class="fc"><i>348</i>&nbsp;        return true;</b>
-<i>349</i>&nbsp;    }
-<i>350</i>&nbsp;
-<i>351</i>&nbsp;    /**
-<i>352</i>&nbsp;     * Call when board initialization has reached a contradiction and needs to clear Tiles.
-<i>353</i>&nbsp;     */
-<i>354</i>&nbsp;    protected void resetInitializationState() {
-<b class="fc"><i>355</i>&nbsp;        if (value &gt; 0) {</b>
-<b class="fc"><i>356</i>&nbsp;            setValueInHouses(value, false);</b>
-<i>357</i>&nbsp;        }
-<b class="fc"><i>358</i>&nbsp;        value = 0;</b>
-<b class="fc"><i>359</i>&nbsp;        visited = false;</b>
-<b class="fc"><i>360</i>&nbsp;        lastTried = 0;</b>
-<b class="fc"><i>361</i>&nbsp;    }</b>
-<i>362</i>&nbsp;
-<i>363</i>&nbsp;    /**
-<i>364</i>&nbsp;     * Set this Tile as an original, unchangeable, starting Tile on the Board.
-<i>365</i>&nbsp;     *
-<i>366</i>&nbsp;     * @param _orig Whether or not to set this Tile as an original, starting Tile.
-<i>367</i>&nbsp;     */
-<i>368</i>&nbsp;    protected void setOrig(boolean _orig) {
-<b class="fc"><i>369</i>&nbsp;        orig = _orig;</b>
-<b class="fc"><i>370</i>&nbsp;    }</b>
-<i>371</i>&nbsp;
-<i>372</i>&nbsp;    /**
-<i>373</i>&nbsp;     * Only to be used for loading a previous game. Will not load any data if the provided json is corrupted or
-<i>374</i>&nbsp;     * otherwise incorrect.
-<i>375</i>&nbsp;     *
-<i>376</i>&nbsp;     * @param jsonObject A JSON representation of this Tile&#39;s state.
-<i>377</i>&nbsp;     */
-<i>378</i>&nbsp;    protected void loadTileState(JSONObject jsonObject) throws JSONException {
-<i>379</i>&nbsp;        // Get JSON Data
-<b class="fc"><i>380</i>&nbsp;        int loadedIndex = jsonObject.getInt(jsonIndexId);</b>
-<b class="fc"><i>381</i>&nbsp;        int loadedRowNumber = jsonObject.getInt(jsonRowId);</b>
-<b class="fc"><i>382</i>&nbsp;        int loadedColumnNumber = jsonObject.getInt(jsonColumnId);</b>
-<b class="fc"><i>383</i>&nbsp;        int loadedZoneId = jsonObject.getInt(jsonZoneId);</b>
-<b class="fc"><i>384</i>&nbsp;        boolean loadedNoteMode = jsonObject.getBoolean(jsonNoteModeId);</b>
-<b class="fc"><i>385</i>&nbsp;        boolean loadedOrig = jsonObject.getBoolean(jsonOrigId);</b>
-<b class="fc"><i>386</i>&nbsp;        JSONArray jsonArray = jsonObject.getJSONArray(jsonValuesId);</b>
-<i>387</i>&nbsp;        // If no problems, load the data into this Tile
-<b class="fc"><i>388</i>&nbsp;        this.index = loadedIndex;</b>
-<b class="fc"><i>389</i>&nbsp;        this.rowNumber = loadedRowNumber;</b>
-<b class="fc"><i>390</i>&nbsp;        this.columnNumber = loadedColumnNumber;</b>
-<b class="fc"><i>391</i>&nbsp;        this.zoneNumber = loadedZoneId;</b>
-<b class="fc"><i>392</i>&nbsp;        this.noteMode = loadedNoteMode;</b>
-<b class="fc"><i>393</i>&nbsp;        this.orig = loadedOrig;</b>
-<b class="fc"><i>394</i>&nbsp;        if (noteMode) {</b>
-<b class="fc"><i>395</i>&nbsp;            value = 0;</b>
-<b class="fc"><i>396</i>&nbsp;            for (int i = 0; i &lt; jsonArray.length(); ++i) {</b>
-<b class="fc"><i>397</i>&nbsp;                notes[jsonArray.getInt(i) - 1] = true;</b>
-<i>398</i>&nbsp;            }
-<i>399</i>&nbsp;        } else {
-<b class="fc"><i>400</i>&nbsp;            value = jsonArray.getInt(0);</b>
-<i>401</i>&nbsp;        }
-<b class="fc"><i>402</i>&nbsp;    }</b>
-<i>403</i>&nbsp;    //endregion
-<i>404</i>&nbsp;}
+<i>318</i>&nbsp;     * This function is a slightly faster way of trying initial values than calling seedInitialValue() with the values 1
+<i>319</i>&nbsp;     * to 9. It keeps track of the last tried value and simply goes to the next one in the series rather than trying
+<i>320</i>&nbsp;     * every value from 1 through 9. If the last value was 9, it simply aborts with a return value of false (meaning it
+<i>321</i>&nbsp;     * failed to find any possible initial value).
+<i>322</i>&nbsp;     *
+<i>323</i>&nbsp;     * @return True if this Tile successfully picked a possible initial value, otherwise False
+<i>324</i>&nbsp;     */
+<i>325</i>&nbsp;    protected boolean tryInitialize() {
+<b class="fc"><i>326</i>&nbsp;        for (int initValue = lastTried + 1; initValue &lt;= houseSize; ++initValue) {</b>
+<b class="fc"><i>327</i>&nbsp;            lastTried = initValue; // Save most recently tried value</b>
+<b class="fc"><i>328</i>&nbsp;            if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {</b>
+<b class="fc"><i>329</i>&nbsp;                update(initValue);</b>
+<b class="fc"><i>330</i>&nbsp;                visited = true;</b>
+<b class="fc"><i>331</i>&nbsp;                return true;</b>
+<i>332</i>&nbsp;            }
+<i>333</i>&nbsp;        }
+<b class="fc"><i>334</i>&nbsp;        return false;</b>
+<i>335</i>&nbsp;    }
+<i>336</i>&nbsp;
+<i>337</i>&nbsp;    /**
+<i>338</i>&nbsp;     * @param initValue The value to try as an initial value for this Tile (1 - 9)
+<i>339</i>&nbsp;     * @return true if the value doesn&#39;t contradict anything in any of the houses, false otherwise
+<i>340</i>&nbsp;     */
+<i>341</i>&nbsp;    protected boolean seedInitialValue(int initValue) {
+<b class="fc"><i>342</i>&nbsp;        if (initValue &lt; 1 || initValue &gt; houseSize) {</b>
+<b class="fc"><i>343</i>&nbsp;            return false;</b>
+<i>344</i>&nbsp;        }
+<b class="fc"><i>345</i>&nbsp;        if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {</b>
+<b class="fc"><i>346</i>&nbsp;            return false;</b>
+<i>347</i>&nbsp;        }
+<b class="fc"><i>348</i>&nbsp;        update(initValue);</b>
+<b class="fc"><i>349</i>&nbsp;        visited = true;</b>
+<b class="fc"><i>350</i>&nbsp;        return true;</b>
+<i>351</i>&nbsp;    }
+<i>352</i>&nbsp;
+<i>353</i>&nbsp;    /**
+<i>354</i>&nbsp;     * Call when board initialization has reached a contradiction and needs to clear Tiles.
+<i>355</i>&nbsp;     */
+<i>356</i>&nbsp;    protected void resetInitializationState() {
+<b class="fc"><i>357</i>&nbsp;        if (value &gt; 0) {</b>
+<b class="fc"><i>358</i>&nbsp;            setValueInHouses(value, false);</b>
+<i>359</i>&nbsp;        }
+<b class="fc"><i>360</i>&nbsp;        value = 0;</b>
+<b class="fc"><i>361</i>&nbsp;        visited = false;</b>
+<b class="fc"><i>362</i>&nbsp;        lastTried = 0;</b>
+<b class="fc"><i>363</i>&nbsp;    }</b>
+<i>364</i>&nbsp;
+<i>365</i>&nbsp;    /**
+<i>366</i>&nbsp;     * Set this Tile as an original, unchangeable, starting Tile on the Board.
+<i>367</i>&nbsp;     *
+<i>368</i>&nbsp;     * @param _orig Whether or not to set this Tile as an original, starting Tile.
+<i>369</i>&nbsp;     */
+<i>370</i>&nbsp;    protected void setOrig(boolean _orig) {
+<b class="fc"><i>371</i>&nbsp;        orig = _orig;</b>
+<b class="fc"><i>372</i>&nbsp;    }</b>
+<i>373</i>&nbsp;
+<i>374</i>&nbsp;    /**
+<i>375</i>&nbsp;     * Only to be used for loading a previous game. Will not load any data if the provided json is corrupted or
+<i>376</i>&nbsp;     * otherwise incorrect.
+<i>377</i>&nbsp;     *
+<i>378</i>&nbsp;     * @param jsonObject A JSON representation of this Tile&#39;s state.
+<i>379</i>&nbsp;     */
+<i>380</i>&nbsp;    protected void loadTileState(JSONObject jsonObject) throws JSONException {
+<i>381</i>&nbsp;        // Get JSON Data
+<b class="fc"><i>382</i>&nbsp;        int loadedIndex = jsonObject.getInt(JSON_INDEX_ID);</b>
+<b class="fc"><i>383</i>&nbsp;        int loadedRowNumber = jsonObject.getInt(JSON_ROW_ID);</b>
+<b class="fc"><i>384</i>&nbsp;        int loadedColumnNumber = jsonObject.getInt(JSON_COLUMN_ID);</b>
+<b class="fc"><i>385</i>&nbsp;        int loadedZoneId = jsonObject.getInt(JSON_ZONE_ID);</b>
+<b class="fc"><i>386</i>&nbsp;        boolean loadedNoteMode = jsonObject.getBoolean(JSON_NOTE_MODE_ID);</b>
+<b class="fc"><i>387</i>&nbsp;        boolean loadedOrig = jsonObject.getBoolean(JSON_ORIG_ID);</b>
+<b class="fc"><i>388</i>&nbsp;        JSONArray jsonArray = jsonObject.getJSONArray(JSON_VALUES_ID);</b>
+<i>389</i>&nbsp;        // If no problems, load the data into this Tile
+<b class="fc"><i>390</i>&nbsp;        this.index = loadedIndex;</b>
+<b class="fc"><i>391</i>&nbsp;        this.rowNumber = loadedRowNumber;</b>
+<b class="fc"><i>392</i>&nbsp;        this.columnNumber = loadedColumnNumber;</b>
+<b class="fc"><i>393</i>&nbsp;        this.zoneNumber = loadedZoneId;</b>
+<b class="fc"><i>394</i>&nbsp;        this.noteMode = loadedNoteMode;</b>
+<b class="fc"><i>395</i>&nbsp;        this.orig = loadedOrig;</b>
+<b class="fc"><i>396</i>&nbsp;        if (noteMode) {</b>
+<b class="fc"><i>397</i>&nbsp;            value = 0;</b>
+<b class="fc"><i>398</i>&nbsp;            for (int i = 0; i &lt; jsonArray.length(); ++i) {</b>
+<b class="fc"><i>399</i>&nbsp;                notes[jsonArray.getInt(i) - 1] = true;</b>
+<i>400</i>&nbsp;            }
+<i>401</i>&nbsp;        } else {
+<b class="fc"><i>402</i>&nbsp;            value = jsonArray.getInt(0);</b>
+<i>403</i>&nbsp;        }
+<b class="fc"><i>404</i>&nbsp;    }</b>
+<i>405</i>&nbsp;    //endregion
+<i>406</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-04-15 10:48</div>
+    <div style="float:right;">generated on 2016-05-27 09:15</div>
 </div>
 </body>
 </html>

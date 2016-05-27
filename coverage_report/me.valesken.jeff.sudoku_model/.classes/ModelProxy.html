@@ -58,10 +58,10 @@
 </td>
 <td class="coverageStat">
   <span class="percent">
-    91.9%
+    89.2%
   </span>
   <span class="absValue">
-    (34/ 37)
+    (33/ 37)
   </span>
 </td>
 </tr>
@@ -94,20 +94,20 @@
 <i>20</i>&nbsp;    public static void initializeNewBoard(int houseSize) {
 <b class="nc"><i>21</i>&nbsp;        board = new Board(houseSize);</b>
 <b class="nc"><i>22</i>&nbsp;        board.initializeHouses();</b>
-<b class="nc"><i>23</i>&nbsp;    }</b>
-<i>24</i>&nbsp;
-<i>25</i>&nbsp;    /**
-<i>26</i>&nbsp;     * Create a new game.
-<i>27</i>&nbsp;     *
-<i>28</i>&nbsp;     * @param difficulty The difficulty level for the new game.
-<i>29</i>&nbsp;     * @return The actual difficulty level of the game. Should be the same (unless random, which case this tells you
-<i>30</i>&nbsp;     * the selected difficulty level). -1 if the board has not yet been initialized.
-<i>31</i>&nbsp;     */
-<i>32</i>&nbsp;    public static int newGame(int difficulty) {
-<b class="fc"><i>33</i>&nbsp;        if (board == null) {</b>
-<b class="fc"><i>34</i>&nbsp;            return -1;</b>
-<i>35</i>&nbsp;        }
-<b class="fc"><i>36</i>&nbsp;        board.initializeTiles();</b>
+<b class="nc"><i>23</i>&nbsp;        board.initializeTiles();</b>
+<b class="nc"><i>24</i>&nbsp;    }</b>
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    /**
+<i>27</i>&nbsp;     * Create a new game.
+<i>28</i>&nbsp;     *
+<i>29</i>&nbsp;     * @param difficulty The difficulty level for the new game.
+<i>30</i>&nbsp;     * @return The actual difficulty level of the game. Should be the same (unless random, which case this tells you
+<i>31</i>&nbsp;     * the selected difficulty level). -1 if the board has not yet been initialized.
+<i>32</i>&nbsp;     */
+<i>33</i>&nbsp;    public static int newGame(int difficulty) {
+<b class="fc"><i>34</i>&nbsp;        if (board == null) {</b>
+<b class="fc"><i>35</i>&nbsp;            return -1;</b>
+<i>36</i>&nbsp;        }
 <b class="fc"><i>37</i>&nbsp;        return board.newGame(difficulty);</b>
 <i>38</i>&nbsp;    }
 <i>39</i>&nbsp;
@@ -272,7 +272,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-04-15 10:48</div>
+    <div style="float:right;">generated on 2016-05-27 09:15</div>
 </div>
 </body>
 </html>
