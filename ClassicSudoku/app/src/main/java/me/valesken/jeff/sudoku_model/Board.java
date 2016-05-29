@@ -16,7 +16,7 @@ import me.valesken.jeff.util.Logger;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 4/14/2016
+ * Last updated on 5/29/2016
  */
 class Board {
     static final protected String JSON_TIME_ID = "time";
@@ -288,6 +288,8 @@ class Board {
         if (position > -1 && position < boardSize) {
             Tile tile = getTile(position);
             tile.update(value);
+
+            // Add or removed to solvedTiles set
             if (tile.getValue() == getSolutionForTile(position)) {
                 solvedTiles.add(tile);
             } else {
@@ -307,7 +309,12 @@ class Board {
     protected LinkedList<Integer> clearTile(int position) {
         if (position > -1 && position < boardSize) {
             Tile tile = getTile(position);
-            getTile(position).clear();
+            tile.clear();
+
+            // Remove from solvedTiles set if not an original tile
+            if(!tile.isOrig()) {
+                solvedTiles.remove(tile);
+            }
             return tile.getNotesOrValue();
         }
         return null;
@@ -322,7 +329,15 @@ class Board {
      */
     protected boolean toggleNoteMode(int position) {
         if (position > -1 && position < boardSize) {
-            getTile(position).toggleMode();
+            Tile tile = getTile(position);
+            tile.toggleMode();
+
+            // Add or removed to solvedTiles set
+            if(tile.getValue() == getSolutionForTile(position)) {
+                solvedTiles.add(tile);
+            } else {
+                solvedTiles.remove(tile);
+            }
             return true;
         }
         return false;
@@ -343,8 +358,10 @@ class Board {
             if (tile.isNoteMode()) {
                 tile.toggleMode();
             }
+            tile.clear();
             tile.update(getSolutionForTile(index));
             tile.setOrig(true);
+            solvedTiles.add(tile);
             return index;
         }
         return -1;
@@ -362,10 +379,10 @@ class Board {
             if (tile.isNoteMode()) {
                 tile.toggleMode();
             }
-            if (tile.getValue() != getSolutionForTile(i)) {
-                tile.update(getSolutionForTile(i));
-                nowSolved = true;
-            }
+            tile.clear();
+            tile.update(getSolutionForTile(i));
+            solvedTiles.add(tile);
+            nowSolved = true;
         }
         return nowSolved;
     }
@@ -578,7 +595,7 @@ class Board {
      * @return The next index in the Board.
      */
     protected int incrementIndex_DFS(int index) {
-        return (index == (tiles.length - 1)) ? 0 : index + 1;
+        return (index == (getTiles().length - 1)) ? 0 : index + 1;
     }
 
     /**
@@ -671,10 +688,10 @@ class Board {
         Stack<House> highHouses = new Stack<>();
         Stack<House> lowHouses = new Stack<>();
         // Check Rows
-        fillHighAndLowHouses(rows, highHouses, lowHouses, bound);
+        fillHighAndLowHouses(getRows(), highHouses, lowHouses, bound);
         adjustHousesToBounds(highHouses, lowHouses, bound, true);
         // Check Columns
-        fillHighAndLowHouses(columns, highHouses, lowHouses, bound);
+        fillHighAndLowHouses(getColumns(), highHouses, lowHouses, bound);
         adjustHousesToBounds(highHouses, lowHouses, bound, false);
     }
 
@@ -740,12 +757,12 @@ class Board {
      */
     protected void swapHighHouseToLowHouseTile(List<Tile> highHouseTiles, House lowHouse, boolean isRow) {
         if(highHouseTiles != null && lowHouse != null) {
-            for (Tile t : highHouseTiles) {
-                Tile tile = lowHouse.getMember((isRow) ? t.getColumnNumber() : t.getRowNumber());
-                if (tile.getValue() == 0) {
-                    int tileSolution = getSolutionForTile(tile.getIndex());
-                    tile.update(tileSolution);
-                    t.clear();
+            for (Tile highTile : highHouseTiles) {
+                Tile lowTile = lowHouse.getMember((isRow) ? highTile.getColumnNumber() : highTile.getRowNumber());
+                if (lowTile.getValue() == 0) {
+                    int tileSolution = getSolutionForTile(lowTile.getIndex());
+                    lowTile.update(tileSolution);
+                    highTile.clear();
                     break;
                 }
             }
@@ -757,9 +774,10 @@ class Board {
      * boundaries have been checked, but before attempting to solve with the Solver.
      */
     protected void markOriginals() {
-        for (Tile t : getTiles()) {
-            if (t.getValue() > 0) {
-                t.setOrig(true);
+        for (Tile tile : getTiles()) {
+            if (tile.getValue() > 0) {
+                tile.setOrig(true);
+                solvedTiles.add(tile);
             }
         }
     }
@@ -779,8 +797,11 @@ class Board {
      * Clear every tile that is not an original tile. This essentially resets the board.
      */
     protected void clearBoard() {
-        for (Tile t : getTiles()) {
-            t.clear();
+        for (Tile tile : getTiles()) {
+            tile.clear();
+            if(!tile.isOrig()) {
+                solvedTiles.remove(tile);
+            }
         }
     }
 
