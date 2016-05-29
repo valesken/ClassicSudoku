@@ -7,7 +7,6 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +27,8 @@ public class MainFragment extends Fragment {
     private Button resumeGameButton;
     private MainActivity activity;
     private FragmentManager fm;
-    private boolean loadingGame;
 
-    public MainFragment() {
-        loadingGame = false;
-    }
+    public MainFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,8 +57,7 @@ public class MainFragment extends Fragment {
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!loadingGame)
-                    toNew(f_inflater, v);
+                toNew(f_inflater, v);
             }
         });
         loadGameButton.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +98,6 @@ public class MainFragment extends Fragment {
     @SuppressLint("InflateParams")
     private void toNew(LayoutInflater inflater, final View button)
     {
-        loadingGame = true;
-
         final AlertDialog ad = new AlertDialog.Builder(rootView.getContext()).create();
 
         final View newGameDialogView = inflater.inflate(R.layout.new_game_dialog_layout, null);
@@ -174,7 +167,6 @@ public class MainFragment extends Fragment {
                     .add(R.id.container, game)
                     .addToBackStack("Game")
                     .commit();
-            loadingGame = false;
             Toast.makeText(rootView.getContext(), "Loaded!", Toast.LENGTH_SHORT).show();
         }
     }

@@ -560,9 +560,11 @@ public class GameFragment extends Fragment {
         }
     }
 
-    /*
-     * Write game state to file.
-     * Update loadGamesJSON with this JSON.
+    /**
+     * Write game state to file. Update loadGamesJSON with this JSON.
+     *
+     * @param saveDir The directory in which to save the game
+     * @param _filename The name of the file to save
      */
     public void saveGame(File saveDir, String _filename) {
         try {
@@ -600,7 +602,9 @@ public class GameFragment extends Fragment {
         }
     }
 
-    // Update high score and save to file
+    /**
+     * Update high score and save to file
+     */
     public void updateHighScore() {
         try {
             JSONObject highScoresJSON = activity.getHighScoresJSON();
