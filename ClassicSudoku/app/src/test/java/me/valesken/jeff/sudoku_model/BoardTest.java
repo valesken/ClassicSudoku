@@ -968,16 +968,16 @@ public class BoardTest {
         // Setup
         int solutionValue = 1;
         Board spy = spy(board);
+        doReturn(false).when(spy).isGameOver();
         doReturn(mockedTile).when(spy).getTile(anyInt());
         doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
         when(mockedTile.getValue()).thenReturn(0);
         // Execute & Verify
         assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
+        verify(mockedTile, times(boardSize)).clear();
         verify(mockedTile, times(boardSize)).update(solutionValue);
     }
 
@@ -987,6 +987,7 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         Tile mockedTile2 = mock(Tile.class);
+        doReturn(false).when(spy).isGameOver();
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
         doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
@@ -996,13 +997,13 @@ public class BoardTest {
         when(mockedTile2.getValue()).thenReturn(0);
         // Execute & Verify
         assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
+        verify(mockedTile, times(boardSize - 2)).clear();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
         verify(mockedTile2, times(2)).isNoteMode();
         verify(mockedTile2, times(2)).toggleMode();
+        verify(mockedTile2, times(2)).clear();
         verify(mockedTile2, times(2)).update(solutionValue);
     }
 
@@ -1011,16 +1012,15 @@ public class BoardTest {
         // Setup
         int solutionValue = 1;
         Board spy = spy(board);
+        doReturn(false).when(spy).isGameOver();
         doReturn(mockedTile).when(spy).getTile(anyInt());
         doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(true);
-        when(mockedTile.getValue()).thenReturn(0);
         // Execute & Verify
         assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize)).getSolutionForTile(anyInt());
         verify(mockedTile, times(boardSize)).isNoteMode();
         verify(mockedTile, times(boardSize)).toggleMode();
+        verify(mockedTile, times(boardSize)).clear();
         verify(mockedTile, times(boardSize)).update(solutionValue);
     }
 
@@ -1030,23 +1030,22 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         Tile mockedTile2 = mock(Tile.class);
+        doReturn(false).when(spy).isGameOver();
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
         doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
-        when(mockedTile.getValue()).thenReturn(0); // mockedTile IS NOT solved
         when(mockedTile2.isNoteMode()).thenReturn(false);
-        when(mockedTile2.getValue()).thenReturn(solutionValue); // mockedTile2 IS solved
         // Execute & Verify
         assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize - 2)).getSolutionForTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
+        verify(mockedTile, times(boardSize - 2)).clear();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
         verify(mockedTile2, times(2)).isNoteMode();
         verify(mockedTile2, never()).toggleMode();
-        verify(mockedTile2, never()).update(anyInt());
+        verify(mockedTile2, times(2)).clear();
+        verify(mockedTile2, times(2)).update(solutionValue);
     }
 
     @Test
@@ -1055,67 +1054,36 @@ public class BoardTest {
         int solutionValue = 1;
         Board spy = spy(board);
         Tile mockedTile2 = mock(Tile.class);
+        doReturn(false).when(spy).isGameOver();
         doReturn(mockedTile).when(spy).getTile(gt(1));
         doReturn(mockedTile2).when(spy).getTile(lt(2));
         doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
         when(mockedTile.isNoteMode()).thenReturn(false);
-        when(mockedTile.getValue()).thenReturn(0); // mockedTile has no value, is in Value Mode
         when(mockedTile2.isNoteMode()).thenReturn(true);
-        when(mockedTile2.getValue()).thenReturn(solutionValue); // mockedTile2 has value, is in Note Mode
         // Execute & Verify
         assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(2 * boardSize - 2)).getSolutionForTile(anyInt()); // Check every Tile, update only mockedTile
         verify(mockedTile, times(boardSize - 2)).isNoteMode();
         verify(mockedTile, never()).toggleMode();
+        verify(mockedTile, times(boardSize - 2)).clear();
         verify(mockedTile, times(boardSize - 2)).update(solutionValue);
         verify(mockedTile2, times(2)).isNoteMode();
         verify(mockedTile2, times(2)).toggleMode();
-        verify(mockedTile2, never()).update(anyInt());
+        verify(mockedTile2, times(2)).clear();
+        verify(mockedTile2, times(2)).update(solutionValue);
     }
 
     @Test
     public void testSolveSolvedBoardNoNotesPass() {
         // Setup
-        int solutionValue = 1;
         Board spy = spy(board);
         doReturn(mockedTile).when(spy).getTile(anyInt());
-        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
-        when(mockedTile.isNoteMode()).thenReturn(false);
-        when(mockedTile.getValue()).thenReturn(solutionValue);
+        doReturn(true).when(spy).isGameOver();
         // Execute & Verify
         assertFalse(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(boardSize)).getSolutionForTile(anyInt());
-        verify(mockedTile, times(boardSize)).isNoteMode();
+        verify(mockedTile, never()).isNoteMode();
         verify(mockedTile, never()).toggleMode();
+        verify(mockedTile, never()).clear();
         verify(mockedTile, never()).update(anyInt());
-    }
-
-    @Test
-    public void testSolveFullBoardPartiallyRightNoNotesPass() {
-        // Setup
-        int solutionValue = 1;
-        int badValue = 2;
-        Board spy = spy(board);
-        Tile mockedTile2 = mock(Tile.class);
-        doReturn(mockedTile).when(spy).getTile(gt(1));
-        doReturn(mockedTile2).when(spy).getTile(lt(2));
-        doReturn(solutionValue).when(spy).getSolutionForTile(anyInt());
-        when(mockedTile.isNoteMode()).thenReturn(false);
-        when(mockedTile.getValue()).thenReturn(solutionValue);
-        when(mockedTile2.isNoteMode()).thenReturn(false);
-        when(mockedTile2.getValue()).thenReturn(badValue);
-        // Execute & Verify
-        assertTrue(spy.solve());
-        verify(spy, times(boardSize)).getTile(anyInt());
-        verify(spy, times(boardSize + 2)).getSolutionForTile(anyInt());
-        verify(mockedTile, times(boardSize - 2)).isNoteMode();
-        verify(mockedTile, never()).toggleMode();
-        verify(mockedTile, never()).update(anyInt());
-        verify(mockedTile2, times(2)).isNoteMode();
-        verify(mockedTile2, never()).toggleMode();
-        verify(mockedTile2, times(2)).update(solutionValue);
     }
     //endregion
 

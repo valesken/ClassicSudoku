@@ -373,8 +373,10 @@ class Board {
      * @return True if the game was not already solved and now has been solve, False otherwise.
      */
     protected boolean solve() {
-        boolean nowSolved = false;
-        for (int i = 0; i < tiles.length; ++i) {
+        if(isGameOver()) {
+            return false;
+        }
+        for (int i = 0; i < getTiles().length; ++i) {
             Tile tile = getTile(i);
             if (tile.isNoteMode()) {
                 tile.toggleMode();
@@ -382,9 +384,8 @@ class Board {
             tile.clear();
             tile.update(getSolutionForTile(i));
             solvedTiles.add(tile);
-            nowSolved = true;
         }
-        return nowSolved;
+        return true;
     }
     //endregion
 
