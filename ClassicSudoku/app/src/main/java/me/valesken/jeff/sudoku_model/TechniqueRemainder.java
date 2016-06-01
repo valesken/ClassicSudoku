@@ -1,13 +1,14 @@
 package me.valesken.jeff.sudoku_model;
 
 /**
- * This Technique examines all houses to see if only 1 unassigned tile remains. If so, it will
- * assign the appropriate value to that tile.
+ * This Technique examines all houses to see if only 1 unassigned tile remains in any House. If so, it will assign the
+ * appropriate value to that tile. Note that this technique only works (right now) on Houses of length 9.
  *
  * Created by jeff on 5/31/16.
  */
 class TechniqueRemainder implements Technique {
 
+    protected static final int TARGET_TOTAL = 45; // Sum of 1 to 9
     protected Solver solver;
 
     protected TechniqueRemainder(Solver solver) {
@@ -16,30 +17,36 @@ class TechniqueRemainder implements Technique {
 
     @Override
     public boolean execute() {
-        int targetTotal = 45; // Sum of 1 through 9
-        for (House row : solver.houses) {
-            Tile remainder = null; // Holds empty Tile (if there is any)
+        for (House house : solver.houses) {
+            Tile emptyTile = null; // Holds empty Tile (if there is any)
             int value; // Tile's value
             int total = 0; // Sum of house's values
             boolean success = false;
-            // Check if row contains only 1 empty Tile
-            for(Tile tile : row) {
+
+            // Check if this House contains only 1 empty Tile
+            for (Tile tile : house) {
                 value = tile.getValue();
-                if(value == 0) {
-                    success = (remainder == null);
-                    if(!success)
+
+                // If value is 0, record this Tile as empty, else add value to the total value of this House
+                if (value == 0) {
+
+                    // If this is not the first empty Tile detected, stop examining this House
+                    success = (emptyTile == null);
+                    if(!success) {
                         break;
-                    remainder = tile;
+                    }
+
+                    // Else, continue
+                    emptyTile = tile;
+                } else {
+                    total += value;
                 }
-                total += value;
             }
+
             // If row contains only 1 empty Tile, solve it (value = targetTotal - total)
-            if(success) {
-                value = targetTotal - total;
-                remainder.getRow().clearValueInHouse(value);
-                remainder.getColumn().clearValueInHouse(value);
-                remainder.getZone().clearValueInHouse(value);
-                solver.board.updateTile(remainder.getIndex(), value);
+            if (success) {
+                value = TARGET_TOTAL - total;
+                solver.solveTile(emptyTile, value);
                 return true;
             }
         }

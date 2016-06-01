@@ -23,6 +23,7 @@ class Solver {
 
     protected Board board;
     protected List<House> houses;
+    protected List<Technique> techniques;
 
     public Solver(Board _board) {
         this.board = _board;
@@ -38,21 +39,20 @@ class Solver {
      * @param difficulty 1 = easy, 2 = medium, 3 = hard
      */
     protected void solve(int difficulty) {
-        while(!isSolvable(difficulty)) {
+        setTechniques(difficulty);
+        while(!isSolvable()) {
             board.useHint();
             board.clearBoard();
         }
     }
 
     /**
+     * Set the Techniques list to appropriate list for the difficulty level
+     *
      * @param difficulty 1 = easy, 2 = medium, 3 = hard
-     * @return Whether or not the board is solvable at the desired difficulty level
      */
-    @SuppressWarnings("StatementWithEmptyBody")
-    protected boolean isSolvable(int difficulty) {
-
-        // Get a list of techniques corresponding to the difficulty level
-        LinkedList<Technique> techniques = new LinkedList<>(Arrays.asList(
+    protected void setTechniques(int difficulty) {
+        techniques = new LinkedList<>(Arrays.asList(
                 new TechniqueRemainder(this),
                 new TechniqueSingleCandidate(this),
                 new TechniqueSinglePosition(this)));
@@ -65,15 +65,30 @@ class Solver {
             techniques.add(new TechniqueNakedPairsAndTriples(this));
             techniques.add(new TechniqueHiddenPairsAndTriples(this));
         }
+    }
 
-        // Iterate over selected techniques, resetting to simplest technique when possible, and
-        // stopping when no technique succeeds.
+    /**
+     * Iterate over selected techniques, resetting to simplest technique when possible, and stopping when no technique
+     * succeeds.
+     *
+     * @return Whether or not the board is solvable at the desired difficulty level
+     */
+    @SuppressWarnings("StatementWithEmptyBody")
+    protected boolean isSolvable() {
         ListIterator<Technique> it = techniques.listIterator();
         while(it.hasNext()) {
             Technique technique = it.next();
-            if(technique.execute())
+            if(technique.execute()) {
                 it = techniques.listIterator();
+            }
         }
         return board.isGameOver();
+    }
+
+    protected void solveTile(Tile tile, int value) {
+        tile.getRow().clearValueInHouse(value);
+        tile.getColumn().clearValueInHouse(value);
+        tile.getZone().clearValueInHouse(value);
+        board.updateTile(tile.getIndex(), value);
     }
 }

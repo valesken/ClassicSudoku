@@ -50,12 +50,12 @@
     100%
   </span>
   <span class="absValue">
-    (39/ 39)
+    (42/ 42)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">House$$EnhancerByMockitoWithCGLIB$$74e9fd89</td>
+    <td class="name">House$$EnhancerByMockitoWithCGLIB$$d0067506</td>
   </tr>
 <tr>
   <td class="name"><strong>total</strong></td>
@@ -72,7 +72,7 @@
     100%
   </span>
   <span class="absValue">
-    (39/ 39)
+    (42/ 42)
   </span>
 </td>
 </tr>
@@ -101,7 +101,7 @@
 <i>17</i>&nbsp; */
 <i>18</i>&nbsp;class House implements Iterable&lt;Tile&gt; {
 <i>19</i>&nbsp;
-<i>20</i>&nbsp;    protected HashSet&lt;Integer&gt;[] valueToOwnersMap;
+<i>20</i>&nbsp;    protected HashSet&lt;Tile&gt;[] valueToOwnersMap;
 <i>21</i>&nbsp;    protected ArrayList&lt;Tile&gt; members;
 <i>22</i>&nbsp;    protected int houseIndex;
 <i>23</i>&nbsp;    protected int houseSize;
@@ -140,105 +140,110 @@
 <i>56</i>&nbsp;     *
 <i>57</i>&nbsp;     * @param value     The 1-9 value to assign (or remove assignment) to the Tile.
 <i>58</i>&nbsp;     * @param assign    Whether to assign or remove assignment of the value to the Tile.
-<i>59</i>&nbsp;     * @param tileIndex The index of the Tile that the value will be assigned to.
+<i>59</i>&nbsp;     * @param tile      The Tile that the value will be assigned to.
 <i>60</i>&nbsp;     * @return true if successful, false otherwise
 <i>61</i>&nbsp;     */
-<i>62</i>&nbsp;    protected boolean setValueInHouse(int value, boolean assign, int tileIndex) {
-<b class="fc"><i>63</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize &amp;&amp; tileIndex &gt; -1 &amp;&amp; tileIndex &lt; boardSize) {</b>
+<i>62</i>&nbsp;    protected boolean setValueInHouse(int value, boolean assign, Tile tile) {
+<b class="fc"><i>63</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
 <b class="fc"><i>64</i>&nbsp;            if (assign) {</b>
-<b class="fc"><i>65</i>&nbsp;                return valueToOwnersMap[value - 1].add(tileIndex);</b>
+<b class="fc"><i>65</i>&nbsp;                return valueToOwnersMap[value - 1].add(tile);</b>
 <i>66</i>&nbsp;            } else {
-<b class="fc"><i>67</i>&nbsp;                return valueToOwnersMap[value - 1].remove(tileIndex);</b>
+<b class="fc"><i>67</i>&nbsp;                return valueToOwnersMap[value - 1].remove(tile);</b>
 <i>68</i>&nbsp;            }
 <i>69</i>&nbsp;        }
 <b class="fc"><i>70</i>&nbsp;        return false;</b>
 <i>71</i>&nbsp;    }
 <i>72</i>&nbsp;
 <i>73</i>&nbsp;    /**
-<i>74</i>&nbsp;     * For a given value, this function will remove all Tiles that are currently assigned to that
-<i>75</i>&nbsp;     * value in this house. E.g. This House no longer thinks 4 is claimed by any Tile.
-<i>76</i>&nbsp;     *
-<i>77</i>&nbsp;     * @param value The 1-9 value in the House to clear.
-<i>78</i>&nbsp;     * @return true if successful, false otherwise
-<i>79</i>&nbsp;     */
-<i>80</i>&nbsp;    protected boolean clearValueInHouse(int value) {
-<b class="fc"><i>81</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
-<b class="fc"><i>82</i>&nbsp;            valueToOwnersMap[value - 1].clear();</b>
-<b class="fc"><i>83</i>&nbsp;            return true;</b>
-<i>84</i>&nbsp;        }
-<b class="fc"><i>85</i>&nbsp;        return false;</b>
-<i>86</i>&nbsp;    }
-<i>87</i>&nbsp;    //endregion
-<i>88</i>&nbsp;
-<i>89</i>&nbsp;    //region Getters
-<i>90</i>&nbsp;
-<i>91</i>&nbsp;    /**
-<i>92</i>&nbsp;     * @param position The 0-8 position within this House to get a Tile from.
-<i>93</i>&nbsp;     * @return The Tile at the corresponding position in the House, null if no Tile at that position.
-<i>94</i>&nbsp;     */
-<i>95</i>&nbsp;    protected Tile getMember(int position) {
-<b class="fc"><i>96</i>&nbsp;        if (position &lt; 0 || position &gt;= members.size()) {</b>
-<b class="fc"><i>97</i>&nbsp;            return null;</b>
-<i>98</i>&nbsp;        }
-<b class="fc"><i>99</i>&nbsp;        return members.get(position);</b>
-<i>100</i>&nbsp;    }
-<i>101</i>&nbsp;
-<i>102</i>&nbsp;    /**
-<i>103</i>&nbsp;     * Checks if the house already has a member with a specific value.
-<i>104</i>&nbsp;     *
-<i>105</i>&nbsp;     * @param value The 1-9 value to check for.
-<i>106</i>&nbsp;     * @return True if this House contains a Tile to which the value is assigned, otherwise False.
-<i>107</i>&nbsp;     */
-<i>108</i>&nbsp;    protected boolean hasValue(int value) {
-<b class="fc"><i>109</i>&nbsp;        return (value &gt; 0 &amp;&amp; value &lt;= houseSize &amp;&amp; valueToOwnersMap[value - 1].size() &gt; 0);</b>
-<i>110</i>&nbsp;    }
-<i>111</i>&nbsp;
-<i>112</i>&nbsp;    /**
-<i>113</i>&nbsp;     * @return The number of Tiles in this House which have an assigned value.
-<i>114</i>&nbsp;     */
-<i>115</i>&nbsp;    protected int getValueCount() {
-<b class="fc"><i>116</i>&nbsp;        int count = 0;</b>
-<b class="fc"><i>117</i>&nbsp;        for (Tile t : members) {</b>
-<b class="fc"><i>118</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
-<b class="fc"><i>119</i>&nbsp;                ++count;</b>
-<i>120</i>&nbsp;            }
-<b class="fc"><i>121</i>&nbsp;        }</b>
-<b class="fc"><i>122</i>&nbsp;        return count;</b>
-<i>123</i>&nbsp;    }
-<i>124</i>&nbsp;
-<i>125</i>&nbsp;    /**
-<i>126</i>&nbsp;     * @return A LinkedList of Tiles in this House which have an assigned value. If no such Tiles,
-<i>127</i>&nbsp;     * the LinkedList will simply be an empty list.
-<i>128</i>&nbsp;     */
-<i>129</i>&nbsp;    protected LinkedList&lt;Tile&gt; getValueTiles() {
-<b class="fc"><i>130</i>&nbsp;        LinkedList&lt;Tile&gt; valueTiles = new LinkedList&lt;&gt;();</b>
-<b class="fc"><i>131</i>&nbsp;        for (Tile t : members) {</b>
-<b class="fc"><i>132</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
-<b class="fc"><i>133</i>&nbsp;                valueTiles.add(t);</b>
-<i>134</i>&nbsp;            }
-<b class="fc"><i>135</i>&nbsp;        }</b>
-<b class="fc"><i>136</i>&nbsp;        return valueTiles;</b>
-<i>137</i>&nbsp;    }
-<i>138</i>&nbsp;
-<i>139</i>&nbsp;    /**
-<i>140</i>&nbsp;     * @return The index (0 - 8) for this house.
-<i>141</i>&nbsp;     */
-<i>142</i>&nbsp;    protected int getHouseIndex() {
-<b class="fc"><i>143</i>&nbsp;        return houseIndex;</b>
-<i>144</i>&nbsp;    }
-<i>145</i>&nbsp;    //endregion
-<i>146</i>&nbsp;
-<i>147</i>&nbsp;    @Override
-<i>148</i>&nbsp;    public Iterator&lt;Tile&gt; iterator() {
-<b class="fc"><i>149</i>&nbsp;        return members.iterator();</b>
-<i>150</i>&nbsp;    }
-<i>151</i>&nbsp;}
+<i>74</i>&nbsp;     * For a given value, this function will remove all Tiles that are currently assigned to that value in this house.
+<i>75</i>&nbsp;     * It also propagates this down to the Tile itself. E.g. This House no longer thinks 4 is claimed by any Tile and
+<i>76</i>&nbsp;     * any Tiles which previously had 4 as their value or note no longer do.
+<i>77</i>&nbsp;     *
+<i>78</i>&nbsp;     * @param value The 1-9 value in the House to clear.
+<i>79</i>&nbsp;     * @return true if successful, false otherwise
+<i>80</i>&nbsp;     */
+<i>81</i>&nbsp;    protected boolean clearValueInHouse(int value) {
+<b class="fc"><i>82</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
+<b class="fc"><i>83</i>&nbsp;            HashSet&lt;Tile&gt; claimants = new HashSet&lt;&gt;(valueToOwnersMap[value - 1]);</b>
+<b class="fc"><i>84</i>&nbsp;            for(Tile claimant : claimants) {</b>
+<b class="fc"><i>85</i>&nbsp;                claimant.clearValue(value);</b>
+<b class="fc"><i>86</i>&nbsp;            }</b>
+<i>87</i>&nbsp;            //valueToOwnersMap[value - 1].clear();
+<b class="fc"><i>88</i>&nbsp;            return true;</b>
+<i>89</i>&nbsp;        }
+<b class="fc"><i>90</i>&nbsp;        return false;</b>
+<i>91</i>&nbsp;    }
+<i>92</i>&nbsp;    //endregion
+<i>93</i>&nbsp;
+<i>94</i>&nbsp;    //region Getters
+<i>95</i>&nbsp;
+<i>96</i>&nbsp;    /**
+<i>97</i>&nbsp;     * @param position The 0-8 position within this House to get a Tile from.
+<i>98</i>&nbsp;     * @return The Tile at the corresponding position in the House, null if no Tile at that position.
+<i>99</i>&nbsp;     */
+<i>100</i>&nbsp;    protected Tile getMember(int position) {
+<b class="fc"><i>101</i>&nbsp;        if (position &lt; 0 || position &gt;= members.size()) {</b>
+<b class="fc"><i>102</i>&nbsp;            return null;</b>
+<i>103</i>&nbsp;        }
+<b class="fc"><i>104</i>&nbsp;        return members.get(position);</b>
+<i>105</i>&nbsp;    }
+<i>106</i>&nbsp;
+<i>107</i>&nbsp;    /**
+<i>108</i>&nbsp;     * Checks if the house already has a member with a specific value.
+<i>109</i>&nbsp;     *
+<i>110</i>&nbsp;     * @param value The 1-9 value to check for.
+<i>111</i>&nbsp;     * @return True if this House contains a Tile to which the value is assigned, otherwise False.
+<i>112</i>&nbsp;     */
+<i>113</i>&nbsp;    protected boolean hasValue(int value) {
+<b class="fc"><i>114</i>&nbsp;        return (value &gt; 0 &amp;&amp; value &lt;= houseSize &amp;&amp; valueToOwnersMap[value - 1].size() &gt; 0);</b>
+<i>115</i>&nbsp;    }
+<i>116</i>&nbsp;
+<i>117</i>&nbsp;    /**
+<i>118</i>&nbsp;     * @return The number of Tiles in this House which have an assigned value.
+<i>119</i>&nbsp;     */
+<i>120</i>&nbsp;    protected int getValueCount() {
+<b class="fc"><i>121</i>&nbsp;        int count = 0;</b>
+<b class="fc"><i>122</i>&nbsp;        for (Tile t : members) {</b>
+<b class="fc"><i>123</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
+<b class="fc"><i>124</i>&nbsp;                ++count;</b>
+<i>125</i>&nbsp;            }
+<b class="fc"><i>126</i>&nbsp;        }</b>
+<b class="fc"><i>127</i>&nbsp;        return count;</b>
+<i>128</i>&nbsp;    }
+<i>129</i>&nbsp;
+<i>130</i>&nbsp;    /**
+<i>131</i>&nbsp;     * @return A LinkedList of Tiles in this House which have an assigned value. If no such Tiles,
+<i>132</i>&nbsp;     * the LinkedList will simply be an empty list.
+<i>133</i>&nbsp;     */
+<i>134</i>&nbsp;    protected LinkedList&lt;Tile&gt; getValueTiles() {
+<b class="fc"><i>135</i>&nbsp;        LinkedList&lt;Tile&gt; valueTiles = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>136</i>&nbsp;        for (Tile t : members) {</b>
+<b class="fc"><i>137</i>&nbsp;            if (t.getValue() &gt; 0) {</b>
+<b class="fc"><i>138</i>&nbsp;                valueTiles.add(t);</b>
+<i>139</i>&nbsp;            }
+<b class="fc"><i>140</i>&nbsp;        }</b>
+<b class="fc"><i>141</i>&nbsp;        return valueTiles;</b>
+<i>142</i>&nbsp;    }
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * @return The index (0 - 8) for this house.
+<i>146</i>&nbsp;     */
+<i>147</i>&nbsp;    protected int getHouseIndex() {
+<b class="fc"><i>148</i>&nbsp;        return houseIndex;</b>
+<i>149</i>&nbsp;    }
+<i>150</i>&nbsp;    //endregion
+<i>151</i>&nbsp;
+<i>152</i>&nbsp;    @Override
+<i>153</i>&nbsp;    public Iterator&lt;Tile&gt; iterator() {
+<b class="fc"><i>154</i>&nbsp;        return members.iterator();</b>
+<i>155</i>&nbsp;    }
+<i>156</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-05-29 14:39</div>
+    <div style="float:right;">generated on 2016-06-01 09:10</div>
 </div>
 </body>
 </html>

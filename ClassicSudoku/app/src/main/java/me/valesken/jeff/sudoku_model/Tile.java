@@ -92,9 +92,9 @@ class Tile {
      */
     protected void setValueInHouses(int value, boolean inHouse) {
         if (!orig && value > 0 && value <= houseSize) {
-            row.setValueInHouse(value, inHouse, index);
-            column.setValueInHouse(value, inHouse, index);
-            zone.setValueInHouse(value, inHouse, index);
+            row.setValueInHouse(value, inHouse, this);
+            column.setValueInHouse(value, inHouse, this);
+            zone.setValueInHouse(value, inHouse, this);
         }
     }
 
@@ -118,6 +118,16 @@ class Tile {
                 }
                 value = v;
                 setValueInHouses(v, true);
+            }
+        }
+    }
+
+    protected void clearValue(int v) {
+        if ((v > 0 && v <= houseSize) && !orig) {
+            notes[v - 1] = false;
+            if(getValue() == v) {
+                value = 0;
+                setValueInHouses(v, false);
             }
         }
     }

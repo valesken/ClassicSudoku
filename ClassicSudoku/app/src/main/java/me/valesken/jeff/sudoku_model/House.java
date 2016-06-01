@@ -17,7 +17,7 @@ import java.util.LinkedList;
  */
 class House implements Iterable<Tile> {
 
-    protected HashSet<Integer>[] valueToOwnersMap;
+    protected HashSet<Tile>[] valueToOwnersMap;
     protected ArrayList<Tile> members;
     protected int houseIndex;
     protected int houseSize;
@@ -56,30 +56,35 @@ class House implements Iterable<Tile> {
      *
      * @param value     The 1-9 value to assign (or remove assignment) to the Tile.
      * @param assign    Whether to assign or remove assignment of the value to the Tile.
-     * @param tileIndex The index of the Tile that the value will be assigned to.
+     * @param tile      The Tile that the value will be assigned to.
      * @return true if successful, false otherwise
      */
-    protected boolean setValueInHouse(int value, boolean assign, int tileIndex) {
-        if (value > 0 && value <= houseSize && tileIndex > -1 && tileIndex < boardSize) {
+    protected boolean setValueInHouse(int value, boolean assign, Tile tile) {
+        if (value > 0 && value <= houseSize) {
             if (assign) {
-                return valueToOwnersMap[value - 1].add(tileIndex);
+                return valueToOwnersMap[value - 1].add(tile);
             } else {
-                return valueToOwnersMap[value - 1].remove(tileIndex);
+                return valueToOwnersMap[value - 1].remove(tile);
             }
         }
         return false;
     }
 
     /**
-     * For a given value, this function will remove all Tiles that are currently assigned to that
-     * value in this house. E.g. This House no longer thinks 4 is claimed by any Tile.
+     * For a given value, this function will remove all Tiles that are currently assigned to that value in this house.
+     * It also propagates this down to the Tile itself. E.g. This House no longer thinks 4 is claimed by any Tile and
+     * any Tiles which previously had 4 as their value or note no longer do.
      *
      * @param value The 1-9 value in the House to clear.
      * @return true if successful, false otherwise
      */
     protected boolean clearValueInHouse(int value) {
         if (value > 0 && value <= houseSize) {
-            valueToOwnersMap[value - 1].clear();
+            HashSet<Tile> claimants = new HashSet<>(valueToOwnersMap[value - 1]);
+            for(Tile claimant : claimants) {
+                claimant.clearValue(value);
+            }
+            //valueToOwnersMap[value - 1].clear();
             return true;
         }
         return false;

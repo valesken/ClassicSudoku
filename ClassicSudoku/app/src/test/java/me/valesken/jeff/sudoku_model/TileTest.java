@@ -13,8 +13,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -196,46 +199,46 @@ public class TileTest {
     public void testSetValueInHousesPass() {
         int value = 4;
         tile.setValueInHouses(value, true);
-        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tile);
     }
 
     @Test
     public void testSetValueInHousesMinValuePass() {
         int value = 1;
         tile.setValueInHouses(value, true);
-        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tile);
     }
 
     @Test
     public void testSetValueInHousesMaxValuePass() {
         int value = houseSize;
         tile.setValueInHouses(value, true);
-        verify(mockedHouse, times(3)).setValueInHouse(value, true, tileIndex);
+        verify(mockedHouse, times(3)).setValueInHouse(value, true, tile);
     }
 
     @Test
     public void testSetValueInHousesZeroIgnored() {
         tile.setValueInHouses(0, true);
-        verify(mockedHouse, never()).setValueInHouse(0, true, tileIndex);
+        verify(mockedHouse, never()).setValueInHouse(0, true, tile);
     }
 
     @Test
     public void testSetValueInHousesNegativeIgnored() {
         tile.setValueInHouses(-1, true);
-        verify(mockedHouse, never()).setValueInHouse(-1, true, tileIndex);
+        verify(mockedHouse, never()).setValueInHouse(-1, true, tile);
     }
 
     @Test
     public void testSetValueInHousesLargeIgnored() {
         tile.setValueInHouses(1000, true);
-        verify(mockedHouse, never()).setValueInHouse(1000, true, tileIndex);
+        verify(mockedHouse, never()).setValueInHouse(1000, true, tile);
     }
 
     @Test
     public void testSetValueInHousesOrigTileIgnored() {
         tile.orig = true;
         tile.setValueInHouses(1, true);
-        verify(mockedHouse, never()).setValueInHouse(1, true, tileIndex);
+        verify(mockedHouse, never()).setValueInHouse(1, true, tile);
     }
     //endregion
 
@@ -313,6 +316,112 @@ public class TileTest {
         tile.orig = true;
         tile.update(1);
         assertEquals(value, tile.value);
+    }
+    //endregion
+
+    //region clearValue() tests
+    @Test
+    public void testClearValueExistsAsNotePass() {
+        // Set up
+        int value = 4;
+        Tile spy = spy(tile);
+        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
+        doReturn(0).when(spy).getValue();
+        spy.notes[value - 1] = true;
+        // Execute
+        spy.clearValue(value);
+        // Verify
+        assertFalse(spy.notes[value - 1]);
+        verify(spy, never()).setValueInHouses(value, false);
+    }
+
+    @Test
+    public void testClearValueExistsAsValuePass() {
+        // Set up
+        int value = 4;
+        Tile spy = spy(tile);
+        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
+        doReturn(value).when(spy).getValue();
+        spy.notes[value - 1] = false;
+        // Execute
+        spy.clearValue(value);
+        // Verify
+        assertEquals(0, spy.value);
+        verify(spy).setValueInHouses(value, false);
+    }
+
+    @Test
+    public void testClearValueNotInTilePass() {
+        // Set up
+        int value = 4;
+        Tile spy = spy(tile);
+        spy.value = value + 1;
+        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
+        spy.notes[value - 1] = false;
+        // Execute
+        spy.clearValue(value);
+        // Verify
+        assertEquals(value + 1, spy.value);
+        assertFalse(spy.notes[value - 1]);
+        verify(spy, never()).setValueInHouses(value, false);
+    }
+
+    @Test
+    public void testClearValueNegativeFail() {
+        // Set up
+        Tile spy = spy(tile);
+        int value = 2;
+        spy.value = value;
+        for(int i = 0; i < spy.notes.length; ++i) {
+            spy.notes[i] = true;
+        }
+        // Execute
+        spy.clearValue(-1);
+        // Verify
+        verify(spy, never()).getValue();
+        assertEquals(value, spy.value);
+        for(int i = 0; i < spy.notes.length; ++i) {
+            assertTrue(spy.notes[i]);
+        }
+    }
+
+    @Test
+    public void testClearValueLargeFail() {
+        // Set up
+        Tile spy = spy(tile);
+        int value = 2;
+        spy.value = value;
+        for(int i = 0; i < spy.notes.length; ++i) {
+            spy.notes[i] = true;
+        }
+        // Execute
+        spy.clearValue(1000);
+        // Verify
+        verify(spy, never()).getValue();
+        assertEquals(value, spy.value);
+        for(int i = 0; i < spy.notes.length; ++i) {
+            assertTrue(spy.notes[i]);
+        }
+    }
+
+    @Test
+    public void testClearValueOriginalFail() {
+        // Set up
+        Tile spy = spy(tile);
+        int value = 2;
+        spy.value = value;
+        for(int i = 0; i < spy.notes.length; ++i) {
+            spy.notes[i] = true;
+        }
+        spy.orig = true;
+        // Execute
+        spy.clearValue(value);
+        // Verify
+        verify(spy, never()).getValue();
+        assertEquals(value, spy.value);
+        for(int i = 0; i < spy.notes.length; ++i) {
+            assertTrue(spy.notes[i]);
+        }
     }
     //endregion
 
