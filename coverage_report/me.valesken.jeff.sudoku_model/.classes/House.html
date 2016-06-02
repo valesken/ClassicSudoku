@@ -50,12 +50,12 @@
     100%
   </span>
   <span class="absValue">
-    (42/ 42)
+    (43/ 43)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">House$$EnhancerByMockitoWithCGLIB$$d0067506</td>
+    <td class="name">House$$EnhancerByMockitoWithCGLIB$$976675dc</td>
   </tr>
 <tr>
   <td class="name"><strong>total</strong></td>
@@ -72,7 +72,7 @@
     100%
   </span>
   <span class="absValue">
-    (42/ 42)
+    (43/ 43)
   </span>
 </td>
 </tr>
@@ -91,7 +91,7 @@
 <i>7</i>&nbsp;
 <i>8</i>&nbsp;/**
 <i>9</i>&nbsp; * Created by Jeff on 2/28/2015.
-<i>10</i>&nbsp; * Last updated on 1/15/2016
+<i>10</i>&nbsp; * Last updated on 6/1/2016.
 <i>11</i>&nbsp; *
 <i>12</i>&nbsp; * House contains a row, column, or zone of 9 Tiles.
 <i>13</i>&nbsp; * House can check if it already contains a tile with a given value.
@@ -166,9 +166,9 @@
 <b class="fc"><i>82</i>&nbsp;        if (value &gt; 0 &amp;&amp; value &lt;= houseSize) {</b>
 <b class="fc"><i>83</i>&nbsp;            HashSet&lt;Tile&gt; claimants = new HashSet&lt;&gt;(valueToOwnersMap[value - 1]);</b>
 <b class="fc"><i>84</i>&nbsp;            for(Tile claimant : claimants) {</b>
-<b class="fc"><i>85</i>&nbsp;                claimant.clearValue(value);</b>
-<b class="fc"><i>86</i>&nbsp;            }</b>
-<i>87</i>&nbsp;            //valueToOwnersMap[value - 1].clear();
+<b class="fc"><i>85</i>&nbsp;                valueToOwnersMap[value - 1].remove(claimant);</b>
+<b class="fc"><i>86</i>&nbsp;                claimant.clearValue(value);</b>
+<b class="fc"><i>87</i>&nbsp;            }</b>
 <b class="fc"><i>88</i>&nbsp;            return true;</b>
 <i>89</i>&nbsp;        }
 <b class="fc"><i>90</i>&nbsp;        return false;</b>
@@ -243,7 +243,7 @@
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-06-01 09:10</div>
+    <div style="float:right;">generated on 2016-06-01 21:22</div>
 </div>
 </body>
 </html>

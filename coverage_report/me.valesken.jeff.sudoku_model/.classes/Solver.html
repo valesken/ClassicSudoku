@@ -55,7 +55,7 @@
 </td>
 </tr>
   <tr>
-    <td class="name">Solver$$EnhancerByMockitoWithCGLIB$$49861dcb</td>
+    <td class="name">Solver$$EnhancerByMockitoWithCGLIB$$10e61ea1</td>
   </tr>
 <tr>
   <td class="name"><strong>total</strong></td>
@@ -90,8 +90,8 @@
 <i>6</i>&nbsp;import java.util.ListIterator;
 <i>7</i>&nbsp;
 <i>8</i>&nbsp;/**
-<i>9</i>&nbsp; * Created by jeff on 1/8/16.
-<i>10</i>&nbsp; * Last updated on 1/15/2016.
+<i>9</i>&nbsp; * Created by jeff on 1/8/2016.
+<i>10</i>&nbsp; * Last updated on 6/1/2016.
 <i>11</i>&nbsp; *
 <i>12</i>&nbsp; * Simple AI to solve the Board using a variety of techniques for different difficulty levels
 <i>13</i>&nbsp; * Uses the Command Pattern to manage the SolvingTechniques
@@ -169,19 +169,26 @@
 <b class="nc"><i>85</i>&nbsp;        return board.isGameOver();</b>
 <i>86</i>&nbsp;    }
 <i>87</i>&nbsp;
-<i>88</i>&nbsp;    protected void solveTile(Tile tile, int value) {
-<b class="nc"><i>89</i>&nbsp;        tile.getRow().clearValueInHouse(value);</b>
-<b class="nc"><i>90</i>&nbsp;        tile.getColumn().clearValueInHouse(value);</b>
-<b class="nc"><i>91</i>&nbsp;        tile.getZone().clearValueInHouse(value);</b>
-<b class="nc"><i>92</i>&nbsp;        board.updateTile(tile.getIndex(), value);</b>
-<b class="nc"><i>93</i>&nbsp;    }</b>
-<i>94</i>&nbsp;}
+<i>88</i>&nbsp;    /**
+<i>89</i>&nbsp;     * Given a Tile and a value, set the Tile to the value. Clear all instances of the value from the Tile&#39;s parent
+<i>90</i>&nbsp;     * Houses before setting the Tile&#39;s value. This is to ensure that there are no contradictions in any Houses.
+<i>91</i>&nbsp;     *
+<i>92</i>&nbsp;     * @param tile The Tile to solve for.
+<i>93</i>&nbsp;     * @param value The 1 to 9 value that you want the Tile to have.
+<i>94</i>&nbsp;     */
+<i>95</i>&nbsp;    protected void solveTile(Tile tile, int value) {
+<b class="nc"><i>96</i>&nbsp;        tile.getRow().clearValueInHouse(value);</b>
+<b class="nc"><i>97</i>&nbsp;        tile.getColumn().clearValueInHouse(value);</b>
+<b class="nc"><i>98</i>&nbsp;        tile.getZone().clearValueInHouse(value);</b>
+<b class="nc"><i>99</i>&nbsp;        board.updateTile(tile.getIndex(), value);</b>
+<b class="nc"><i>100</i>&nbsp;    }</b>
+<i>101</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-06-01 09:10</div>
+    <div style="float:right;">generated on 2016-06-01 21:22</div>
 </div>
 </body>
 </html>

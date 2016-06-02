@@ -50,15 +50,15 @@
     96.1%
   </span>
   <span class="absValue">
-    (149/ 155)
+    (148/ 154)
   </span>
 </td>
 </tr>
   <tr>
-    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$3fdda64e</td>
+    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$73da724</td>
   </tr>
   <tr>
-    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$3fdda64e$$FastClassByMockitoWithCGLIB$$a715070</td>
+    <td class="name">Tile$$EnhancerByMockitoWithCGLIB$$73da724$$FastClassByMockitoWithCGLIB$$dffecca9</td>
   </tr>
   <tr>
     <td class="name">Tile$$FastClassByMockitoWithCGLIB$$4bc8c67b</td>
@@ -78,7 +78,7 @@
     96.1%
   </span>
   <span class="absValue">
-    (149/ 155)
+    (148/ 154)
   </span>
 </td>
 </tr>
@@ -98,7 +98,7 @@
 <i>8</i>&nbsp;
 <i>9</i>&nbsp;/**
 <i>10</i>&nbsp; * Created by Jeff on 2/28/2015.
-<i>11</i>&nbsp; * Last updated on 1/15/2016.
+<i>11</i>&nbsp; * Last updated on 6/1/2016.
 <i>12</i>&nbsp; */
 <i>13</i>&nbsp;
 <i>14</i>&nbsp;class Tile {
@@ -212,304 +212,313 @@
 <i>122</i>&nbsp;        }
 <b class="fc"><i>123</i>&nbsp;    }</b>
 <i>124</i>&nbsp;
-<i>125</i>&nbsp;    protected void clearValue(int v) {
-<b class="fc"><i>126</i>&nbsp;        if ((v &gt; 0 &amp;&amp; v &lt;= houseSize) &amp;&amp; !orig) {</b>
-<b class="fc"><i>127</i>&nbsp;            notes[v - 1] = false;</b>
-<b class="fc"><i>128</i>&nbsp;            if(getValue() == v) {</b>
-<b class="fc"><i>129</i>&nbsp;                value = 0;</b>
-<b class="fc"><i>130</i>&nbsp;                setValueInHouses(v, false);</b>
-<i>131</i>&nbsp;            }
-<i>132</i>&nbsp;        }
-<b class="fc"><i>133</i>&nbsp;    }</b>
-<i>134</i>&nbsp;
-<i>135</i>&nbsp;    /**
-<i>136</i>&nbsp;     * This will remove this tile&#39;s current value from its houses, will clear its current value, and will remove all
-<i>137</i>&nbsp;     * its current notes. This will NOT clear the &quot;lastTried&quot; value.
-<i>138</i>&nbsp;     */
-<i>139</i>&nbsp;    protected void clear() {
-<b class="fc"><i>140</i>&nbsp;        if (!orig) {</b>
-<b class="fc"><i>141</i>&nbsp;            if (value &gt; 0) {</b>
-<b class="fc"><i>142</i>&nbsp;                setValueInHouses(value, false);</b>
-<i>143</i>&nbsp;            }
-<b class="fc"><i>144</i>&nbsp;            value = 0;</b>
-<b class="fc"><i>145</i>&nbsp;            for (int i = 0; i &lt; houseSize; ++i) {</b>
-<b class="fc"><i>146</i>&nbsp;                notes[i] = false;</b>
-<i>147</i>&nbsp;            }
-<i>148</i>&nbsp;        }
-<b class="fc"><i>149</i>&nbsp;    }</b>
-<i>150</i>&nbsp;
-<i>151</i>&nbsp;    /**
-<i>152</i>&nbsp;     * This will switch the tile between note mode and value mode. If it is in one, it will switch to the other.
-<i>153</i>&nbsp;     */
-<i>154</i>&nbsp;    protected void toggleMode() {
-<b class="fc"><i>155</i>&nbsp;        if (!orig) {</b>
-<b class="fc"><i>156</i>&nbsp;            if (noteMode) { // Switch from notes to value</b>
-<i>157</i>&nbsp;                // If only one hint recorded, make it the new value
-<b class="fc"><i>158</i>&nbsp;                int v = 0;</b>
-<b class="fc"><i>159</i>&nbsp;                for (int i = 0; i &lt; houseSize; ++i) {</b>
-<b class="fc"><i>160</i>&nbsp;                    if (notes[i]) {</b>
-<b class="fc"><i>161</i>&nbsp;                        v = (v == 0) ? (i + 1) : -1; // 0 if no hints, -1 if multiple hints</b>
-<b class="fc"><i>162</i>&nbsp;                        notes[i] = false;</b>
-<i>163</i>&nbsp;                    }
-<i>164</i>&nbsp;                }
-<b class="fc"><i>165</i>&nbsp;                if (v &gt; 0) {</b>
-<b class="fc"><i>166</i>&nbsp;                    value = v;</b>
-<b class="fc"><i>167</i>&nbsp;                    setValueInHouses(v, true);</b>
-<i>168</i>&nbsp;                }
-<b class="fc"><i>169</i>&nbsp;            } else { // Switch from value to notes</b>
-<i>170</i>&nbsp;                // If there&#39;s a value recorded, make it a hint
-<b class="fc"><i>171</i>&nbsp;                if (value &gt; 0) {</b>
-<b class="fc"><i>172</i>&nbsp;                    notes[value - 1] = true;</b>
+<i>125</i>&nbsp;    /**
+<i>126</i>&nbsp;     * This function is will make sure that the Tile does not have the specified 1 to 9 value as a value or a note. This
+<i>127</i>&nbsp;     * function is to be used when you want to make sure the Tile does not contain a specific value, but do not know
+<i>128</i>&nbsp;     * whether is does or does not already contain that value.
+<i>129</i>&nbsp;     *
+<i>130</i>&nbsp;     * This function will NOT update its Houses. Therefore, this function should only be called from its containing
+<i>131</i>&nbsp;     * Houses and only after the House has updated itself.
+<i>132</i>&nbsp;     *
+<i>133</i>&nbsp;     * @param v The value that you want to remove.
+<i>134</i>&nbsp;     */
+<i>135</i>&nbsp;    protected void clearValue(int v) {
+<b class="fc"><i>136</i>&nbsp;        if ((v &gt; 0 &amp;&amp; v &lt;= houseSize) &amp;&amp; !orig) {</b>
+<b class="fc"><i>137</i>&nbsp;            notes[v - 1] = false;</b>
+<b class="fc"><i>138</i>&nbsp;            if(getValue() == v) {</b>
+<b class="fc"><i>139</i>&nbsp;                value = 0;</b>
+<i>140</i>&nbsp;            }
+<i>141</i>&nbsp;        }
+<b class="fc"><i>142</i>&nbsp;    }</b>
+<i>143</i>&nbsp;
+<i>144</i>&nbsp;    /**
+<i>145</i>&nbsp;     * This will remove this tile&#39;s current value from its houses, will clear its current value, and will remove all
+<i>146</i>&nbsp;     * its current notes. This will NOT clear the &quot;lastTried&quot; value.
+<i>147</i>&nbsp;     */
+<i>148</i>&nbsp;    protected void clear() {
+<b class="fc"><i>149</i>&nbsp;        if (!orig) {</b>
+<b class="fc"><i>150</i>&nbsp;            if (value &gt; 0) {</b>
+<b class="fc"><i>151</i>&nbsp;                setValueInHouses(value, false);</b>
+<i>152</i>&nbsp;            }
+<b class="fc"><i>153</i>&nbsp;            value = 0;</b>
+<b class="fc"><i>154</i>&nbsp;            for (int i = 0; i &lt; houseSize; ++i) {</b>
+<b class="fc"><i>155</i>&nbsp;                notes[i] = false;</b>
+<i>156</i>&nbsp;            }
+<i>157</i>&nbsp;        }
+<b class="fc"><i>158</i>&nbsp;    }</b>
+<i>159</i>&nbsp;
+<i>160</i>&nbsp;    /**
+<i>161</i>&nbsp;     * This will switch the tile between note mode and value mode. If it is in one, it will switch to the other.
+<i>162</i>&nbsp;     */
+<i>163</i>&nbsp;    protected void toggleMode() {
+<b class="fc"><i>164</i>&nbsp;        if (!orig) {</b>
+<b class="fc"><i>165</i>&nbsp;            if (noteMode) { // Switch from notes to value</b>
+<i>166</i>&nbsp;                // If only one hint recorded, make it the new value
+<b class="fc"><i>167</i>&nbsp;                int v = 0;</b>
+<b class="fc"><i>168</i>&nbsp;                for (int i = 0; i &lt; houseSize; ++i) {</b>
+<b class="fc"><i>169</i>&nbsp;                    if (notes[i]) {</b>
+<b class="fc"><i>170</i>&nbsp;                        v = (v == 0) ? (i + 1) : -1; // 0 if no hints, -1 if multiple hints</b>
+<b class="fc"><i>171</i>&nbsp;                        notes[i] = false;</b>
+<i>172</i>&nbsp;                    }
 <i>173</i>&nbsp;                }
-<b class="fc"><i>174</i>&nbsp;                value = 0;</b>
-<i>175</i>&nbsp;            }
-<i>176</i>&nbsp;
-<b class="fc"><i>177</i>&nbsp;            noteMode = !noteMode;</b>
-<i>178</i>&nbsp;        }
-<b class="fc"><i>179</i>&nbsp;    }</b>
-<i>180</i>&nbsp;    //endregion
-<i>181</i>&nbsp;
-<i>182</i>&nbsp;    //region Getters
-<i>183</i>&nbsp;
-<i>184</i>&nbsp;    /**
-<i>185</i>&nbsp;     * @return A LinkedList containing the current notes in this tile or, if this tile is not in note mode, a single
-<i>186</i>&nbsp;     * value which is the current value of this tile (0 if empty).
-<i>187</i>&nbsp;     */
-<i>188</i>&nbsp;    protected LinkedList&lt;Integer&gt; getNotesOrValue() {
-<b class="fc"><i>189</i>&nbsp;        if (noteMode) {</b>
-<b class="fc"><i>190</i>&nbsp;            return getNotes();</b>
-<i>191</i>&nbsp;        }
-<b class="fc"><i>192</i>&nbsp;        LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;();</b>
-<b class="fc"><i>193</i>&nbsp;        list.add(getValue());</b>
-<b class="fc"><i>194</i>&nbsp;        return list;</b>
-<i>195</i>&nbsp;    }
-<i>196</i>&nbsp;
-<i>197</i>&nbsp;    /**
-<i>198</i>&nbsp;     * @return The current value of the Tile. 0 if no current value or the Tile is in Node mode.
-<i>199</i>&nbsp;     */
-<i>200</i>&nbsp;    protected int getValue() {
-<b class="fc"><i>201</i>&nbsp;        return value;</b>
-<i>202</i>&nbsp;    }
-<i>203</i>&nbsp;
-<i>204</i>&nbsp;    /**
-<i>205</i>&nbsp;     * @return A LinkedList containing the current notes in this tile. If this tile is not in note mode, it will
-<i>206</i>&nbsp;     * return null.
-<i>207</i>&nbsp;     */
-<i>208</i>&nbsp;    protected LinkedList&lt;Integer&gt; getNotes() {
-<b class="fc"><i>209</i>&nbsp;        LinkedList&lt;Integer&gt; notesList = new LinkedList&lt;&gt;();</b>
-<b class="fc"><i>210</i>&nbsp;        if (noteMode) {</b>
-<b class="fc"><i>211</i>&nbsp;            for (int i = 0; i &lt; houseSize; ++i) {</b>
-<b class="fc"><i>212</i>&nbsp;                if (notes[i]) {</b>
-<b class="fc"><i>213</i>&nbsp;                    notesList.add(i + 1);</b>
-<i>214</i>&nbsp;                }
-<i>215</i>&nbsp;            }
-<i>216</i>&nbsp;        }
-<b class="fc"><i>217</i>&nbsp;        return notesList;</b>
-<i>218</i>&nbsp;    }
-<i>219</i>&nbsp;
-<i>220</i>&nbsp;    /**
-<i>221</i>&nbsp;     * @return The 0-80 index of this Tile in the Board.
-<i>222</i>&nbsp;     */
-<i>223</i>&nbsp;    protected int getIndex() {
-<b class="fc"><i>224</i>&nbsp;        return index;</b>
-<i>225</i>&nbsp;    }
-<i>226</i>&nbsp;
-<i>227</i>&nbsp;    /**
-<i>228</i>&nbsp;     * @return The row that this Tile belongs to.
-<i>229</i>&nbsp;     */
-<i>230</i>&nbsp;    protected House getRow() {
-<b class="fc"><i>231</i>&nbsp;        return row;</b>
-<i>232</i>&nbsp;    }
-<i>233</i>&nbsp;
-<i>234</i>&nbsp;    /**
-<i>235</i>&nbsp;     * @return The 0-9 index of the row that this Tile belongs to.
-<i>236</i>&nbsp;     */
-<i>237</i>&nbsp;    protected int getRowNumber() {
-<b class="fc"><i>238</i>&nbsp;        return rowNumber;</b>
-<i>239</i>&nbsp;    }
-<i>240</i>&nbsp;
-<i>241</i>&nbsp;    /**
-<i>242</i>&nbsp;     * @return The column that this Tile belongs to.
-<i>243</i>&nbsp;     */
-<i>244</i>&nbsp;    protected House getColumn() {
-<b class="fc"><i>245</i>&nbsp;        return column;</b>
-<i>246</i>&nbsp;    }
-<i>247</i>&nbsp;
-<i>248</i>&nbsp;    /**
-<i>249</i>&nbsp;     * @return The 0-9 index of the column that this Tile belongs to.
-<i>250</i>&nbsp;     */
-<i>251</i>&nbsp;    protected int getColumnNumber() {
-<b class="fc"><i>252</i>&nbsp;        return columnNumber;</b>
-<i>253</i>&nbsp;    }
-<i>254</i>&nbsp;
-<i>255</i>&nbsp;    /**
-<i>256</i>&nbsp;     * @return The zone that this Tile belongs to.
-<i>257</i>&nbsp;     */
-<i>258</i>&nbsp;    protected House getZone() {
-<b class="fc"><i>259</i>&nbsp;        return zone;</b>
-<i>260</i>&nbsp;    }
-<i>261</i>&nbsp;
-<i>262</i>&nbsp;    /**
-<i>263</i>&nbsp;     * @return The 0-9 index of the zone that this Tile belongs to.
-<i>264</i>&nbsp;     */
-<i>265</i>&nbsp;    protected int getZoneNumber() {
-<b class="fc"><i>266</i>&nbsp;        return zoneNumber;</b>
-<i>267</i>&nbsp;    }
-<i>268</i>&nbsp;
-<i>269</i>&nbsp;    /**
-<i>270</i>&nbsp;     * @return True if this Tile is currently marked to accept notes, otherwise False.
-<i>271</i>&nbsp;     */
-<i>272</i>&nbsp;    protected boolean isNoteMode() {
-<b class="fc"><i>273</i>&nbsp;        return noteMode;</b>
-<i>274</i>&nbsp;    }
-<i>275</i>&nbsp;
-<i>276</i>&nbsp;    /**
-<i>277</i>&nbsp;     * @return True if this Tile is a starting, original, unchangeable Tile, otherwise False.
-<i>278</i>&nbsp;     */
-<i>279</i>&nbsp;    protected boolean isOrig() {
-<b class="fc"><i>280</i>&nbsp;        return this.orig;</b>
-<i>281</i>&nbsp;    }
-<i>282</i>&nbsp;
-<i>283</i>&nbsp;    /**
-<i>284</i>&nbsp;     * Only to be used when saving the game.
-<i>285</i>&nbsp;     *
-<i>286</i>&nbsp;     * @return a JSON representation of this Tile&#39;s current state.
+<b class="fc"><i>174</i>&nbsp;                if (v &gt; 0) {</b>
+<b class="fc"><i>175</i>&nbsp;                    value = v;</b>
+<b class="fc"><i>176</i>&nbsp;                    setValueInHouses(v, true);</b>
+<i>177</i>&nbsp;                }
+<b class="fc"><i>178</i>&nbsp;            } else { // Switch from value to notes</b>
+<i>179</i>&nbsp;                // If there&#39;s a value recorded, make it a hint
+<b class="fc"><i>180</i>&nbsp;                if (value &gt; 0) {</b>
+<b class="fc"><i>181</i>&nbsp;                    notes[value - 1] = true;</b>
+<i>182</i>&nbsp;                }
+<b class="fc"><i>183</i>&nbsp;                value = 0;</b>
+<i>184</i>&nbsp;            }
+<i>185</i>&nbsp;
+<b class="fc"><i>186</i>&nbsp;            noteMode = !noteMode;</b>
+<i>187</i>&nbsp;        }
+<b class="fc"><i>188</i>&nbsp;    }</b>
+<i>189</i>&nbsp;    //endregion
+<i>190</i>&nbsp;
+<i>191</i>&nbsp;    //region Getters
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;    /**
+<i>194</i>&nbsp;     * @return A LinkedList containing the current notes in this tile or, if this tile is not in note mode, a single
+<i>195</i>&nbsp;     * value which is the current value of this tile (0 if empty).
+<i>196</i>&nbsp;     */
+<i>197</i>&nbsp;    protected LinkedList&lt;Integer&gt; getNotesOrValue() {
+<b class="fc"><i>198</i>&nbsp;        if (noteMode) {</b>
+<b class="fc"><i>199</i>&nbsp;            return getNotes();</b>
+<i>200</i>&nbsp;        }
+<b class="fc"><i>201</i>&nbsp;        LinkedList&lt;Integer&gt; list = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>202</i>&nbsp;        list.add(getValue());</b>
+<b class="fc"><i>203</i>&nbsp;        return list;</b>
+<i>204</i>&nbsp;    }
+<i>205</i>&nbsp;
+<i>206</i>&nbsp;    /**
+<i>207</i>&nbsp;     * @return The current value of the Tile. 0 if no current value or the Tile is in Node mode.
+<i>208</i>&nbsp;     */
+<i>209</i>&nbsp;    protected int getValue() {
+<b class="fc"><i>210</i>&nbsp;        return value;</b>
+<i>211</i>&nbsp;    }
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;    /**
+<i>214</i>&nbsp;     * @return A LinkedList containing the current notes in this tile. If this tile is not in note mode, it will
+<i>215</i>&nbsp;     * return null.
+<i>216</i>&nbsp;     */
+<i>217</i>&nbsp;    protected LinkedList&lt;Integer&gt; getNotes() {
+<b class="fc"><i>218</i>&nbsp;        LinkedList&lt;Integer&gt; notesList = new LinkedList&lt;&gt;();</b>
+<b class="fc"><i>219</i>&nbsp;        if (noteMode) {</b>
+<b class="fc"><i>220</i>&nbsp;            for (int i = 0; i &lt; houseSize; ++i) {</b>
+<b class="fc"><i>221</i>&nbsp;                if (notes[i]) {</b>
+<b class="fc"><i>222</i>&nbsp;                    notesList.add(i + 1);</b>
+<i>223</i>&nbsp;                }
+<i>224</i>&nbsp;            }
+<i>225</i>&nbsp;        }
+<b class="fc"><i>226</i>&nbsp;        return notesList;</b>
+<i>227</i>&nbsp;    }
+<i>228</i>&nbsp;
+<i>229</i>&nbsp;    /**
+<i>230</i>&nbsp;     * @return The 0-80 index of this Tile in the Board.
+<i>231</i>&nbsp;     */
+<i>232</i>&nbsp;    protected int getIndex() {
+<b class="fc"><i>233</i>&nbsp;        return index;</b>
+<i>234</i>&nbsp;    }
+<i>235</i>&nbsp;
+<i>236</i>&nbsp;    /**
+<i>237</i>&nbsp;     * @return The row that this Tile belongs to.
+<i>238</i>&nbsp;     */
+<i>239</i>&nbsp;    protected House getRow() {
+<b class="fc"><i>240</i>&nbsp;        return row;</b>
+<i>241</i>&nbsp;    }
+<i>242</i>&nbsp;
+<i>243</i>&nbsp;    /**
+<i>244</i>&nbsp;     * @return The 0-9 index of the row that this Tile belongs to.
+<i>245</i>&nbsp;     */
+<i>246</i>&nbsp;    protected int getRowNumber() {
+<b class="fc"><i>247</i>&nbsp;        return rowNumber;</b>
+<i>248</i>&nbsp;    }
+<i>249</i>&nbsp;
+<i>250</i>&nbsp;    /**
+<i>251</i>&nbsp;     * @return The column that this Tile belongs to.
+<i>252</i>&nbsp;     */
+<i>253</i>&nbsp;    protected House getColumn() {
+<b class="fc"><i>254</i>&nbsp;        return column;</b>
+<i>255</i>&nbsp;    }
+<i>256</i>&nbsp;
+<i>257</i>&nbsp;    /**
+<i>258</i>&nbsp;     * @return The 0-9 index of the column that this Tile belongs to.
+<i>259</i>&nbsp;     */
+<i>260</i>&nbsp;    protected int getColumnNumber() {
+<b class="fc"><i>261</i>&nbsp;        return columnNumber;</b>
+<i>262</i>&nbsp;    }
+<i>263</i>&nbsp;
+<i>264</i>&nbsp;    /**
+<i>265</i>&nbsp;     * @return The zone that this Tile belongs to.
+<i>266</i>&nbsp;     */
+<i>267</i>&nbsp;    protected House getZone() {
+<b class="fc"><i>268</i>&nbsp;        return zone;</b>
+<i>269</i>&nbsp;    }
+<i>270</i>&nbsp;
+<i>271</i>&nbsp;    /**
+<i>272</i>&nbsp;     * @return The 0-9 index of the zone that this Tile belongs to.
+<i>273</i>&nbsp;     */
+<i>274</i>&nbsp;    protected int getZoneNumber() {
+<b class="fc"><i>275</i>&nbsp;        return zoneNumber;</b>
+<i>276</i>&nbsp;    }
+<i>277</i>&nbsp;
+<i>278</i>&nbsp;    /**
+<i>279</i>&nbsp;     * @return True if this Tile is currently marked to accept notes, otherwise False.
+<i>280</i>&nbsp;     */
+<i>281</i>&nbsp;    protected boolean isNoteMode() {
+<b class="fc"><i>282</i>&nbsp;        return noteMode;</b>
+<i>283</i>&nbsp;    }
+<i>284</i>&nbsp;
+<i>285</i>&nbsp;    /**
+<i>286</i>&nbsp;     * @return True if this Tile is a starting, original, unchangeable Tile, otherwise False.
 <i>287</i>&nbsp;     */
-<i>288</i>&nbsp;    protected JSONObject getJSON() {
-<b class="fc"><i>289</i>&nbsp;        JSONObject jsonObject = new JSONObject();</b>
-<i>290</i>&nbsp;        try {
-<b class="fc"><i>291</i>&nbsp;            jsonObject.put(JSON_INDEX_ID, this.getIndex());</b>
-<b class="fc"><i>292</i>&nbsp;            jsonObject.put(JSON_ROW_ID, this.getRowNumber());</b>
-<b class="fc"><i>293</i>&nbsp;            jsonObject.put(JSON_COLUMN_ID, this.getColumnNumber());</b>
-<b class="fc"><i>294</i>&nbsp;            jsonObject.put(JSON_ZONE_ID, this.getZoneNumber());</b>
-<b class="fc"><i>295</i>&nbsp;            jsonObject.put(JSON_NOTE_MODE_ID, this.isNoteMode());</b>
-<b class="fc"><i>296</i>&nbsp;            jsonObject.put(JSON_ORIG_ID, this.isOrig());</b>
-<b class="fc"><i>297</i>&nbsp;            JSONArray notesOrValueArray = new JSONArray(this.getNotesOrValue());</b>
-<b class="fc"><i>298</i>&nbsp;            jsonObject.put(JSON_VALUES_ID, notesOrValueArray);</b>
-<b class="nc"><i>299</i>&nbsp;        } catch (JSONException e) {</b>
-<b class="nc"><i>300</i>&nbsp;            e.printStackTrace();</b>
-<b class="fc"><i>301</i>&nbsp;        }</b>
-<b class="fc"><i>302</i>&nbsp;        return jsonObject;</b>
-<i>303</i>&nbsp;    }
-<i>304</i>&nbsp;    //endregion
-<i>305</i>&nbsp;
-<i>306</i>&nbsp;    //region Initialization
-<i>307</i>&nbsp;
-<i>308</i>&nbsp;    protected boolean visited;
-<i>309</i>&nbsp;    protected int lastTried;
-<i>310</i>&nbsp;
-<i>311</i>&nbsp;    /**
-<i>312</i>&nbsp;     * Mark this Tile as NOT visited in the current initialization path. It also clears its current value so that it
-<i>313</i>&nbsp;     * is primed for the next initialization attempt.
-<i>314</i>&nbsp;     */
-<i>315</i>&nbsp;    protected void unVisit() {
-<b class="fc"><i>316</i>&nbsp;        clear();</b>
-<b class="fc"><i>317</i>&nbsp;        visited = false;</b>
-<b class="fc"><i>318</i>&nbsp;    }</b>
+<i>288</i>&nbsp;    protected boolean isOrig() {
+<b class="fc"><i>289</i>&nbsp;        return this.orig;</b>
+<i>290</i>&nbsp;    }
+<i>291</i>&nbsp;
+<i>292</i>&nbsp;    /**
+<i>293</i>&nbsp;     * Only to be used when saving the game.
+<i>294</i>&nbsp;     *
+<i>295</i>&nbsp;     * @return a JSON representation of this Tile&#39;s current state.
+<i>296</i>&nbsp;     */
+<i>297</i>&nbsp;    protected JSONObject getJSON() {
+<b class="fc"><i>298</i>&nbsp;        JSONObject jsonObject = new JSONObject();</b>
+<i>299</i>&nbsp;        try {
+<b class="fc"><i>300</i>&nbsp;            jsonObject.put(JSON_INDEX_ID, this.getIndex());</b>
+<b class="fc"><i>301</i>&nbsp;            jsonObject.put(JSON_ROW_ID, this.getRowNumber());</b>
+<b class="fc"><i>302</i>&nbsp;            jsonObject.put(JSON_COLUMN_ID, this.getColumnNumber());</b>
+<b class="fc"><i>303</i>&nbsp;            jsonObject.put(JSON_ZONE_ID, this.getZoneNumber());</b>
+<b class="fc"><i>304</i>&nbsp;            jsonObject.put(JSON_NOTE_MODE_ID, this.isNoteMode());</b>
+<b class="fc"><i>305</i>&nbsp;            jsonObject.put(JSON_ORIG_ID, this.isOrig());</b>
+<b class="fc"><i>306</i>&nbsp;            JSONArray notesOrValueArray = new JSONArray(this.getNotesOrValue());</b>
+<b class="fc"><i>307</i>&nbsp;            jsonObject.put(JSON_VALUES_ID, notesOrValueArray);</b>
+<b class="nc"><i>308</i>&nbsp;        } catch (JSONException e) {</b>
+<b class="nc"><i>309</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>310</i>&nbsp;        }</b>
+<b class="fc"><i>311</i>&nbsp;        return jsonObject;</b>
+<i>312</i>&nbsp;    }
+<i>313</i>&nbsp;    //endregion
+<i>314</i>&nbsp;
+<i>315</i>&nbsp;    //region Initialization
+<i>316</i>&nbsp;
+<i>317</i>&nbsp;    protected boolean visited;
+<i>318</i>&nbsp;    protected int lastTried;
 <i>319</i>&nbsp;
 <i>320</i>&nbsp;    /**
-<i>321</i>&nbsp;     * @return True if this Tile has already been visited in the current initialization path, otherwise False.
-<i>322</i>&nbsp;     */
-<i>323</i>&nbsp;    protected boolean hasBeenVisited() {
-<b class="fc"><i>324</i>&nbsp;        return visited;</b>
-<i>325</i>&nbsp;    }
-<i>326</i>&nbsp;
-<i>327</i>&nbsp;    /**
-<i>328</i>&nbsp;     * This function is a slightly faster way of trying initial values than calling seedInitialValue() with the values 1
-<i>329</i>&nbsp;     * to 9. It keeps track of the last tried value and simply goes to the next one in the series rather than trying
-<i>330</i>&nbsp;     * every value from 1 through 9. If the last value was 9, it simply aborts with a return value of false (meaning it
-<i>331</i>&nbsp;     * failed to find any possible initial value).
-<i>332</i>&nbsp;     *
-<i>333</i>&nbsp;     * @return True if this Tile successfully picked a possible initial value, otherwise False
-<i>334</i>&nbsp;     */
-<i>335</i>&nbsp;    protected boolean tryInitialize() {
-<b class="fc"><i>336</i>&nbsp;        for (int initValue = lastTried + 1; initValue &lt;= houseSize; ++initValue) {</b>
-<b class="fc"><i>337</i>&nbsp;            lastTried = initValue; // Save most recently tried value</b>
-<b class="fc"><i>338</i>&nbsp;            if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {</b>
-<b class="fc"><i>339</i>&nbsp;                update(initValue);</b>
-<b class="fc"><i>340</i>&nbsp;                visited = true;</b>
-<b class="fc"><i>341</i>&nbsp;                return true;</b>
-<i>342</i>&nbsp;            }
-<i>343</i>&nbsp;        }
-<b class="fc"><i>344</i>&nbsp;        return false;</b>
-<i>345</i>&nbsp;    }
-<i>346</i>&nbsp;
-<i>347</i>&nbsp;    /**
-<i>348</i>&nbsp;     * @param initValue The value to try as an initial value for this Tile (1 - 9)
-<i>349</i>&nbsp;     * @return true if the value doesn&#39;t contradict anything in any of the houses, false otherwise
-<i>350</i>&nbsp;     */
-<i>351</i>&nbsp;    protected boolean seedInitialValue(int initValue) {
-<b class="fc"><i>352</i>&nbsp;        if (initValue &lt; 1 || initValue &gt; houseSize) {</b>
-<b class="fc"><i>353</i>&nbsp;            return false;</b>
-<i>354</i>&nbsp;        }
-<b class="fc"><i>355</i>&nbsp;        if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {</b>
-<b class="fc"><i>356</i>&nbsp;            return false;</b>
-<i>357</i>&nbsp;        }
-<b class="fc"><i>358</i>&nbsp;        update(initValue);</b>
-<b class="fc"><i>359</i>&nbsp;        visited = true;</b>
-<b class="fc"><i>360</i>&nbsp;        return true;</b>
-<i>361</i>&nbsp;    }
-<i>362</i>&nbsp;
-<i>363</i>&nbsp;    /**
-<i>364</i>&nbsp;     * Call when board initialization has reached a contradiction and needs to clear Tiles.
-<i>365</i>&nbsp;     */
-<i>366</i>&nbsp;    protected void resetInitializationState() {
-<b class="fc"><i>367</i>&nbsp;        if (value &gt; 0) {</b>
-<b class="fc"><i>368</i>&nbsp;            setValueInHouses(value, false);</b>
-<i>369</i>&nbsp;        }
-<b class="fc"><i>370</i>&nbsp;        value = 0;</b>
-<b class="fc"><i>371</i>&nbsp;        visited = false;</b>
-<b class="fc"><i>372</i>&nbsp;        lastTried = 0;</b>
-<b class="fc"><i>373</i>&nbsp;    }</b>
-<i>374</i>&nbsp;
-<i>375</i>&nbsp;    /**
-<i>376</i>&nbsp;     * Set this Tile as an original, unchangeable, starting Tile on the Board.
-<i>377</i>&nbsp;     *
-<i>378</i>&nbsp;     * @param _orig Whether or not to set this Tile as an original, starting Tile.
-<i>379</i>&nbsp;     */
-<i>380</i>&nbsp;    protected void setOrig(boolean _orig) {
-<b class="fc"><i>381</i>&nbsp;        orig = _orig;</b>
+<i>321</i>&nbsp;     * Mark this Tile as NOT visited in the current initialization path. It also clears its current value so that it
+<i>322</i>&nbsp;     * is primed for the next initialization attempt.
+<i>323</i>&nbsp;     */
+<i>324</i>&nbsp;    protected void unVisit() {
+<b class="fc"><i>325</i>&nbsp;        clear();</b>
+<b class="fc"><i>326</i>&nbsp;        visited = false;</b>
+<b class="fc"><i>327</i>&nbsp;    }</b>
+<i>328</i>&nbsp;
+<i>329</i>&nbsp;    /**
+<i>330</i>&nbsp;     * @return True if this Tile has already been visited in the current initialization path, otherwise False.
+<i>331</i>&nbsp;     */
+<i>332</i>&nbsp;    protected boolean hasBeenVisited() {
+<b class="fc"><i>333</i>&nbsp;        return visited;</b>
+<i>334</i>&nbsp;    }
+<i>335</i>&nbsp;
+<i>336</i>&nbsp;    /**
+<i>337</i>&nbsp;     * This function is a slightly faster way of trying initial values than calling seedInitialValue() with the values 1
+<i>338</i>&nbsp;     * to 9. It keeps track of the last tried value and simply goes to the next one in the series rather than trying
+<i>339</i>&nbsp;     * every value from 1 through 9. If the last value was 9, it simply aborts with a return value of false (meaning it
+<i>340</i>&nbsp;     * failed to find any possible initial value).
+<i>341</i>&nbsp;     *
+<i>342</i>&nbsp;     * @return True if this Tile successfully picked a possible initial value, otherwise False
+<i>343</i>&nbsp;     */
+<i>344</i>&nbsp;    protected boolean tryInitialize() {
+<b class="fc"><i>345</i>&nbsp;        for (int initValue = lastTried + 1; initValue &lt;= houseSize; ++initValue) {</b>
+<b class="fc"><i>346</i>&nbsp;            lastTried = initValue; // Save most recently tried value</b>
+<b class="fc"><i>347</i>&nbsp;            if (!(row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue))) {</b>
+<b class="fc"><i>348</i>&nbsp;                update(initValue);</b>
+<b class="fc"><i>349</i>&nbsp;                visited = true;</b>
+<b class="fc"><i>350</i>&nbsp;                return true;</b>
+<i>351</i>&nbsp;            }
+<i>352</i>&nbsp;        }
+<b class="fc"><i>353</i>&nbsp;        return false;</b>
+<i>354</i>&nbsp;    }
+<i>355</i>&nbsp;
+<i>356</i>&nbsp;    /**
+<i>357</i>&nbsp;     * @param initValue The value to try as an initial value for this Tile (1 - 9)
+<i>358</i>&nbsp;     * @return true if the value doesn&#39;t contradict anything in any of the houses, false otherwise
+<i>359</i>&nbsp;     */
+<i>360</i>&nbsp;    protected boolean seedInitialValue(int initValue) {
+<b class="fc"><i>361</i>&nbsp;        if (initValue &lt; 1 || initValue &gt; houseSize) {</b>
+<b class="fc"><i>362</i>&nbsp;            return false;</b>
+<i>363</i>&nbsp;        }
+<b class="fc"><i>364</i>&nbsp;        if (row.hasValue(initValue) || column.hasValue(initValue) || zone.hasValue(initValue)) {</b>
+<b class="fc"><i>365</i>&nbsp;            return false;</b>
+<i>366</i>&nbsp;        }
+<b class="fc"><i>367</i>&nbsp;        update(initValue);</b>
+<b class="fc"><i>368</i>&nbsp;        visited = true;</b>
+<b class="fc"><i>369</i>&nbsp;        return true;</b>
+<i>370</i>&nbsp;    }
+<i>371</i>&nbsp;
+<i>372</i>&nbsp;    /**
+<i>373</i>&nbsp;     * Call when board initialization has reached a contradiction and needs to clear Tiles.
+<i>374</i>&nbsp;     */
+<i>375</i>&nbsp;    protected void resetInitializationState() {
+<b class="fc"><i>376</i>&nbsp;        if (value &gt; 0) {</b>
+<b class="fc"><i>377</i>&nbsp;            setValueInHouses(value, false);</b>
+<i>378</i>&nbsp;        }
+<b class="fc"><i>379</i>&nbsp;        value = 0;</b>
+<b class="fc"><i>380</i>&nbsp;        visited = false;</b>
+<b class="fc"><i>381</i>&nbsp;        lastTried = 0;</b>
 <b class="fc"><i>382</i>&nbsp;    }</b>
 <i>383</i>&nbsp;
 <i>384</i>&nbsp;    /**
-<i>385</i>&nbsp;     * Only to be used for loading a previous game. Will not load any data if the provided json is corrupted or
-<i>386</i>&nbsp;     * otherwise incorrect.
-<i>387</i>&nbsp;     *
-<i>388</i>&nbsp;     * @param jsonObject A JSON representation of this Tile&#39;s state.
-<i>389</i>&nbsp;     */
-<i>390</i>&nbsp;    protected void loadTileState(JSONObject jsonObject) throws JSONException {
-<i>391</i>&nbsp;        // Get JSON Data
-<b class="fc"><i>392</i>&nbsp;        int loadedIndex = jsonObject.getInt(JSON_INDEX_ID);</b>
-<b class="fc"><i>393</i>&nbsp;        int loadedRowNumber = jsonObject.getInt(JSON_ROW_ID);</b>
-<b class="fc"><i>394</i>&nbsp;        int loadedColumnNumber = jsonObject.getInt(JSON_COLUMN_ID);</b>
-<b class="fc"><i>395</i>&nbsp;        int loadedZoneId = jsonObject.getInt(JSON_ZONE_ID);</b>
-<b class="fc"><i>396</i>&nbsp;        boolean loadedNoteMode = jsonObject.getBoolean(JSON_NOTE_MODE_ID);</b>
-<b class="fc"><i>397</i>&nbsp;        boolean loadedOrig = jsonObject.getBoolean(JSON_ORIG_ID);</b>
-<b class="fc"><i>398</i>&nbsp;        JSONArray jsonArray = jsonObject.getJSONArray(JSON_VALUES_ID);</b>
-<i>399</i>&nbsp;        // If no problems, load the data into this Tile
-<b class="fc"><i>400</i>&nbsp;        this.index = loadedIndex;</b>
-<b class="fc"><i>401</i>&nbsp;        this.rowNumber = loadedRowNumber;</b>
-<b class="fc"><i>402</i>&nbsp;        this.columnNumber = loadedColumnNumber;</b>
-<b class="fc"><i>403</i>&nbsp;        this.zoneNumber = loadedZoneId;</b>
-<b class="fc"><i>404</i>&nbsp;        this.noteMode = loadedNoteMode;</b>
-<b class="fc"><i>405</i>&nbsp;        this.orig = loadedOrig;</b>
-<b class="fc"><i>406</i>&nbsp;        if (noteMode) {</b>
-<b class="fc"><i>407</i>&nbsp;            value = 0;</b>
-<b class="fc"><i>408</i>&nbsp;            for (int i = 0; i &lt; jsonArray.length(); ++i) {</b>
-<b class="fc"><i>409</i>&nbsp;                notes[jsonArray.getInt(i) - 1] = true;</b>
-<i>410</i>&nbsp;            }
-<i>411</i>&nbsp;        } else {
-<b class="fc"><i>412</i>&nbsp;            value = jsonArray.getInt(0);</b>
-<i>413</i>&nbsp;        }
-<b class="fc"><i>414</i>&nbsp;    }</b>
-<i>415</i>&nbsp;    //endregion
-<i>416</i>&nbsp;}
+<i>385</i>&nbsp;     * Set this Tile as an original, unchangeable, starting Tile on the Board.
+<i>386</i>&nbsp;     *
+<i>387</i>&nbsp;     * @param _orig Whether or not to set this Tile as an original, starting Tile.
+<i>388</i>&nbsp;     */
+<i>389</i>&nbsp;    protected void setOrig(boolean _orig) {
+<b class="fc"><i>390</i>&nbsp;        orig = _orig;</b>
+<b class="fc"><i>391</i>&nbsp;    }</b>
+<i>392</i>&nbsp;
+<i>393</i>&nbsp;    /**
+<i>394</i>&nbsp;     * Only to be used for loading a previous game. Will not load any data if the provided json is corrupted or
+<i>395</i>&nbsp;     * otherwise incorrect.
+<i>396</i>&nbsp;     *
+<i>397</i>&nbsp;     * @param jsonObject A JSON representation of this Tile&#39;s state.
+<i>398</i>&nbsp;     */
+<i>399</i>&nbsp;    protected void loadTileState(JSONObject jsonObject) throws JSONException {
+<i>400</i>&nbsp;        // Get JSON Data
+<b class="fc"><i>401</i>&nbsp;        int loadedIndex = jsonObject.getInt(JSON_INDEX_ID);</b>
+<b class="fc"><i>402</i>&nbsp;        int loadedRowNumber = jsonObject.getInt(JSON_ROW_ID);</b>
+<b class="fc"><i>403</i>&nbsp;        int loadedColumnNumber = jsonObject.getInt(JSON_COLUMN_ID);</b>
+<b class="fc"><i>404</i>&nbsp;        int loadedZoneId = jsonObject.getInt(JSON_ZONE_ID);</b>
+<b class="fc"><i>405</i>&nbsp;        boolean loadedNoteMode = jsonObject.getBoolean(JSON_NOTE_MODE_ID);</b>
+<b class="fc"><i>406</i>&nbsp;        boolean loadedOrig = jsonObject.getBoolean(JSON_ORIG_ID);</b>
+<b class="fc"><i>407</i>&nbsp;        JSONArray jsonArray = jsonObject.getJSONArray(JSON_VALUES_ID);</b>
+<i>408</i>&nbsp;        // If no problems, load the data into this Tile
+<b class="fc"><i>409</i>&nbsp;        this.index = loadedIndex;</b>
+<b class="fc"><i>410</i>&nbsp;        this.rowNumber = loadedRowNumber;</b>
+<b class="fc"><i>411</i>&nbsp;        this.columnNumber = loadedColumnNumber;</b>
+<b class="fc"><i>412</i>&nbsp;        this.zoneNumber = loadedZoneId;</b>
+<b class="fc"><i>413</i>&nbsp;        this.noteMode = loadedNoteMode;</b>
+<b class="fc"><i>414</i>&nbsp;        this.orig = loadedOrig;</b>
+<b class="fc"><i>415</i>&nbsp;        if (noteMode) {</b>
+<b class="fc"><i>416</i>&nbsp;            value = 0;</b>
+<b class="fc"><i>417</i>&nbsp;            for (int i = 0; i &lt; jsonArray.length(); ++i) {</b>
+<b class="fc"><i>418</i>&nbsp;                notes[jsonArray.getInt(i) - 1] = true;</b>
+<i>419</i>&nbsp;            }
+<i>420</i>&nbsp;        } else {
+<b class="fc"><i>421</i>&nbsp;            value = jsonArray.getInt(0);</b>
+<i>422</i>&nbsp;        }
+<b class="fc"><i>423</i>&nbsp;    }</b>
+<i>424</i>&nbsp;    //endregion
+<i>425</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2016-06-01 09:10</div>
+    <div style="float:right;">generated on 2016-06-01 21:22</div>
 </div>
 </body>
 </html>

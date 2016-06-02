@@ -13,10 +13,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -27,7 +25,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 1/25/2016.
- * Last updated on 1/28/2016.
+ * Last updated on 6/1/2016.
  */
 public class TileTest {
 

@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * Created by jeff on 1/8/16.
- * Last updated on 1/15/2016.
+ * Created by jeff on 1/8/2016.
+ * Last updated on 6/1/2016.
  *
  * Simple AI to solve the Board using a variety of techniques for different difficulty levels
  * Uses the Command Pattern to manage the SolvingTechniques

@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 1/28/2016.
- * Last Updated on 2/8/2016.
+ * Last Updated on 6/1/2016.
  */
 public class HouseTest {
 

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 1/15/2016
+ * Last updated on 6/1/2016.
  *
  * House contains a row, column, or zone of 9 Tiles.
  * House can check if it already contains a tile with a given value.
