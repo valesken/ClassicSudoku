@@ -3,6 +3,7 @@ package me.valesken.jeff.sudoku_model;
 /**
  * This Technique examines all houses to see if only 1 unassigned tile remains in any House. If so, it will assign the
  * appropriate value to that tile. Note that this technique only works (right now) on Houses of length 9.
+ * TODO: Write an integration test
  *
  * Created by jeff on 5/31/16.
  */

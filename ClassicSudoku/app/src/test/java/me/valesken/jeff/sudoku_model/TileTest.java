@@ -325,14 +325,12 @@ public class TileTest {
         // Set up
         int value = 4;
         Tile spy = spy(tile);
-        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
         doReturn(0).when(spy).getValue();
         spy.notes[value - 1] = true;
         // Execute
         spy.clearValue(value);
         // Verify
         assertFalse(spy.notes[value - 1]);
-        verify(spy, never()).setValueInHouses(value, false);
     }
 
     @Test
@@ -340,14 +338,12 @@ public class TileTest {
         // Set up
         int value = 4;
         Tile spy = spy(tile);
-        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
         doReturn(value).when(spy).getValue();
         spy.notes[value - 1] = false;
         // Execute
         spy.clearValue(value);
         // Verify
         assertEquals(0, spy.value);
-        verify(spy).setValueInHouses(value, false);
     }
 
     @Test
@@ -356,14 +352,12 @@ public class TileTest {
         int value = 4;
         Tile spy = spy(tile);
         spy.value = value + 1;
-        doNothing().when(spy).setValueInHouses(anyInt(), anyBoolean());
         spy.notes[value - 1] = false;
         // Execute
         spy.clearValue(value);
         // Verify
         assertEquals(value + 1, spy.value);
         assertFalse(spy.notes[value - 1]);
-        verify(spy, never()).setValueInHouses(value, false);
     }
 
     @Test

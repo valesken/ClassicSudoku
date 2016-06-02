@@ -85,6 +85,13 @@ class Solver {
         return board.isGameOver();
     }
 
+    /**
+     * Given a Tile and a value, set the Tile to the value. Clear all instances of the value from the Tile's parent
+     * Houses before setting the Tile's value. This is to ensure that there are no contradictions in any Houses.
+     *
+     * @param tile The Tile to solve for.
+     * @param value The 1 to 9 value that you want the Tile to have.
+     */
     protected void solveTile(Tile tile, int value) {
         tile.getRow().clearValueInHouse(value);
         tile.getColumn().clearValueInHouse(value);

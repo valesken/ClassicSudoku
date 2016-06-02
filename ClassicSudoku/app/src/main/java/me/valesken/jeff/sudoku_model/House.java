@@ -82,9 +82,9 @@ class House implements Iterable<Tile> {
         if (value > 0 && value <= houseSize) {
             HashSet<Tile> claimants = new HashSet<>(valueToOwnersMap[value - 1]);
             for(Tile claimant : claimants) {
+                valueToOwnersMap[value - 1].remove(claimant);
                 claimant.clearValue(value);
             }
-            //valueToOwnersMap[value - 1].clear();
             return true;
         }
         return false;

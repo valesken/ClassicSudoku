@@ -122,12 +122,21 @@ class Tile {
         }
     }
 
+    /**
+     * This function is will make sure that the Tile does not have the specified 1 to 9 value as a value or a note. This
+     * function is to be used when you want to make sure the Tile does not contain a specific value, but do not know
+     * whether is does or does not already contain that value.
+     *
+     * This function will NOT update its Houses. Therefore, this function should only be called from its containing
+     * Houses and only after the House has updated itself.
+     *
+     * @param v The value that you want to remove.
+     */
     protected void clearValue(int v) {
         if ((v > 0 && v <= houseSize) && !orig) {
             notes[v - 1] = false;
             if(getValue() == v) {
                 value = 0;
-                setValueInHouses(v, false);
             }
         }
     }

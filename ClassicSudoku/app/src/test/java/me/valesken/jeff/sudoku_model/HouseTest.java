@@ -29,7 +29,6 @@ public class HouseTest {
     private Tile mockedTile2;
     private int houseSize = 9;
     private int houseIndex = 0;
-    private Answer tileClearValueAnswer;
 
     //region setup
     @Before
@@ -37,14 +36,6 @@ public class HouseTest {
         house = new House(houseSize, houseIndex);
         mockedTile = mock(Tile.class);
         mockedTile2 = mock(Tile.class);
-        tileClearValueAnswer = new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                int value = (Integer) invocation.getArguments()[0];
-                house.valueToOwnersMap[value - 1].remove(invocation.getMock());
-                return null;
-            }
-        };
     }
     //endregion
 
@@ -187,8 +178,7 @@ public class HouseTest {
         // Set up
         int value = 1;
         house.valueToOwnersMap[value - 1].add(mockedTile);
-        doAnswer(tileClearValueAnswer).when(mockedTile).clearValue(value);
-        // Verification
+        // Execute & Verify
         assertTrue(house.clearValueInHouse(value));
         verify(mockedTile).clearValue(value);
         assertEquals(0, house.valueToOwnersMap[0].size());
@@ -198,11 +188,9 @@ public class HouseTest {
     public void testClearMultipleValuesInHousePass() {
         // Set up
         int value = 1;
-        doAnswer(tileClearValueAnswer).when(mockedTile).clearValue(value);
-        doAnswer(tileClearValueAnswer).when(mockedTile2).clearValue(value);
         house.valueToOwnersMap[value - 1].add(mockedTile);
         house.valueToOwnersMap[value - 1].add(mockedTile2);
-        // Verification
+        // Execute & Verify
         assertTrue(house.clearValueInHouse(value));
         verify(mockedTile).clearValue(value);
         verify(mockedTile2).clearValue(value);
@@ -220,11 +208,9 @@ public class HouseTest {
         // Set up
         int value1 = 1;
         int value2 = 2;
-        doAnswer(tileClearValueAnswer).when(mockedTile).clearValue(anyInt());
-        doAnswer(tileClearValueAnswer).when(mockedTile2).clearValue(anyInt());
         house.valueToOwnersMap[value1 - 1].add(mockedTile);
         house.valueToOwnersMap[value2 - 1].add(mockedTile2);
-        // Verification
+        // Execute & Verify
         assertTrue(house.clearValueInHouse(value1));
         verify(mockedTile).clearValue(anyInt());
         verify(mockedTile2, never()).clearValue(anyInt());
