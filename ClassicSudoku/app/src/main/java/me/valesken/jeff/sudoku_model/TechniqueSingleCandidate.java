@@ -1,10 +1,11 @@
 package me.valesken.jeff.sudoku_model;
 
 /**
- * This Technique examines each tile in the board and checks to see if there is only one value
- * that can be applied to that tile.
+ * This Technique examines each tile in the board and checks to see if there is only one value that can be applied to
+ * that tile.
  *
- * Created by jeff on 5/31/16.
+ * Created by jeff on 5/31/2016.
+ * Last updated on 6/1/2016.
  */
 class TechniqueSingleCandidate implements Technique {
 
@@ -16,33 +17,44 @@ class TechniqueSingleCandidate implements Technique {
 
     @Override
     public boolean execute() {
-        int targetTotal = 45; // Sum of 1 through 9
-        int realTotal; // For each tile, sum of values unavailable in that tile
-        int counter; // For each tile, number of values unavailable in that tile
-        boolean inRow, inColumn, inZone;
+
+        // Iterate over every Tile in the board
         for(Tile candidate : solver.board.getTiles()) {
+
+            // If the Tile doesn't already have a value, give it a closer look
             if(candidate.getValue() == 0) {
-                realTotal = 0;
-                counter = 0;
+
+                int candidateValue = 0; // The possible value available to this candidate Tile
+                int counter = 0; // Number of possible values available to this candidate Tile
+
+                // For each value 1 - 9, examine the candidate's Houses to see if it's already taken
                 for (int value = 1; value < 10; ++value) {
-                    inRow = candidate.getRow().hasValue(value);
-                    inColumn = candidate.getColumn().hasValue(value);
-                    inZone = candidate.getZone().hasValue(value);
-                    if (inRow || inColumn || inZone) {
-                        realTotal += value;
-                        counter++;
+
+                    // If the value is not taken in one of the candidate's Houses, record it for later
+                    if (!(candidate.getRow().hasValue(value) ||
+                            candidate.getColumn().hasValue(value) ||
+                            candidate.getZone().hasValue(value))) {
+
+                        candidateValue = value;
+                        ++counter;
+
+                        // If there's already a candidate value, abort because there's too many candidates
+                        if(counter > 1) {
+                            break;
+                        }
                     }
                 }
-                if(counter == 8) {
-                    int value = targetTotal - realTotal;
-                    candidate.getRow().clearValueInHouse(value);
-                    candidate.getColumn().clearValueInHouse(value);
-                    candidate.getZone().clearValueInHouse(value);
-                    solver.board.updateTile(candidate.getIndex(), value);
+
+                // If there's 1 and only 1 candidate value, assign it
+                if(counter == 1) {
+                    solver.solveTile(candidate, candidateValue);
                     return true;
                 }
+
             }
+
         }
+
         return false;
     }
 }

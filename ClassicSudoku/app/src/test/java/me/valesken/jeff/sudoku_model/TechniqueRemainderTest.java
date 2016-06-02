@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.doReturn;
@@ -24,24 +23,25 @@ import static org.mockito.Mockito.verify;
  */
 public class TechniqueRemainderTest {
 
-    private int targetTotal = 45;
+    private int solution = 9;
     private TechniqueRemainder remainder;
     private Solver mockSolver;
     private List<House> houses;
     private List<Tile> tiles;
-    private Board mockBoard;
     private House mockHouse;
     private Tile mockTile;
 
     //region setup
     @Before
     public void setUp() throws Exception {
-        mockSolver = mock(Solver.class);
         houses = new LinkedList<>();
         tiles = new LinkedList<>();
-        mockBoard = mock(Board.class);
+        Board mockBoard = mock(Board.class);
         mockHouse = mock(House.class);
         mockTile = mock(Tile.class);
+        mockSolver = mock(Solver.class);
+        mockSolver.houses = houses;
+        mockSolver.board = mockBoard;
         remainder = new TechniqueRemainder(mockSolver);
     }
     //endregion
@@ -52,6 +52,7 @@ public class TechniqueRemainderTest {
         TechniqueRemainder tr = new TechniqueRemainder(mockSolver);
         assertNotNull(tr);
         assertEquals(tr.solver, mockSolver);
+        int targetTotal = 45;
         assertEquals(TechniqueRemainder.TARGET_TOTAL, targetTotal);
     }
     //endregion
@@ -69,12 +70,7 @@ public class TechniqueRemainderTest {
         doReturn(0).when(mockTile).getValue();
         tiles.add(mockTile);
         doReturn(tiles.iterator()).when(mockHouse).iterator();
-
-        // Set up everything else
         houses.add(mockHouse);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertTrue(remainder.execute());
@@ -93,12 +89,7 @@ public class TechniqueRemainderTest {
             tiles.add(tempMockTile);
         }
         doReturn(tiles.iterator()).when(mockHouse).iterator();
-
-        // Set up everything else
         houses.add(mockHouse);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertTrue(remainder.execute());
@@ -122,12 +113,7 @@ public class TechniqueRemainderTest {
             tiles.add(tempMockTile);
         }
         doReturn(tiles.iterator()).when(mockHouse).iterator();
-
-        // Set up everything else
         houses.add(mockHouse);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertTrue(remainder.execute());
@@ -144,6 +130,7 @@ public class TechniqueRemainderTest {
             tiles.add(tempMockTile);
         }
         doReturn(tiles.iterator()).when(mockHouse).iterator();
+        houses.add(mockHouse);
 
         // Set up Tiles in second House
         List<Tile> moreTiles = new LinkedList<>();
@@ -156,13 +143,7 @@ public class TechniqueRemainderTest {
         moreTiles.add(mockTile);
         House mockHouse2 = mock(House.class);
         doReturn(moreTiles.iterator()).when(mockHouse2).iterator();
-
-        // Set up everything else
-        houses.add(mockHouse);
         houses.add(mockHouse2);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertTrue(remainder.execute());
@@ -181,6 +162,7 @@ public class TechniqueRemainderTest {
         doReturn(0).when(mockTile).getValue();
         tiles.add(mockTile);
         doReturn(tiles.iterator()).when(mockHouse).iterator();
+        houses.add(mockHouse);
 
         // Set up Tiles in second House
         List<Tile> moreTiles = new LinkedList<>();
@@ -194,13 +176,7 @@ public class TechniqueRemainderTest {
         moreTiles.add(mockTile2);
         House mockHouse2 = mock(House.class);
         doReturn(moreTiles.iterator()).when(mockHouse2).iterator();
-
-        // Set up everything else
-        houses.add(mockHouse);
         houses.add(mockHouse2);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertTrue(remainder.execute());
@@ -223,12 +199,7 @@ public class TechniqueRemainderTest {
         doReturn(0).when(mockTile2).getValue();
         tiles.add(mockTile2);
         doReturn(tiles.iterator()).when(mockHouse).iterator();
-
-        // Set up everything else
         houses.add(mockHouse);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
-        int solution = 9;
 
         // Execute & Verify
         assertFalse(remainder.execute());
@@ -246,11 +217,7 @@ public class TechniqueRemainderTest {
             tiles.add(tempMockTile);
         }
         doReturn(tiles.iterator()).when(mockHouse).iterator();
-
-        // Set up everything else
         houses.add(mockHouse);
-        mockSolver.houses = houses;
-        mockSolver.board = mockBoard;
 
         // Execute & Verify
         assertFalse(remainder.execute());
