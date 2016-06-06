@@ -1,13 +1,15 @@
 package me.valesken.jeff.sudoku_model;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 /**
  * Created by jeff on 1/8/2016.
- * Last updated on 6/1/2016.
+ * Last updated on 6/5/2016.
  *
  * Simple AI to solve the Board using a variety of techniques for different difficulty levels
  * Uses the Command Pattern to manage the SolvingTechniques
@@ -23,13 +25,13 @@ class Solver {
 
     protected Board board;
     protected List<House> houses;
-    protected List<Technique> techniques;
+    protected Set<Technique> techniques;
 
-    public Solver(Board _board) {
-        this.board = _board;
-        houses = Arrays.asList(board.getRows());
-        houses.addAll(Arrays.asList(board.getColumns()));
-        houses.addAll(Arrays.asList(board.getZones()));
+    public Solver(Board board) {
+        this.board = board;
+        houses = new LinkedList<>(Arrays.asList(this.board.getRows()));
+        houses.addAll(Arrays.asList(this.board.getColumns()));
+        houses.addAll(Arrays.asList(this.board.getZones()));
     }
 
     /**
@@ -39,10 +41,12 @@ class Solver {
      * @param difficulty 1 = easy, 2 = medium, 3 = hard
      */
     protected void solve(int difficulty) {
-        setTechniques(difficulty);
-        while(!isSolvable()) {
-            board.useHint();
-            board.clearBoard();
+        if (difficulty > 0 && difficulty < 4) {
+            setTechniques(difficulty);
+            while (!isSolvable()) {
+                board.useHint();
+                board.clearBoard();
+            }
         }
     }
 
@@ -52,18 +56,20 @@ class Solver {
      * @param difficulty 1 = easy, 2 = medium, 3 = hard
      */
     protected void setTechniques(int difficulty) {
-        techniques = new LinkedList<>(Arrays.asList(
-                new TechniqueRemainder(this),
-                new TechniqueSingleCandidate(this),
-                new TechniqueSinglePosition(this)));
-        if(difficulty > 1) {
-            techniques.add(new TechniqueCandidateLine(this));
-            techniques.add(new TechniqueDoublePair(this));
-            techniques.add(new TechniqueMultiLine(this));
-        }
-        if(difficulty > 2) {
-            techniques.add(new TechniqueNakedPairsAndTriples(this));
-            techniques.add(new TechniqueHiddenPairsAndTriples(this));
+        if (difficulty > 0 && difficulty < 4) {
+            techniques = new HashSet<>(Arrays.asList(
+                    new TechniqueRemainder(this),
+                    new TechniqueSingleCandidate(this),
+                    new TechniqueSinglePosition(this)));
+            if (difficulty > 1) {
+                techniques.add(new TechniqueCandidateLine(this));
+                techniques.add(new TechniqueDoublePair(this));
+                techniques.add(new TechniqueMultiLine(this));
+            }
+            if (difficulty > 2) {
+                techniques.add(new TechniqueNakedPairsAndTriples(this));
+                techniques.add(new TechniqueHiddenPairsAndTriples(this));
+            }
         }
     }
 
@@ -75,11 +81,12 @@ class Solver {
      */
     @SuppressWarnings("StatementWithEmptyBody")
     protected boolean isSolvable() {
-        ListIterator<Technique> it = techniques.listIterator();
-        while(it.hasNext()) {
-            Technique technique = it.next();
-            if(technique.execute()) {
-                it = techniques.listIterator();
+        Technique[] techniqueArray = techniques.toArray(new Technique[techniques.size()]);
+        for (int i = 0; i < techniqueArray.length; ) {
+            if (techniqueArray[i].execute()) {
+                i = 0;
+            } else {
+                ++i;
             }
         }
         return board.isGameOver();
@@ -93,9 +100,11 @@ class Solver {
      * @param value The 1 to 9 value that you want the Tile to have.
      */
     protected void solveTile(Tile tile, int value) {
-        tile.getRow().clearValueInHouse(value);
-        tile.getColumn().clearValueInHouse(value);
-        tile.getZone().clearValueInHouse(value);
-        board.updateTile(tile.getIndex(), value);
+        if (tile != null && value > 0 && value < 10) {
+            tile.getRow().clearValueInHouse(value);
+            tile.getColumn().clearValueInHouse(value);
+            tile.getZone().clearValueInHouse(value);
+            board.updateTile(tile.getIndex(), value);
+        }
     }
 }

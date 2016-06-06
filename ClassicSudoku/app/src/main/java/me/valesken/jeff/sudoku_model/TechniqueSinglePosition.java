@@ -5,7 +5,7 @@ package me.valesken.jeff.sudoku_model;
  * one tile which can hold that value.
  *
  * Created by jeff on 5/31/2016.
- * Last updated on 6/2/2016.
+ * Last updated on 6/5/2016.
  */
 public class TechniqueSinglePosition implements Technique {
 
