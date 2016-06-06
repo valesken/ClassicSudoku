@@ -33,7 +33,7 @@ public class TechniqueRemainderTest {
 
     //region setup
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         houses = new LinkedList<>();
         tiles = new LinkedList<>();
         Board mockBoard = mock(Board.class);

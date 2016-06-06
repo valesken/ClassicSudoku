@@ -45,7 +45,7 @@ public class TileTest {
 
     //region setUp
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mockedHouse = mock(House.class);
         tile = new Tile(houseSize, tileIndex);
         tile.row = mockedHouse;

@@ -32,7 +32,7 @@ public class TechniqueSingleCandidateTest {
 
     //region setup
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Board mockBoard = mock(Board.class);
         doReturn(tiles).when(mockBoard).getTiles();
         mockRow1 = mock(House.class);
