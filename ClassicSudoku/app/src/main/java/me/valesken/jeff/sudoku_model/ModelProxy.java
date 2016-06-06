@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 /**
  * Created by jeff on 2/8/2016.
- * Last updated on 2/8/2016.
+ * Last updated on 6/5/2016.
  */
 public class ModelProxy {
 
@@ -17,10 +17,14 @@ public class ModelProxy {
      *
      * @param houseSize The size of each House (row, column, zone) in the board.
      */
-    public static void initializeNewBoard(int houseSize) {
-        board = new Board(houseSize);
-        board.initializeHouses();
-        board.initializeTiles();
+    public static void initializeNewBoard(int houseSize, Board __TEST_BOARD) {
+        if (__TEST_BOARD == null) {
+            board = new Board(houseSize);
+            board.initializeHouses();
+            board.initializeTiles();
+        } else {
+            board = __TEST_BOARD;
+        }
     }
 
     /**
@@ -30,11 +34,13 @@ public class ModelProxy {
      * @return The actual difficulty level of the game. Should be the same (unless random, which case this tells you
      * the selected difficulty level). -1 if the board has not yet been initialized.
      */
-    public static int newGame(int difficulty) {
-        if (board == null) {
-            return -1;
-        }
-        return board.newGame(difficulty);
+    public static int newGame(int houseSize, int difficulty, Board __TEST_BOARD, boolean useAI) {
+        int result;
+        do {
+            initializeNewBoard(houseSize, __TEST_BOARD);
+            result = board.newGame(difficulty, useAI);
+        } while (result < 0);
+        return result;
     }
 
     /**
@@ -44,10 +50,8 @@ public class ModelProxy {
      * @return The difficulty level of the saved game. -1 if the JSON is badly formatted or the board has not yet
      * been initialized.
      */
-    public static int loadGame(JSONObject jsonObject) {
-        if (board == null) {
-            return -1;
-        }
+    public static int loadGame(int houseSize, JSONObject jsonObject, Board __TEST_BOARD) {
+        initializeNewBoard(houseSize, __TEST_BOARD);
         return board.loadGame(jsonObject);
     }
 

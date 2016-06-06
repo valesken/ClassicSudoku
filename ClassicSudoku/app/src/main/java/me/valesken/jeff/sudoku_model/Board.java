@@ -16,7 +16,7 @@ import me.valesken.jeff.util.Logger;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 5/29/2016
+ * Last updated on 6/5/2016
  */
 class Board {
     static final protected String JSON_TIME_ID = "time";
@@ -480,7 +480,7 @@ class Board {
      * @param _difficulty difficulty level for the game
      * @return difficulty level for the game
      */
-    protected int newGame(int _difficulty) {
+    protected int newGame(int _difficulty, boolean useAI) {
         difficulty = _difficulty;
         timeElapsed = "00:00";
 
@@ -489,11 +489,16 @@ class Board {
             difficulty = randGen.nextInt(3) + 1;
         }
 
-        buildCompleteBoard();
+        if (!buildCompleteBoard()) {
+            return -1;
+        }
+
         digHoles(getNumberOfGivens(difficulty));
         checkBounds(getBound(difficulty));
         markOriginals();
-        //runSolver();
+        if (useAI) {
+            runSolver(new Solver(this));
+        }
 
         return difficulty;
     }
@@ -509,9 +514,12 @@ class Board {
         try {
             Stack<Tile> tileStack = new Stack<>();
             seedFirstTiles(tileStack);
-            fillBoard_DFS(tileStack);
-            saveBoardToSolution();
-            return true;
+            if (fillBoard_DFS(tileStack)) {
+                saveBoardToSolution();
+                return true;
+            } else {
+                return false;
+            }
         } catch (EmptyStackException e) {
             return false;
         }
@@ -544,12 +552,18 @@ class Board {
      *
      * @param tileStack The Stack used to keep track of how many Tile have been visited and which was the most
      *                  recently visited Tile.
+     * @return false if initialization is taking too long - abort and try again with a new seed
      */
-    protected void fillBoard_DFS(Stack<Tile> tileStack) {
+    protected boolean fillBoard_DFS(Stack<Tile> tileStack) {
+        long start = System.currentTimeMillis();
         int currentIndex = incrementIndex_DFS(tileStack.peek().getIndex());
         while (keepSearching_DFS(tileStack)) {
             currentIndex = executeOneStep_DFS(currentIndex, tileStack);
+            if ((System.currentTimeMillis() - start) > 100) {
+                return false;
+            }
         }
+        return true;
     }
 
     /**

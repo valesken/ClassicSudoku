@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,13 +18,15 @@ import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.AdditionalMatchers.lt;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.booleanThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
  * Created by Jeff on 4/14/16.
- * Last Updated on 4/14/2016.
+ * Last Updated on 6/5/2016.
  */
 public class ModelProxyTest {
 
@@ -52,11 +55,11 @@ public class ModelProxyTest {
         // Set up
         int difficulty = 1;
         int randomDifficulty = 2;
-        doReturn(randomDifficulty).when(mockBoard).newGame(anyInt());
-        doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)));
+        doReturn(randomDifficulty).when(mockBoard).newGame(anyInt(), booleanThat(is(false)));
+        doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)), booleanThat(is(false)));
         // Execute & Verify
-        assertEquals(difficulty, ModelProxy.newGame(difficulty));
-        verify(mockBoard).newGame(difficulty);
+        assertEquals(difficulty, ModelProxy.newGame(9, difficulty, mockBoard, false));
+        verify(mockBoard).newGame(difficulty, false);
     }
 
     @Test
@@ -64,20 +67,11 @@ public class ModelProxyTest {
         // Set up
         int difficulty = 4;
         int randomDifficulty = 2;
-        doReturn(randomDifficulty).when(mockBoard).newGame(anyInt());
-        doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)));
+        doReturn(randomDifficulty).when(mockBoard).newGame(anyInt(), booleanThat(is(false)));
+        doReturn(difficulty).when(mockBoard).newGame(and(gt(0), lt(4)), booleanThat(is(false)));
         // Execute & Verify
-        assertEquals(randomDifficulty, ModelProxy.newGame(difficulty));
-        verify(mockBoard).newGame(difficulty);
-    }
-
-    @Test
-    public void test_newGame_null_fail() {
-        // Setup
-        int difficulty = 1;
-        ModelProxy.board = null;
-        // Execute & Verify
-        assertEquals(ModelProxy.newGame(difficulty), -1);
+        assertEquals(randomDifficulty, ModelProxy.newGame(9, difficulty, mockBoard, false));
+        verify(mockBoard).newGame(difficulty, false);
     }
     //endregion
 
@@ -89,16 +83,7 @@ public class ModelProxyTest {
         JSONObject mockJson = mock(JSONObject.class);
         doReturn(difficulty).when(mockBoard).loadGame(mockJson);
         // Execute & Verify
-        assertEquals(ModelProxy.loadGame(mockJson), difficulty);
-    }
-
-    @Test
-    public void test_loadGame_null_fail() {
-        // Setup
-        ModelProxy.board = null;
-        JSONObject mockJson = mock(JSONObject.class);
-        // Execute & Verify
-        assertEquals(ModelProxy.loadGame(mockJson), -1);
+        assertEquals(difficulty, ModelProxy.loadGame(9, mockJson, mockBoard));
     }
     //endregion
 

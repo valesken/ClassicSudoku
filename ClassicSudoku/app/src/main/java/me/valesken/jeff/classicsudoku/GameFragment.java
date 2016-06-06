@@ -34,10 +34,12 @@ import me.valesken.jeff.sudoku_model.ModelProxy;
 
 /**
  * Created by Jeff on 7/12/2015.
+ * Last updated on 6/5/2016.
  *
  * This fragment contains the actual board and UI that comprise the main game.
  */
 public class GameFragment extends Fragment {
+
     //region Member Variables
     private LayoutInflater inflater;
     private View rootView;
@@ -117,8 +119,7 @@ public class GameFragment extends Fragment {
     public void newGame(int _boardSize, int _difficulty)
     {
         boardSize = _boardSize;
-        ModelProxy.initializeNewBoard(boardSize);
-        difficulty = ModelProxy.newGame(_difficulty);
+        difficulty = ModelProxy.newGame(boardSize, _difficulty, null, false);
         loadJSON = null;
         saveFile = null;
         loadJSONPosition = -1;
@@ -130,11 +131,10 @@ public class GameFragment extends Fragment {
             loadJSONPosition = _loadJSONPosition;
             saveFile = _saveFile;
             boardSize = _boardSize;
-            ModelProxy.initializeNewBoard(boardSize);
             BufferedReader buff = new BufferedReader(new FileReader(saveFile));
             JSONObject jsonObject = new JSONObject(buff.readLine());
             buff.close();
-            difficulty = ModelProxy.loadGame(jsonObject);
+            difficulty = ModelProxy.loadGame(boardSize, jsonObject, null);
         }
         catch (IOException | JSONException e) {
             e.printStackTrace();

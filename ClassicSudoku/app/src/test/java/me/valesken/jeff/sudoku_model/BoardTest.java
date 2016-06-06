@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 2/8/2016.
- * Last Updated on 4/14/2016.
+ * Last Updated on 6/5/2016.
  */
 public class BoardTest {
 
@@ -1294,7 +1294,7 @@ public class BoardTest {
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
         // Execute
-        assertEquals(difficulty, spy.newGame(difficulty));
+        assertEquals(difficulty, spy.newGame(difficulty, false));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
@@ -1321,7 +1321,7 @@ public class BoardTest {
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
         // Execute
-        assertEquals(difficulty, spy.newGame(difficulty));
+        assertEquals(difficulty, spy.newGame(difficulty, false));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
@@ -1348,7 +1348,7 @@ public class BoardTest {
         doNothing().when(spy).markOriginals();
         spy.randGen = mock(Random.class);
         // Execute
-        assertEquals(difficulty, spy.newGame(difficulty));
+        assertEquals(difficulty, spy.newGame(difficulty, false));
         // Verify
         assertEquals(difficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
@@ -1377,7 +1377,7 @@ public class BoardTest {
         spy.randGen = mock(Random.class);
         when(spy.randGen.nextInt(3)).thenReturn(resultantDifficulty - 1);
         // Execute
-        assertEquals(resultantDifficulty, spy.newGame(difficulty));
+        assertEquals(resultantDifficulty, spy.newGame(difficulty, false));
         // Verify
         assertEquals(resultantDifficulty, spy.difficulty);
         assertEquals("00:00", spy.timeElapsed);
@@ -1397,7 +1397,7 @@ public class BoardTest {
         // Setup
         Board spy = spy(board);
         doNothing().when(spy).seedFirstTiles(argThat(is(any(Stack.class))));
-        doNothing().when(spy).fillBoard_DFS(argThat(is(any(Stack.class))));
+        doReturn(true).when(spy).fillBoard_DFS(argThat(is(any(Stack.class))));
         doNothing().when(spy).saveBoardToSolution();
         // Execute & Verify
         assertTrue(spy.buildCompleteBoard());
