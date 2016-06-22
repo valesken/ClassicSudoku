@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 /**
  * Created by Jeff on 2/28/2015.
- * Last updated on 6/1/2016.
+ * Last updated on 6/8/2016.
  *
  * House contains a row, column, or zone of 9 Tiles.
  * House can check if it already contains a tile with a given value.
@@ -107,11 +107,22 @@ class House implements Iterable<Tile> {
     /**
      * Checks if the house already has a member with a specific value.
      *
-     * @param value The 1-9 value to check for.
+     * @param value The 1 - 9 value to check for.
      * @return True if this House contains a Tile to which the value is assigned, otherwise False.
      */
     protected boolean hasValue(int value) {
         return (value > 0 && value <= houseSize && valueToOwnersMap[value - 1].size() > 0);
+    }
+
+    /**
+     * Checks if the house has assigned a specific value to a given Tile.
+     *
+     * @param value The 1 - 9 value to check for.
+     * @param tile  The Tile to check for.
+     * @return True if this House has assigned the specified value to the specified Tile, otherwise False.
+     */
+    protected boolean hasAssignedValueToTile(int value, Tile tile) {
+        return value > 0 && value <= houseSize && tile != null && valueToOwnersMap[value - 1].contains(tile);
     }
 
     /**

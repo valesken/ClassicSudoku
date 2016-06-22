@@ -1,13 +1,15 @@
 package me.valesken.jeff.sudoku_model;
 
 /**
- * For each value 1 through 9, this Technique will check each house to see if it contains only
- * one tile which can hold that value.
+ * For each value 1 through 9, this Technique will check each house to see if it contains only one tile which can hold
+ * that value.
+ *
+ * See https://www.sudokuoftheday.com/techniques/single-position/
  *
  * Created by jeff on 5/31/2016.
- * Last updated on 6/5/2016.
+ * Last updated on 6/14/2016.
  */
-public class TechniqueSinglePosition implements Technique {
+public class TechniqueSinglePosition extends Technique {
 
     protected static final int[] VALUES = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     protected Solver solver;
@@ -19,7 +21,7 @@ public class TechniqueSinglePosition implements Technique {
 
 
     @Override
-    public boolean execute() {
+    protected boolean execute() {
 
         // Cycle through every possible value 1 through 9
         for(int value : VALUES) {
@@ -34,7 +36,6 @@ public class TechniqueSinglePosition implements Technique {
 
     /**
      * This method checks all Houses to see if they have a single position for a specific 1 to 9 value.
-     * Note: Separated from execute() function for testing purposes.
      *
      * @param value The 1 to 9 value to check for.
      * @return The single Tile if one exists, else null.
@@ -55,9 +56,7 @@ public class TechniqueSinglePosition implements Technique {
             // Check every Tile in the House to see if it can have the current value
             for (Tile tile : house) {
 
-                if (!(tile.getRow().hasValue(value) ||
-                        tile.getColumn().hasValue(value) ||
-                        tile.getZone().hasValue(value))) {
+                if (tileIsCandidate(tile, value)) {
 
                     // If the Tile can have the value and it's the first Tile that can have the value, then save it
                     if (singlePosition == null) {

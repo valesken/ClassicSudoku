@@ -48,6 +48,7 @@ public class SolverTest {
         verify(mockBoard).getColumns();
         verify(mockBoard).getZones();
         assertNotNull(solver.houses);
+        assertNotNull(solver.zones);
         assertNull(solver.techniques);
     }
     //endregion

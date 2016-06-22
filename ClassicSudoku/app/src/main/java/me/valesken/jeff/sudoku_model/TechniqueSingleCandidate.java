@@ -4,10 +4,12 @@ package me.valesken.jeff.sudoku_model;
  * This Technique examines each tile in the board and checks to see if there is only one value that can be applied to
  * that tile.
  *
+ * See https://www.sudokuoftheday.com/techniques/single-candidate/
+ *
  * Created by jeff on 5/31/2016.
- * Last updated on 6/1/2016.
+ * Last updated on 6/14/2016.
  */
-class TechniqueSingleCandidate implements Technique {
+class TechniqueSingleCandidate extends Technique {
 
     protected Solver solver;
 
@@ -16,7 +18,7 @@ class TechniqueSingleCandidate implements Technique {
     }
 
     @Override
-    public boolean execute() {
+    protected boolean execute() {
 
         // Iterate over every Tile in the board
         for(Tile candidate : solver.board.getTiles()) {
@@ -31,9 +33,7 @@ class TechniqueSingleCandidate implements Technique {
                 for (int value = 1; value < 10; ++value) {
 
                     // If the value is not taken in one of the candidate's Houses, record it for later
-                    if (!(candidate.getRow().hasValue(value) ||
-                            candidate.getColumn().hasValue(value) ||
-                            candidate.getZone().hasValue(value))) {
+                    if (tileIsCandidate(candidate, value)) {
 
                         candidateValue = value;
                         ++counter;

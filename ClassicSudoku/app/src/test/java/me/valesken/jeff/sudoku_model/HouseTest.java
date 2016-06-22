@@ -2,31 +2,26 @@ package me.valesken.jeff.sudoku_model;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.stub;
-import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
  * Created by jeff on 1/28/2016.
- * Last Updated on 6/1/2016.
+ * Last Updated on 6/8/2016.
  */
 public class HouseTest {
 
     private House house;
-    private Tile mockedTile;
-    private Tile mockedTile2;
+    private Tile mockTile;
+    private Tile mockTile2;
     private int houseSize = 9;
     private int houseIndex = 0;
 
@@ -34,8 +29,8 @@ public class HouseTest {
     @Before
     public void setUp() {
         house = new House(houseSize, houseIndex);
-        mockedTile = mock(Tile.class);
-        mockedTile2 = mock(Tile.class);
+        mockTile = mock(Tile.class);
+        mockTile2 = mock(Tile.class);
     }
     //endregion
 
@@ -58,9 +53,9 @@ public class HouseTest {
     //region addMember() tests
     @Test
     public void testAddFirstMemberPass() {
-        house.addMember(mockedTile);
+        house.addMember(mockTile);
         assertEquals(1, house.members.size());
-        assertEquals(mockedTile, house.members.get(0));
+        assertEquals(mockTile, house.members.get(0));
     }
 
     @Test
@@ -92,83 +87,83 @@ public class HouseTest {
 
     @Test
     public void testCannotAddSameTileTwiceFail() {
-        house.addMember(mockedTile);
-        house.addMember(mockedTile);
+        house.addMember(mockTile);
+        house.addMember(mockTile);
         assertEquals(1, house.members.size());
-        assertEquals(mockedTile, house.members.get(0));
+        assertEquals(mockTile, house.members.get(0));
     }
     //endregion
 
     //region setValueInHouse() tests
     @Test
     public void testSetValueNoClaimPass() {
-        assertTrue(house.setValueInHouse(1, true, mockedTile));
+        assertTrue(house.setValueInHouse(1, true, mockTile));
         assertEquals(1, house.valueToOwnersMap[0].size());
-        assertTrue(house.valueToOwnersMap[0].contains(mockedTile));
+        assertTrue(house.valueToOwnersMap[0].contains(mockTile));
     }
 
     @Test
     public void testSetValueOneClaimPass() {
         Tile mockedTile2 = mock(Tile.class);
-        house.valueToOwnersMap[0].add(mockedTile);
+        house.valueToOwnersMap[0].add(mockTile);
         assertTrue(house.setValueInHouse(1, true, mockedTile2));
         assertEquals(2, house.valueToOwnersMap[0].size());
-        assertTrue(house.valueToOwnersMap[0].contains(mockedTile));
+        assertTrue(house.valueToOwnersMap[0].contains(mockTile));
         assertTrue(house.valueToOwnersMap[0].contains(mockedTile2));
     }
 
     @Test
     public void testRemoveValueOneClaimPass() {
-        house.valueToOwnersMap[0].add(mockedTile);
-        assertTrue(house.setValueInHouse(1, false, mockedTile));
+        house.valueToOwnersMap[0].add(mockTile);
+        assertTrue(house.setValueInHouse(1, false, mockTile));
         assertEquals(0, house.valueToOwnersMap[0].size());
-        assertFalse(house.valueToOwnersMap[0].contains(mockedTile));
+        assertFalse(house.valueToOwnersMap[0].contains(mockTile));
     }
 
     @Test
     public void testRemoveValueTwoClaimsPass() {
         Tile mockedTile2 = mock(Tile.class);
-        house.valueToOwnersMap[0].add(mockedTile);
+        house.valueToOwnersMap[0].add(mockTile);
         house.valueToOwnersMap[0].add(mockedTile2);
-        assertTrue(house.setValueInHouse(1, false, mockedTile));
+        assertTrue(house.setValueInHouse(1, false, mockTile));
         assertEquals(1, house.valueToOwnersMap[0].size());
-        assertFalse(house.valueToOwnersMap[0].contains(mockedTile));
+        assertFalse(house.valueToOwnersMap[0].contains(mockTile));
         assertTrue(house.valueToOwnersMap[0].contains(mockedTile2));
     }
 
     @Test
     public void testAddSameTileTwiceFail() {
-        house.valueToOwnersMap[0].add(mockedTile);
-        assertFalse(house.setValueInHouse(1, true, mockedTile));
+        house.valueToOwnersMap[0].add(mockTile);
+        assertFalse(house.setValueInHouse(1, true, mockTile));
     }
 
     @Test
     public void testAddZeroValueFail() {
-        assertFalse(house.setValueInHouse(0, true, mockedTile));
+        assertFalse(house.setValueInHouse(0, true, mockTile));
     }
 
     @Test
     public void testAddNegativeValueFail() {
-        assertFalse(house.setValueInHouse(-1, true, mockedTile));
+        assertFalse(house.setValueInHouse(-1, true, mockTile));
     }
 
     @Test
     public void testAddLargeValueFail() {
-        assertFalse(house.setValueInHouse(1000, true, mockedTile));
+        assertFalse(house.setValueInHouse(1000, true, mockTile));
     }
 
     @Test
     public void testRemoveValueNoClaimsFail() {
-        assertFalse(house.setValueInHouse(1, false, mockedTile));
+        assertFalse(house.setValueInHouse(1, false, mockTile));
     }
 
     @Test
     public void testRemoveMissingValueOneClaimFail() {
         Tile mockedTile2 = mock(Tile.class);
-        house.valueToOwnersMap[0].add(mockedTile);
+        house.valueToOwnersMap[0].add(mockTile);
         assertFalse(house.setValueInHouse(1, false, mockedTile2));
         assertEquals(1, house.valueToOwnersMap[0].size());
-        assertTrue(house.valueToOwnersMap[0].contains(mockedTile));
+        assertTrue(house.valueToOwnersMap[0].contains(mockTile));
     }
     //endregion
 
@@ -177,10 +172,10 @@ public class HouseTest {
     public void testClearOneValueInHousePass() {
         // Set up
         int value = 1;
-        house.valueToOwnersMap[value - 1].add(mockedTile);
+        house.valueToOwnersMap[value - 1].add(mockTile);
         // Execute & Verify
         assertTrue(house.clearValueInHouse(value));
-        verify(mockedTile).clearValue(value);
+        verify(mockTile).clearValue(value);
         assertEquals(0, house.valueToOwnersMap[0].size());
     }
 
@@ -188,12 +183,12 @@ public class HouseTest {
     public void testClearMultipleValuesInHousePass() {
         // Set up
         int value = 1;
-        house.valueToOwnersMap[value - 1].add(mockedTile);
-        house.valueToOwnersMap[value - 1].add(mockedTile2);
+        house.valueToOwnersMap[value - 1].add(mockTile);
+        house.valueToOwnersMap[value - 1].add(mockTile2);
         // Execute & Verify
         assertTrue(house.clearValueInHouse(value));
-        verify(mockedTile).clearValue(value);
-        verify(mockedTile2).clearValue(value);
+        verify(mockTile).clearValue(value);
+        verify(mockTile2).clearValue(value);
         assertEquals(0, house.valueToOwnersMap[value - 1].size());
     }
 
@@ -208,14 +203,14 @@ public class HouseTest {
         // Set up
         int value1 = 1;
         int value2 = 2;
-        house.valueToOwnersMap[value1 - 1].add(mockedTile);
-        house.valueToOwnersMap[value2 - 1].add(mockedTile2);
+        house.valueToOwnersMap[value1 - 1].add(mockTile);
+        house.valueToOwnersMap[value2 - 1].add(mockTile2);
         // Execute & Verify
         assertTrue(house.clearValueInHouse(value1));
-        verify(mockedTile).clearValue(anyInt());
-        verify(mockedTile2, never()).clearValue(anyInt());
+        verify(mockTile).clearValue(anyInt());
+        verify(mockTile2, never()).clearValue(anyInt());
         assertEquals(1, house.valueToOwnersMap[value2 - 1].size());
-        assertTrue(house.valueToOwnersMap[value2 - 1].contains(mockedTile2));
+        assertTrue(house.valueToOwnersMap[value2 - 1].contains(mockTile2));
     }
 
     @Test
@@ -237,15 +232,15 @@ public class HouseTest {
     //region getMember() tests
     @Test
     public void testGetMemberZeroPass() {
-        house.members.add(mockedTile);
-        assertEquals(mockedTile, house.getMember(0));
+        house.members.add(mockTile);
+        assertEquals(mockTile, house.getMember(0));
     }
 
     @Test
     public void testGetMemberLaterPass() {
         house.members.add(new Tile(houseSize, 10));
-        house.members.add(mockedTile);
-        assertEquals(mockedTile, house.getMember(1));
+        house.members.add(mockTile);
+        assertEquals(mockTile, house.getMember(1));
     }
 
     @Test
@@ -267,14 +262,14 @@ public class HouseTest {
     //region hasValue() tests
     @Test
     public void testOneTileHasValuePass() {
-        house.valueToOwnersMap[0].add(mockedTile);
+        house.valueToOwnersMap[0].add(mockTile);
         assertTrue(house.hasValue(1));
     }
 
     @Test
     public void testMultipleTilesHaveValuePass() {
         Tile mockedTile2 = mock(Tile.class);
-        house.valueToOwnersMap[0].add(mockedTile);
+        house.valueToOwnersMap[0].add(mockTile);
         house.valueToOwnersMap[0].add(mockedTile2);
         assertTrue(house.hasValue(1));
     }
@@ -300,6 +295,49 @@ public class HouseTest {
     }
     //endregion
 
+    //region hasAssignedValueToTile() tests
+    @Test
+    public void testHasAssignedValueToTile_ValueIsAssigned_True() {
+        // Set up
+        int value = 6;
+        house.valueToOwnersMap[value - 1].add(mockTile);
+        // Execute & Verify
+        assertTrue(house.hasAssignedValueToTile(value, mockTile));
+    }
+
+    @Test
+    public void testHasAssignedValueToTile_ValueIsNotAssigned_False() {
+        // Set up
+        int value = 6;
+        // Execute & Verify
+        assertFalse(house.hasAssignedValueToTile(value, mockTile));
+    }
+
+    @Test
+    public void testHasAssignedValueToTile_ValueTooSmall_False() {
+        // Set up
+        int value = 0;
+        // Execute & Verify
+        assertFalse(house.hasAssignedValueToTile(value, mockTile));
+    }
+
+    @Test
+    public void testHasAssignedValueToTile_ValueTooLarge_False() {
+        // Set up
+        int value = 10;
+        // Execute & Verify
+        assertFalse(house.hasAssignedValueToTile(value, mockTile));
+    }
+
+    @Test
+    public void testHasAssignedValueToTile_TileNull_False() {
+        // Set up
+        int value = 6;
+        // Execute & Verify
+        assertFalse(house.hasAssignedValueToTile(value, null));
+    }
+    //endregion
+
     //region getValueCount() tests
     @Test
     public void testDefaultValueCountZeroPass() {
@@ -312,8 +350,8 @@ public class HouseTest {
 
     @Test
     public void testValueCountOnePass() {
-        when(mockedTile.getValue()).thenReturn(1);
-        house.members.add(mockedTile);
+        when(mockTile.getValue()).thenReturn(1);
+        house.members.add(mockTile);
         for (int i = 1; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
@@ -343,14 +381,14 @@ public class HouseTest {
 
     @Test
     public void testOneValueGetValueTilesPass() {
-        when(mockedTile.getValue()).thenReturn(1);
-        house.members.add(mockedTile);
+        when(mockTile.getValue()).thenReturn(1);
+        house.members.add(mockTile);
         for (int i = 1; i < houseSize; ++i) {
             house.members.add(mock(Tile.class));
         }
         LinkedList<Tile> values = house.getValueTiles();
         assertEquals(1, values.size());
-        assertEquals(mockedTile, values.getFirst());
+        assertEquals(mockTile, values.getFirst());
     }
 
     @Test
@@ -390,9 +428,9 @@ public class HouseTest {
     @Test
     public void testIterateOverOneTilePass() {
         int count = 0;
-        house.members.add(mockedTile);
+        house.members.add(mockTile);
         for (Tile tile : house) {
-            assertEquals(tile, mockedTile);
+            assertEquals(tile, mockTile);
             ++count;
         }
         assertEquals(1, count);

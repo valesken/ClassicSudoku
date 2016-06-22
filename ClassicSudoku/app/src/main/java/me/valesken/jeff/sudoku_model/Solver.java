@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Created by jeff on 1/8/2016.
- * Last updated on 6/5/2016.
+ * Last updated on 6/9/2016.
  *
  * Simple AI to solve the Board using a variety of techniques for different difficulty levels
  * Uses the Command Pattern to manage the SolvingTechniques
@@ -24,13 +24,15 @@ class Solver {
 
     protected Board board;
     protected List<House> houses;
+    protected List<House> zones;
     protected Set<Technique> techniques;
 
     public Solver(Board board) {
         this.board = board;
         houses = new LinkedList<>(Arrays.asList(this.board.getRows()));
         houses.addAll(Arrays.asList(this.board.getColumns()));
-        houses.addAll(Arrays.asList(this.board.getZones()));
+        zones = Arrays.asList(this.board.getZones());
+        houses.addAll(zones);
     }
 
     /**

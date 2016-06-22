@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Created by jeff on 6/2/2016.
- * Last updated on 6/5/2016.
+ * Last updated on 6/8/2016.
  */
 public class TechniqueSinglePositionTest {
 
@@ -35,7 +35,7 @@ public class TechniqueSinglePositionTest {
     private List<House> housesSpy;
     private ArrayList<Tile> tilesSpy;
     private Tile mockTile;
-    private House mockRow, mockColumn, mockZone;
+    private House mockRow;
     private Solver mockSolver;
     private TechniqueSinglePosition singlePosition;
 
@@ -48,8 +48,6 @@ public class TechniqueSinglePositionTest {
         tilesSpy = spy(tiles);
         mockTile = mock(Tile.class);
         mockRow = mock(House.class);
-        mockColumn = mock(House.class);
-        mockZone = mock(House.class);
         mockSolver = mock(Solver.class);
         mockSolver.houses = housesSpy;
         singlePosition = new TechniqueSinglePosition(mockSolver);
@@ -95,115 +93,81 @@ public class TechniqueSinglePositionTest {
     //region checkHousesForValue() tests
     @Test
     public void testCheckHousesForValuePass() {
+        TechniqueSinglePosition spy = spy(singlePosition);
+        doReturn(false).when(spy).tileIsCandidate(argThat(is(any(Tile.class))), anyInt());
+
         // Build first house
-        doReturn(false).when(mockRow).hasValue(solution);
-        doReturn(false).when(mockColumn).hasValue(solution);
-        doReturn(false).when(mockZone).hasValue(solution);
         for(int i = 0; i < 8; ++i) {
-            Tile tempMockTile = mock(Tile.class);
-            House tempMockColumn = mock(House.class);
-            House tempMockZone = mock(House.class);
-            doReturn(true).when(tempMockColumn).hasValue(solution);
-            doReturn(true).when(tempMockZone).hasValue(solution);
-            doReturn(mockRow).when(tempMockTile).getRow();
-            doReturn(tempMockColumn).when(tempMockTile).getColumn();
-            doReturn(tempMockZone).when(tempMockTile).getZone();
-            tilesSpy.add(tempMockTile);
+            tilesSpy.add(mock(Tile.class));
         }
-        doReturn(mockRow).when(mockTile).getRow();
-        doReturn(mockColumn).when(mockTile).getColumn();
-        doReturn(mockZone).when(mockTile).getZone();
+
+        // Add "successful" tile
+        doReturn(true).when(spy).tileIsCandidate(mockTile, solution);
         tilesSpy.add(mockTile);
         final Iterator<Tile> iter = tilesSpy.iterator();
         doReturn(iter).when(mockRow).iterator();
         housesSpy.add(mockRow);
 
         // Execute
-        Tile solutionTile = singlePosition.checkHousesForValue(solution);
+        Tile solutionTile = spy.checkHousesForValue(solution);
 
         // Verify
         verify(mockRow).iterator();
         verify(tilesSpy).iterator();
-        verify(mockRow, times(9)).hasValue(solution);
-        verify(mockColumn).hasValue(solution);
-        verify(mockZone).hasValue(solution);
         assertNotNull(solutionTile);
         assertEquals(solutionTile, mockTile);
     }
 
     @Test
     public void testCheckHousesForValueNoPositionFail() {
+        TechniqueSinglePosition spy = spy(singlePosition);
+        doReturn(false).when(spy).tileIsCandidate(argThat(is(any(Tile.class))), anyInt());
+
         // Build first house
-        doReturn(true).when(mockRow).hasValue(solution);
-        doReturn(true).when(mockColumn).hasValue(solution);
-        doReturn(true).when(mockZone).hasValue(solution);
         for(int i = 0; i < 9; ++i) {
-            Tile tempMockTile = mock(Tile.class);
-            doReturn(mockRow).when(tempMockTile).getRow();
-            doReturn(mockColumn).when(tempMockTile).getColumn();
-            doReturn(mockZone).when(tempMockTile).getZone();
-            doReturn(i).when(tempMockTile).getIndex();
-            tilesSpy.add(tempMockTile);
+            tilesSpy.add(mock(Tile.class));
         }
         final Iterator<Tile> iter = tilesSpy.iterator();
         doReturn(iter).when(mockRow).iterator();
         housesSpy.add(mockRow);
 
         // Execute
-        Tile solutionTile = singlePosition.checkHousesForValue(solution);
+        Tile solutionTile = spy.checkHousesForValue(solution);
 
         // Verify
         verify(mockRow).iterator();
         verify(tilesSpy).iterator();
-        verify(mockRow, times(9)).hasValue(solution);
-        verify(mockColumn, never()).hasValue(solution);
-        verify(mockZone, never()).hasValue(solution);
         assertNull(solutionTile);
     }
 
     @Test
     public void testCheckHousesForValueTwoPositionsFail() {
+        TechniqueSinglePosition spy = spy(singlePosition);
+        doReturn(false).when(spy).tileIsCandidate(argThat(is(any(Tile.class))), anyInt());
+
         // Build first house
-        doReturn(false).when(mockRow).hasValue(solution);
-        doReturn(false).when(mockColumn).hasValue(solution);
-        doReturn(false).when(mockZone).hasValue(solution);
         for(int i = 0; i < 7; ++i) {
-            Tile tempMockTile = mock(Tile.class);
-            House tempMockColumn = mock(House.class);
-            House tempMockZone = mock(House.class);
-            doReturn(true).when(tempMockColumn).hasValue(solution);
-            doReturn(true).when(tempMockZone).hasValue(solution);
-            doReturn(mockRow).when(tempMockTile).getRow();
-            doReturn(tempMockColumn).when(tempMockTile).getColumn();
-            doReturn(tempMockZone).when(tempMockTile).getZone();
-            tilesSpy.add(tempMockTile);
+            tilesSpy.add(mock(Tile.class));
         }
 
         // Add first "successful" Tile
-        doReturn(mockRow).when(mockTile).getRow();
-        doReturn(mockColumn).when(mockTile).getColumn();
-        doReturn(mockZone).when(mockTile).getZone();
+        doReturn(true).when(spy).tileIsCandidate(mockTile, solution);
         tilesSpy.add(mockTile);
 
         // Add second "successful" Tile
         Tile mockTile2 = mock(Tile.class);
-        doReturn(mockRow).when(mockTile2).getRow();
-        doReturn(mockColumn).when(mockTile2).getColumn();
-        doReturn(mockZone).when(mockTile2).getZone();
+        doReturn(true).when(spy).tileIsCandidate(mockTile2, solution);
         tilesSpy.add(mockTile2);
         final Iterator<Tile> iter = tilesSpy.iterator();
         doReturn(iter).when(mockRow).iterator();
         housesSpy.add(mockRow);
 
         // Execute
-        Tile solutionTile = singlePosition.checkHousesForValue(solution);
+        Tile solutionTile = spy.checkHousesForValue(solution);
 
         // Verify
         verify(mockRow).iterator();
         verify(tilesSpy).iterator();
-        verify(mockRow, times(9)).hasValue(solution);
-        verify(mockColumn, times(2)).hasValue(solution);
-        verify(mockZone, times(2)).hasValue(solution);
         assertNull(solutionTile);
     }
 

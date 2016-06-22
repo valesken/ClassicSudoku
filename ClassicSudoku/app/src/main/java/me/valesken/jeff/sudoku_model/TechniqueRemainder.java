@@ -5,9 +5,9 @@ package me.valesken.jeff.sudoku_model;
  * appropriate value to that tile. Note that this technique only works (right now) on Houses of length 9.
  *
  * Created by jeff on 5/31/2016.
- * Last updated on 6/1/2016.
+ * Last updated on 6/8/2016.
  */
-class TechniqueRemainder implements Technique {
+class TechniqueRemainder extends Technique {
 
     protected static final int TARGET_TOTAL = 45; // Sum of 1 to 9
     protected Solver solver;
@@ -17,7 +17,7 @@ class TechniqueRemainder implements Technique {
     }
 
     @Override
-    public boolean execute() {
+    protected boolean execute() {
         for (House house : solver.houses) {
             Tile emptyTile = null; // Holds empty Tile (if there is any)
             int value; // Tile's value
